@@ -3,9 +3,9 @@ package audioShit;
 import nodeSystem.Entry;
 import nodeSystem.Node;
 
-public class AUdioInOutEntry extends Entry {
+public class AudioInOutEntry extends Entry {
 
-	public AUdioInOutEntry(Node node, String name) {
+	public AudioInOutEntry(Node node, String name) {
 		super(node, name, 0);
 		addInConnector();
 		addOutCOnnector();
