@@ -4,13 +4,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.plaf.synth.SynthButtonUI;
 
 import com.jsyn.data.SegmentedEnvelope;
+import com.jsyn.data.SequentialData;
 import com.jsyn.midi.MidiConstants;
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
 import com.jsyn.unitgen.Circuit;
+import com.jsyn.unitgen.Maximum;
+import com.jsyn.unitgen.Minimum;
 import com.jsyn.unitgen.PassThrough;
+import com.jsyn.unitgen.PulseOscillator;
 import com.jsyn.unitgen.SawtoothOscillator;
 import com.jsyn.unitgen.SineOscillator;
 import com.jsyn.unitgen.SquareOscillator;
@@ -20,18 +25,21 @@ import com.jsyn.unitgen.VariableRateMonoReader;
 
 public class Piano extends Circuit {
 	private Map<Integer, UnitOscillatorReaderPair> keyboardKeys;
-	private SegmentedEnvelope falloff;
+	private SegmentedEnvelope falloff, end;
 	public UnitOutputPort output;
+
+	private Maximum max;
+	private Minimum min;
 
 	private PassThrough psToOut, psAmpli, psFallofRate;
 	public UnitInputPort amplitude, falloffspeed;
 
-	private enum EnumUnitTemp{
-		Saw,Sine,Tri,Squ
-		
+	private enum EnumUnitTemp {
+		Saw, Sine, Tri, Squ, Pulse
+
 	}
-	
-	private EnumUnitTemp currentUnit = EnumUnitTemp.Squ;
+
+	private EnumUnitTemp currentUnit = EnumUnitTemp.Pulse;
 
 	public Piano() {
 		addPort(output = new UnitOutputPort("Piano Out"));
@@ -61,38 +69,46 @@ public class Piano extends Circuit {
 		};
 
 		falloff = new SegmentedEnvelope(data);
+		data = new double[] { 0.02, 0.5, // 0
+				0.2, 0.1, // 1
+				0.3, 0 };
+
+		end = new SegmentedEnvelope(data);
 	}
-	
-	/*Manually set a UnitOscillator for specified Keys;
+
+	/*
+	 * Manually set a UnitOscillator for specified Keys;
 	 * 
 	 */
-	public void setKeys(Map<Integer, UnitOscillator>  newKeys) {
-		for(Integer key : newKeys.keySet()) {
+	public void setKeys(Map<Integer, UnitOscillator> newKeys) {
+		for (Integer key : newKeys.keySet()) {
 			keyboardKeys.get(key).ossie = newKeys.get(key);
 		}
-	
+
 	}
 
 	private UnitOscillator getCurrentUnitGen() {
 		switch (currentUnit) {
 		case Saw:
 			return new SawtoothOscillator();
-			
+
 		case Sine:
 			return new SineOscillator();
 		case Squ:
 			return new SquareOscillator();
 		case Tri:
 			return new TriangleOscillator();
-			
+		case Pulse:
+			return new PulseOscillator();
 		}
 		return null;
 	}
-	
+
 	/*
 	 * 69 = A4 60 = C4
 	 **/
 	public void pressKeyMidi(int midiKey) {
+
 		UnitOscillator ossie;
 		VariableRateMonoReader reader;
 		System.out.println("play Pitch: " + midiKey);
@@ -123,19 +139,26 @@ public class Piano extends Circuit {
 		}
 
 		reader.dataQueue.clear();
-		reader.dataQueue.queue(falloff, 0, 2);
-		reader.dataQueue.queueLoop(falloff, 0, 2);
+		reader.dataQueue.queue(falloff, 0, falloff.getNumFrames());
+
 	}
 
 	/*
 	 * 69 = A4 60 = C4
 	 **/
 	public void peleaseKeyMidi(int midiKey) {
+
 		System.out.println("stop Pitch: " + midiKey);
 		if (keyboardKeys.containsKey(midiKey)) {
 
 			VariableRateMonoReader reader = keyboardKeys.get(midiKey).reader;
-			reader.dataQueue.queue(falloff, 2, 4);
+			reader.dataQueue.clear();
+			System.out.println(reader.output.get());
+			if (reader.output.get() >= 0.5 * reader.amplitude.get()) {
+				reader.dataQueue.queue(end, 0, 3);
+			} else {
+				reader.dataQueue.queue(end, 2, 1);
+			}
 		}
 
 	}

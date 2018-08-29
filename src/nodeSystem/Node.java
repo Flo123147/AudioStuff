@@ -25,7 +25,7 @@ public abstract class Node extends Draggable {
 		super(pos, name);
 		entryIndex = 0;
 		// entries = new LinkedList<Entry>();
-		entries = new Entry[10];
+		entries = new Entry[20];
 
 	}
 

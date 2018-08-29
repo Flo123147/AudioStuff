@@ -20,7 +20,7 @@ public class PianoNode extends KeyNode {
 		OutputNode.getSynth().add(piano);
 		piano.start();
 
-		addEntry(amplitude = new Slider(this, "Amplitude", 0, 1));
+		addEntry(amplitude = new Slider(this, "Amplitude", 0, 0.2));
 		amplitude.getRightPorts().output.connect(piano.amplitude);
 
 		addEntry(rate = new Slider(this, "Falloff", 0, 10));
@@ -70,11 +70,11 @@ public class PianoNode extends KeyNode {
 			break;
 
 		default:
-			ntoPlay = 0;
+			ntoPlay = -1;
 			break;
 		}
-
-		piano.pressKeyMidi(ntoPlay);
+		if (ntoPlay != -1)
+			piano.pressKeyMidi(ntoPlay);
 	}
 
 	@Override
@@ -120,11 +120,11 @@ public class PianoNode extends KeyNode {
 			break;
 
 		default:
-			ntoPlay = 0;
+			ntoPlay = -1;
 			break;
 		}
-
-		piano.peleaseKeyMidi(ntoPlay);
+		if (ntoPlay != -1)
+			piano.peleaseKeyMidi(ntoPlay);
 
 	}
 

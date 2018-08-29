@@ -29,7 +29,7 @@ public class GenaeralNodeTest extends Node {
 					if (uip.getNumParts() != 1) {
 						eName += " " + i;
 					}
-					double minVal = uip.getMinimum();
+					double minVal = -uip.getMaximum();
 					double maxVal = uip.getMaximum();
 					boolean isSlider = true;
 					switch (port.getName()) {

@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import javax.swing.JFrame;
 
+import com.jsyn.instruments.DrumWoodFM;
+import com.jsyn.instruments.DualOscillatorSynthVoice;
 import com.jsyn.unitgen.*;
 
 import audioShit.AbsoluteNode;
@@ -91,15 +93,18 @@ public class Window extends JFrame implements Runnable {
 
 		AdderNode an = new AdderNode(new int[] { 55, 88 }, "AdderTest");
 
-		GenaeralNodeTest gnt = new GenaeralNodeTest(new int[] { 77, 77 }, "wuutwuuut", new Multiply());
+		GenaeralNodeTest gnt = new GenaeralNodeTest(new int[] { 77, 77 }, "wuutwuuut", new Maximum());
+
+		GenaeralNodeTest gnt2 = new GenaeralNodeTest(new int[] { 77, 77 }, "wuutwuuut", new Minimum());
 
 		AbsoluteNode ann = new AbsoluteNode(new int[] { 666, 666 }, "Basolute");
 
 		ReaderNode rn = new ReaderNode(new int[] { 676, 676 }, "Reader");
-		
+
 //		KeyTestNode ktn = new KeyTestNode(new int[] {987,77}, "KeyOutTest"); 
-		
-		PianoNode tn = new PianoNode(new int[] {900,600}, "Piano");
+
+		PianoNode tn = new PianoNode(new int[] { 900, 600 }, "Piano");
+
 	}
 
 	private void uitest() {
