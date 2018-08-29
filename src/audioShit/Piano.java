@@ -39,7 +39,7 @@ public class Piano extends Circuit {
 
 	}
 
-	private EnumUnitTemp currentUnit = EnumUnitTemp.Pulse;
+	private EnumUnitTemp currentUnit = EnumUnitTemp.Sine;
 
 	public Piano() {
 		addPort(output = new UnitOutputPort("Piano Out"));
@@ -153,7 +153,7 @@ public class Piano extends Circuit {
 
 			VariableRateMonoReader reader = keyboardKeys.get(midiKey).reader;
 			reader.dataQueue.clear();
-			System.out.println(reader.output.get());
+			
 			if (reader.output.get() >= 0.5 * reader.amplitude.get()) {
 				reader.dataQueue.queue(end, 0, 3);
 			} else {
