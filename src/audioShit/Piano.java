@@ -1,7 +1,9 @@
 package audioShit;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+
 
 import com.jsyn.data.SegmentedEnvelope;
 import com.jsyn.midi.MidiConstants;
@@ -11,6 +13,7 @@ import com.jsyn.unitgen.Circuit;
 import com.jsyn.unitgen.PassThrough;
 import com.jsyn.unitgen.SawtoothOscillator;
 import com.jsyn.unitgen.SineOscillator;
+import com.jsyn.unitgen.SquareOscillator;
 import com.jsyn.unitgen.TriangleOscillator;
 import com.jsyn.unitgen.UnitOscillator;
 import com.jsyn.unitgen.VariableRateMonoReader;
@@ -21,8 +24,14 @@ public class Piano extends Circuit {
 	public UnitOutputPort output;
 
 	private PassThrough psToOut, psAmpli, psFallofRate;
-//	private float baseFreq = 440f;
 	public UnitInputPort amplitude, falloffspeed;
+
+	private enum EnumUnitTemp{
+		Saw,Sine,Tri,Squ
+		
+	}
+	
+	private EnumUnitTemp currentUnit = EnumUnitTemp.Squ;
 
 	public Piano() {
 		addPort(output = new UnitOutputPort("Piano Out"));
@@ -53,7 +62,33 @@ public class Piano extends Circuit {
 
 		falloff = new SegmentedEnvelope(data);
 	}
+	
+	/*Manually set a UnitOscillator for specified Keys;
+	 * 
+	 */
+	public void setKeys(Map<Integer, UnitOscillator>  newKeys) {
+		for(Integer key : newKeys.keySet()) {
+			keyboardKeys.get(key).ossie = newKeys.get(key);
+		}
+	
+	}
 
+	private UnitOscillator getCurrentUnitGen() {
+		switch (currentUnit) {
+		case Saw:
+			return new SawtoothOscillator();
+			
+		case Sine:
+			return new SineOscillator();
+		case Squ:
+			return new SquareOscillator();
+		case Tri:
+			return new TriangleOscillator();
+			
+		}
+		return null;
+	}
+	
 	/*
 	 * 69 = A4 60 = C4
 	 **/
@@ -63,7 +98,7 @@ public class Piano extends Circuit {
 		System.out.println("play Pitch: " + midiKey);
 		if (!keyboardKeys.containsKey(midiKey)) {
 			keyboardKeys.put(midiKey,
-					new UnitOscillatorReaderPair(ossie = new TriangleOscillator(), reader = new VariableRateMonoReader()));
+					new UnitOscillatorReaderPair(ossie = getCurrentUnitGen(), reader = new VariableRateMonoReader()));
 
 			OutputNode.getSynth().add(reader);
 			OutputNode.getSynth().add(ossie);
