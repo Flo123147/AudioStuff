@@ -20,6 +20,7 @@ import com.jsyn.unitgen.SawtoothOscillator;
 import com.jsyn.unitgen.SineOscillator;
 import com.jsyn.unitgen.SquareOscillator;
 import com.jsyn.unitgen.TriangleOscillator;
+import com.jsyn.unitgen.UnitGenerator;
 import com.jsyn.unitgen.UnitOscillator;
 import com.jsyn.unitgen.VariableRateMonoReader;
 
@@ -40,6 +41,7 @@ public class Piano extends Circuit {
 	}
 
 	private EnumUnitTemp currentUnit = EnumUnitTemp.Sine;
+	private boolean pause;
 
 	public Piano() {
 		addPort(output = new UnitOutputPort("Piano Out"));
@@ -74,17 +76,46 @@ public class Piano extends Circuit {
 				0.3, 0 };
 
 		end = new SegmentedEnvelope(data);
+
+		initUnitGens();
 	}
 
 	/*
-	 * Manually set a UnitOscillator for specified Keys;
-	 * 
+	 * Manually set a UnitOscillator for specified Keys.
+	 * Only works if Piano is Paused.
 	 */
 	public void setKeys(Map<Integer, UnitOscillator> newKeys) {
-		for (Integer key : newKeys.keySet()) {
-			keyboardKeys.get(key).ossie = newKeys.get(key);
+		if (pause) {
+			for (Integer key : newKeys.keySet()) {
+				keyboardKeys.get(key).ossie = newKeys.get(key);
+			}
+		}else {
+			
 		}
+	}
 
+	private void initUnitGens() {
+		for (int midiKey = 12; midiKey <= 119; midiKey++) {
+			UnitOscillator ossie;
+			VariableRateMonoReader reader;
+			reader = new VariableRateMonoReader();
+			keyboardKeys.put(midiKey,
+					new UnitOscillatorReaderPair(ossie = getCurrentUnitGen(), reader = new VariableRateMonoReader()));
+
+			OutputNode.getSynth().add(reader);
+			OutputNode.getSynth().add(ossie);
+			add(ossie);
+			add(reader);
+
+			ossie.frequency.set(MidiConstants.convertPitchToFrequency(midiKey));
+
+			psAmpli.output.connect(reader.amplitude);
+			reader.output.connect(ossie.amplitude);
+
+			psFallofRate.output.connect(reader.rate);
+
+			ossie.output.connect(psToOut.input);
+		}
 	}
 
 	private UnitOscillator getCurrentUnitGen() {
@@ -111,35 +142,34 @@ public class Piano extends Circuit {
 
 		UnitOscillator ossie;
 		VariableRateMonoReader reader;
-		System.out.println("play Pitch: " + midiKey);
+		System.out.println("play Pitch: " + midiKey + "   " + MidiConstants.convertPitchToFrequency(midiKey));
 		if (!keyboardKeys.containsKey(midiKey)) {
-			keyboardKeys.put(midiKey,
-					new UnitOscillatorReaderPair(ossie = getCurrentUnitGen(), reader = new VariableRateMonoReader()));
-
-			OutputNode.getSynth().add(reader);
-			OutputNode.getSynth().add(ossie);
-			add(ossie);
-			add(reader);
-
-			ossie.frequency.set(MidiConstants.convertPitchToFrequency(midiKey));
-
-			psAmpli.output.connect(reader.amplitude);
-			reader.output.connect(ossie.amplitude);
-
-			psFallofRate.output.connect(reader.rate);
-
-			ossie.output.connect(psToOut.input);
-
-			ossie.start();
-			reader.start();
+//			keyboardKeys.put(midiKey,
+//					new UnitOscillatorReaderPair(ossie = getCurrentUnitGen(), reader = new VariableRateMonoReader()));
+//
+//			OutputNode.getSynth().add(reader);
+//			OutputNode.getSynth().add(ossie);
+//			add(ossie);
+//			add(reader);
+//
+//			ossie.frequency.set(MidiConstants.convertPitchToFrequency(midiKey));
+//
+//			psAmpli.output.connect(reader.amplitude);
+//			reader.output.connect(ossie.amplitude);
+//
+//			psFallofRate.output.connect(reader.rate);
+//
+//			ossie.output.connect(psToOut.input);
+//
+//			ossie.start();
+//			reader.start();
 
 		} else {
 			ossie = keyboardKeys.get(midiKey).ossie;
 			reader = keyboardKeys.get(midiKey).reader;
+			reader.dataQueue.clear();
+			reader.dataQueue.queue(falloff, 0, falloff.getNumFrames());
 		}
-
-		reader.dataQueue.clear();
-		reader.dataQueue.queue(falloff, 0, falloff.getNumFrames());
 
 	}
 
@@ -153,7 +183,7 @@ public class Piano extends Circuit {
 
 			VariableRateMonoReader reader = keyboardKeys.get(midiKey).reader;
 			reader.dataQueue.clear();
-			
+
 			if (reader.output.get() >= 0.5 * reader.amplitude.get()) {
 				reader.dataQueue.queue(end, 0, 3);
 			} else {
@@ -162,6 +192,7 @@ public class Piano extends Circuit {
 		}
 
 	}
+
 }
 
 class UnitOscillatorReaderPair {
