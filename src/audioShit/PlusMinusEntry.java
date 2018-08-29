@@ -21,8 +21,10 @@ public class PlusMinusEntry extends Entry {
 		int middle = getWidth() / 2;
 
 		addChild(tf = new ValueOutField(new int[] { middle - 15, nameHeight }, "OctaveDisp", 30, 20));
-		addChild(minus = new Clicker(new int[] { middle - 50, nameHeight }, "Minus", true, this));
-		addChild(plus = new Clicker(new int[] { middle + 50, nameHeight }, "Plus", false, this));
+		tf.valueC = this.valueC;
+		tf.useValueVontainer(true);
+		addChild(minus = new Clicker(new int[] { middle - 50, nameHeight + 10 }, "Minus", true, this));
+		addChild(plus = new Clicker(new int[] { middle + 50, nameHeight + 10 }, "Plus", false, this));
 	}
 
 	public void plus() {
@@ -35,7 +37,6 @@ public class PlusMinusEntry extends Entry {
 
 	@Override
 	protected void updateMetrics() {
-		// TODO Auto-generated method stub
 
 	}
 

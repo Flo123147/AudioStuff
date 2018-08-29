@@ -96,7 +96,7 @@ public class PianoNode extends KeyNode {
 			break;
 		}
 
-		return (int) (ntoPlay + octaveOffsetC.value * 12);
+		return (int) (ntoPlay + (octaveOffsetC.value-4) * 12);
 	}
 
 	@Override
