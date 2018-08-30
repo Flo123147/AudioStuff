@@ -22,9 +22,11 @@ import com.jsyn.unitgen.SquareOscillator;
 import com.jsyn.unitgen.TriangleOscillator;
 import com.jsyn.unitgen.UnitGenerator;
 import com.jsyn.unitgen.UnitOscillator;
+import com.jsyn.unitgen.UnitVoice;
 import com.jsyn.unitgen.VariableRateMonoReader;
+import com.softsynth.shared.time.TimeStamp;
 
-public class Piano extends Circuit {
+public class Piano extends Circuit implements UnitVoice{
 	private Map<Integer, UnitOscillatorReaderPair> keyboardKeys;
 	private SegmentedEnvelope falloff, end;
 	public UnitOutputPort output;
@@ -143,28 +145,7 @@ public class Piano extends Circuit {
 		UnitOscillator ossie;
 		VariableRateMonoReader reader;
 		System.out.println("play Pitch: " + midiKey + "   " + MidiConstants.convertPitchToFrequency(midiKey));
-		if (!keyboardKeys.containsKey(midiKey)) {
-//			keyboardKeys.put(midiKey,
-//					new UnitOscillatorReaderPair(ossie = getCurrentUnitGen(), reader = new VariableRateMonoReader()));
-//
-//			OutputNode.getSynth().add(reader);
-//			OutputNode.getSynth().add(ossie);
-//			add(ossie);
-//			add(reader);
-//
-//			ossie.frequency.set(MidiConstants.convertPitchToFrequency(midiKey));
-//
-//			psAmpli.output.connect(reader.amplitude);
-//			reader.output.connect(ossie.amplitude);
-//
-//			psFallofRate.output.connect(reader.rate);
-//
-//			ossie.output.connect(psToOut.input);
-//
-//			ossie.start();
-//			reader.start();
-
-		} else {
+		if (keyboardKeys.containsKey(midiKey)) {
 			ossie = keyboardKeys.get(midiKey).ossie;
 			reader = keyboardKeys.get(midiKey).reader;
 			reader.dataQueue.clear();
@@ -191,6 +172,46 @@ public class Piano extends Circuit {
 			}
 		}
 
+	}
+
+	@Override
+	public UnitOutputPort getOutput() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void noteOn(double frequency, double amplitude, TimeStamp timeStamp) {
+		UnitOscillator ossie;
+		VariableRateMonoReader reader;
+		System.out.println("play Pitch: " + MidiConstants.convertFrequencyToPitch(frequency) + "   " + frequency);
+		int midiKey = (int) MidiConstants.convertFrequencyToPitch(frequency);
+		if (keyboardKeys.containsKey(midiKey)) {
+			ossie = keyboardKeys.get(midiKey).ossie;
+			reader = keyboardKeys.get(midiKey).reader;
+			reader.dataQueue.clear();
+			reader.dataQueue.queue(falloff, 0, falloff.getNumFrames());
+		}
+		
+	}
+
+	@Override
+	public void noteOff(TimeStamp timeStamp) {
+//		// TODO Auto-generated method stub
+//		
+//		int midiKey = (int) MidiConstants.convertFrequencyToPitch(frequency);
+//		System.out.println("stop Pitch: " + midiKey);
+//		if (keyboardKeys.containsKey(midiKey)) {
+//
+//			VariableRateMonoReader reader = keyboardKeys.get(midiKey).reader;
+//			reader.dataQueue.clear();
+//
+//			if (reader.output.get() >= 0.5 * reader.amplitude.get()) {
+//				reader.dataQueue.queue(end, 0, 3);
+//			} else {
+//				reader.dataQueue.queue(end, 2, 1);
+//			}
+//		}
 	}
 
 }

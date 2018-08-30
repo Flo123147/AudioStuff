@@ -18,6 +18,7 @@ import audioShit.AbsoluteNode;
 import audioShit.AdderNode;
 import audioShit.DelayNode;
 import audioShit.GenaeralNodeTest;
+import audioShit.MidiSynthNode;
 import audioShit.OutputNode;
 import audioShit.ReaderNode;
 import audioShit.SineOscillatorNode;
@@ -29,6 +30,7 @@ import graphics.Rect;
 import helper.ImHelping;
 import nodeSystem.KeyTestNode;
 import nodeSystem.Root;
+import testingInProgress.MidiTester;
 import uiShit.Spawner;
 
 @SuppressWarnings("serial")
@@ -83,28 +85,33 @@ public class Window extends JFrame implements Runnable {
 
 	private void test2() {
 		outputNode = new OutputNode(new int[] { 1100, 500 }, "Output");
-		WhiteNoiseNode wnn = new WhiteNoiseNode(new int[] { 100, 100 }, "White Noise");
-		SineOscillatorNode son = new SineOscillatorNode(new int[] { 700, 800 });
-		son.setFreq(8f);
-		SineOscillatorNode son2 = new SineOscillatorNode(new int[] { 700, 900 });
-		son2.setFreq(300f);
+//		WhiteNoiseNode wnn = new WhiteNoiseNode(new int[] { 100, 100 }, "White Noise");
+//		SineOscillatorNode son = new SineOscillatorNode(new int[] { 700, 800 });
+//		son.setFreq(8f);
+//		SineOscillatorNode son2 = new SineOscillatorNode(new int[] { 700, 900 });
+//		son2.setFreq(300f);
+//
+//		DelayNode delayNode = new DelayNode(new int[] { 500, 620 }, "Delay");
+//
+//		AdderNode an = new AdderNode(new int[] { 55, 88 }, "AdderTest");
+//
+//		GenaeralNodeTest gnt = new GenaeralNodeTest(new int[] { 77, 77 }, "wuutwuuut", new Maximum());
+//
+//		GenaeralNodeTest gnt2 = new GenaeralNodeTest(new int[] { 77, 77 }, "wuutwuuut", new DualOscillatorSynthVoice());
+//
+//		AbsoluteNode ann = new AbsoluteNode(new int[] { 666, 666 }, "Basolute");
+//
+//		ReaderNode rn = new ReaderNode(new int[] { 676, 676 }, "Reader");
+//
+////		KeyTestNode ktn = new KeyTestNode(new int[] {987,77}, "KeyOutTest"); 
 
-		DelayNode delayNode = new DelayNode(new int[] { 500, 620 }, "Delay");
-
-		AdderNode an = new AdderNode(new int[] { 55, 88 }, "AdderTest");
-
-		GenaeralNodeTest gnt = new GenaeralNodeTest(new int[] { 77, 77 }, "wuutwuuut", new Maximum());
-
-		GenaeralNodeTest gnt2 = new GenaeralNodeTest(new int[] { 77, 77 }, "wuutwuuut", new Minimum());
-
-		AbsoluteNode ann = new AbsoluteNode(new int[] { 666, 666 }, "Basolute");
-
-		ReaderNode rn = new ReaderNode(new int[] { 676, 676 }, "Reader");
-
-//		KeyTestNode ktn = new KeyTestNode(new int[] {987,77}, "KeyOutTest"); 
+		MidiSynthNode msn = new MidiSynthNode(new int[] { 300, 300 }, "Midi --Synth Test");
 
 		PianoNode tn = new PianoNode(new int[] { 900, 600 }, "Piano");
 
+		MidiTester nidiTester;
+		Thread t = (new Thread(nidiTester = new MidiTester(msn.getMidisynth())));
+		t.start();
 	}
 
 	private void uitest() {

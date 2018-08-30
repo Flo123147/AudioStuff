@@ -1,5 +1,10 @@
 package audioShit;
 
+import javax.sound.midi.MidiSystem;
+
+import com.jsyn.midi.MidiSynthesizer;
+import com.jsyn.util.MultiChannelSynthesizer;
+
 import helper.ValueContainer;
 import nodeSystem.KeyNode;
 import nodeSystem.Slider;
@@ -36,6 +41,11 @@ public class PianoNode extends KeyNode {
 		addEntry(plusMinus = new PlusMinusEntry(this, "Octave",1,octaveOffsetC));
 	}
 
+	public void testMidi() {
+		MidiSynthesizer msys = new MidiSynthesizer(new MultiChannelSynthesizer());
+		
+	}
+	
 	@Override
 	public void keyOn(char key) {
 
