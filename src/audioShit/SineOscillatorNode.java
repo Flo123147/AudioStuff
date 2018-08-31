@@ -15,7 +15,7 @@ public class SineOscillatorNode extends Node {
 	public SineOscillatorNode(int[] pos) {
 		super(pos, "Sine Oscillator");
 		sine = new SineOscillator();
-		OutputNode.getSynth().add(sine);
+		MidiOutputNode.getSynth().add(sine);
 		sine.start();
 		sine.frequency.set(3);
 

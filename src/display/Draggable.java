@@ -8,11 +8,15 @@ public abstract class Draggable extends Drawable {
 
 	public Draggable(int[] pos, String name) {
 		super(pos, name);
-		Window.dragger.addDraggable(this);
-		root.addChild(this);
+
 	}
 
 	protected abstract Shape getCollider();
+
+	@Override
+	public void init() {
+		correspondingView.addDraggable(this);
+	}
 
 	protected void dragStart() {
 

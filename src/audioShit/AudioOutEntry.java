@@ -1,5 +1,6 @@
 package audioShit;
 
+import display.View;
 import nodeSystem.Entry;
 import nodeSystem.Node;
 import nodeSystem.ValueOutField;

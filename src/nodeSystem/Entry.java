@@ -5,7 +5,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import com.jsyn.unitgen.PassThrough;
 
-import audioShit.OutputNode;
+import audioShit.MidiOutputNode;
+import display.View;
 import graphics.Drawable;
 
 public abstract class Entry extends Drawable {
@@ -33,10 +34,10 @@ public abstract class Entry extends Drawable {
 		this.node = node;
 
 		this.leftPorts = new PassThrough();
-		OutputNode.getSynth().add(leftPorts);
+		wind.getSynth().add(leftPorts);
 		this.leftPorts.start();
 		this.rightPorts = new PassThrough();
-		OutputNode.getSynth().add(rightPorts);
+		wind.getSynth().add(rightPorts);
 		this.rightPorts.start();
 
 	}
@@ -136,4 +137,9 @@ public abstract class Entry extends Drawable {
 
 	protected abstract void setConnected();
 
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
 }

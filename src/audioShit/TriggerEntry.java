@@ -13,7 +13,7 @@ public class TriggerEntry extends Entry {
 		super(node, name, 0);
 		this.tr = tr;
 		triggerUnit = new TriggerUnit(this);
-		OutputNode.getSynth().add(triggerUnit);
+		MidiOutputNode.getSynth().add(triggerUnit);
 		triggerUnit.start();
 		
 		getLeftPorts().output.connect(triggerUnit.input);

@@ -8,11 +8,15 @@ public abstract class Clickable extends Drawable {
 
 	public Clickable(int[] pos, String name) {
 		super(pos, name);
-		Window.dragger.addClickable(this);
+
 	}
 
 	public abstract void clicked();
 
 	public abstract Shape getCollider();
 
+	@Override
+	public void init() {
+		correspondingView.addClickable(this);
+	}
 }

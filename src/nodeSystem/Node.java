@@ -7,6 +7,7 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import display.Draggable;
+import display.View;
 
 public abstract class Node extends Draggable {
 
@@ -29,10 +30,9 @@ public abstract class Node extends Draggable {
 
 	}
 
-	
 	@SuppressWarnings("unused")
 	private void test() {
-	
+
 		Slider s = (Slider) getChild("c");
 		s.addInConnector();
 		s.addOutCOnnector();
@@ -84,8 +84,6 @@ public abstract class Node extends Draggable {
 		}
 	}
 
-
-	
 	@Override
 	protected Shape getCollider() {
 		return new RoundRectangle2D.Float(getX(), getY(), width, getEntriesHeight() + arcRadi * 2 + nameHeight, arcRadi,
@@ -123,7 +121,5 @@ public abstract class Node extends Draggable {
 	public int getBorderWidth() {
 		return borderWidth;
 	}
-	
-	
 
 }

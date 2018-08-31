@@ -26,13 +26,15 @@ import com.jsyn.unitgen.UnitVoice;
 import com.jsyn.unitgen.VariableRateMonoReader;
 import com.softsynth.shared.time.TimeStamp;
 
-public class Piano extends Circuit implements UnitVoice{
+import display.Window;
+
+public class Piano extends Circuit implements UnitVoice {
 	private Map<Integer, UnitOscillatorReaderPair> keyboardKeys;
 	private SegmentedEnvelope falloff, end;
 	public UnitOutputPort output;
 
-	private Maximum max;
-	private Minimum min;
+//	private Maximum max;
+//	private Minimum min;
 
 	private PassThrough psToOut, psAmpli, psFallofRate;
 	public UnitInputPort amplitude, falloffspeed;
@@ -53,15 +55,15 @@ public class Piano extends Circuit implements UnitVoice{
 		keyboardKeys = new HashMap<>();
 
 		add(psToOut = new PassThrough());
-		OutputNode.getSynth().add(psToOut);
+		Window.getSynth().add(psToOut);
 		psToOut.output = output;
 
 		add(psAmpli = new PassThrough());
-		OutputNode.getSynth().add(psAmpli);
+		Window.getSynth().add(psAmpli);
 		psAmpli.input = amplitude;
 
 		add(psFallofRate = new PassThrough());
-		OutputNode.getSynth().add(psFallofRate);
+		Window.getSynth().add(psFallofRate);
 		psFallofRate.input = falloffspeed;
 
 		double[] data = { 0.02, 1.0, // 0
@@ -83,16 +85,16 @@ public class Piano extends Circuit implements UnitVoice{
 	}
 
 	/*
-	 * Manually set a UnitOscillator for specified Keys.
-	 * Only works if Piano is Paused.
+	 * Manually set a UnitOscillator for specified Keys. Only works if Piano is
+	 * Paused.
 	 */
 	public void setKeys(Map<Integer, UnitOscillator> newKeys) {
 		if (pause) {
 			for (Integer key : newKeys.keySet()) {
 				keyboardKeys.get(key).ossie = newKeys.get(key);
 			}
-		}else {
-			
+		} else {
+
 		}
 	}
 
@@ -104,8 +106,8 @@ public class Piano extends Circuit implements UnitVoice{
 			keyboardKeys.put(midiKey,
 					new UnitOscillatorReaderPair(ossie = getCurrentUnitGen(), reader = new VariableRateMonoReader()));
 
-			OutputNode.getSynth().add(reader);
-			OutputNode.getSynth().add(ossie);
+			Window.getSynth().add(reader);
+			Window.getSynth().add(ossie);
 			add(ossie);
 			add(reader);
 
@@ -182,17 +184,17 @@ public class Piano extends Circuit implements UnitVoice{
 
 	@Override
 	public void noteOn(double frequency, double amplitude, TimeStamp timeStamp) {
-		UnitOscillator ossie;
+//		UnitOscillator ossie;
 		VariableRateMonoReader reader;
 		System.out.println("play Pitch: " + MidiConstants.convertFrequencyToPitch(frequency) + "   " + frequency);
 		int midiKey = (int) MidiConstants.convertFrequencyToPitch(frequency);
 		if (keyboardKeys.containsKey(midiKey)) {
-			ossie = keyboardKeys.get(midiKey).ossie;
+//			ossie = keyboardKeys.get(midiKey).ossie;
 			reader = keyboardKeys.get(midiKey).reader;
 			reader.dataQueue.clear();
 			reader.dataQueue.queue(falloff, 0, falloff.getNumFrames());
 		}
-		
+
 	}
 
 	@Override

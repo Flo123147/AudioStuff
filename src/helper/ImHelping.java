@@ -4,14 +4,14 @@ import java.awt.Graphics2D;
 import java.awt.geom.CubicCurve2D;
 
 import display.Draggable;
+import display.NodeView;
 import display.Window;
 import graphics.Drawable;
 import nodeSystem.Connector;
-import nodeSystem.Root;
 
 public class ImHelping {
 	public static Window wind;
-	public static Root root;
+	public static NodeView root;
 
 	public static void drawConnectionBezier(Graphics2D g, int startX, int startY, int endX, int endY) {
 		int cuviness = Math.abs(startX -endX);

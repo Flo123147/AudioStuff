@@ -1,5 +1,13 @@
 package helper;
 
-public class ValueContainer{
-	public float value;
+
+public class ValueContainer<Type> {
+	public ValueContainer(Type value) {
+		this.x = value;
+	}
+
+	public ValueContainer() {
+	}
+
+	public Type x;
 }

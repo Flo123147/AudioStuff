@@ -2,7 +2,7 @@ package testingInProgress;
 
 import com.jsyn.midi.MidiSynthesizer;
 
-import audioShit.OutputNode;
+import audioShit.MidiOutputNode;
 
 public class MidiTester implements Runnable {
 
@@ -18,7 +18,7 @@ public class MidiTester implements Runnable {
 		for (int i = 12; i <= 94; i++) {
 			ms.noteOn(0, i, 100);
 			try {
-				OutputNode.getSynth().sleepFor(0.5);
+				MidiOutputNode.getSynth().sleepFor(0.5);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

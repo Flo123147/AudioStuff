@@ -5,8 +5,9 @@ import java.awt.Graphics2D;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 
+import display.NodeView;
+import display.View;
 import display.Window;
-import nodeSystem.Root;
 
 public abstract class Drawable {
 	private int[] pos;
@@ -14,24 +15,32 @@ public abstract class Drawable {
 
 	protected Color color;
 	protected Window wind;
-	protected Root root;
+//	protected Root root;
 
-	protected Drawable parent;
-	protected LinkedList<Drawable> children;
+	Drawable parent;
+	LinkedList<Drawable> children;
+
+	protected View correspondingView;
+	private boolean initialized;
 
 	public Drawable(int[] pos, String name) {
 		this.pos = pos;
 		this.name = name;
 		wind = Window.widow;
-		root = Window.root;
+//		root = Window.root;
 		color = Color.WHITE;
 		children = new LinkedList<Drawable>();
 
 	}
 
+	// Called once the correspondingView has been set
+	public abstract void init();
+
 	protected abstract void draw(Graphics2D g, int x, int y);
 
 	public void preDraw(Graphics2D g, int xOffset, int yOffset) {
+//		System.out.println(getName() + "    " + getClass() + "      " + initialized);
+		if (initialized) {
 		draw(g, getLocalX() + xOffset, getLocalY() + yOffset);
 		try {
 			for (Drawable d : children) {
@@ -41,11 +50,16 @@ public abstract class Drawable {
 		} catch (ConcurrentModificationException e) {
 			System.out.println("lel");
 		}
+		}
 	}
 
 	public final boolean addChild(Drawable child) {
 		if (children.contains(child))
 			return false;
+		if (this.initialized) {
+			child.setView(correspondingView);
+		}
+
 		children.addFirst(child);
 		child.setParent(this);
 		return true;
@@ -140,7 +154,17 @@ public abstract class Drawable {
 		}
 		System.out.print(pos[1] + " ");
 	}
+
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setView(View view) {
+		correspondingView = view;
+		init();
+		for (Drawable c : children) {
+			c.setView(correspondingView);
+		}
+		initialized = true;
 	}
 }

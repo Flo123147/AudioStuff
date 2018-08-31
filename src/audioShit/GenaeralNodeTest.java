@@ -16,7 +16,7 @@ public class GenaeralNodeTest extends Node {
 	public GenaeralNodeTest(int[] pos, String name, UnitGenerator ug) {
 		super(pos, ug.getClass().getName());
 		this.ug = ug;
-		OutputNode.getSynth().add(ug);
+		wind.getSynth().add(ug);
 		ug.start();
 		System.out.println(ug.getPorts());
 		for (UnitPort port : ug.getPorts()) {

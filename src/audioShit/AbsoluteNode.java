@@ -10,7 +10,7 @@ public class AbsoluteNode extends Node {
 	public AbsoluteNode(int[] pos, String name) {
 		super(pos, name);
 		absolute = new Absolute();
-		OutputNode.getSynth().add(absolute);
+		wind.addToSynth(absolute);
 	//	absolute.start();
 		addEntry(inOut = new AudioInOutEntry(this, "Absolute"));
 		

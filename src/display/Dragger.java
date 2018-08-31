@@ -8,18 +8,18 @@ import java.util.LinkedList;
 import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import helper.ControlHelper;
+import helper.ValueContainer;
 import nodeSystem.Connector;
-import nodeSystem.Root;
 import nodeSystem.SliderKnob;
 
 public class Dragger implements MouseMotionListener, MouseListener {
 
-	private LinkedList<Draggable> dragos;
+//	private LinkedList<Draggable> dragos;
 	private Draggable toDrag;
 
-	private LinkedList<Clickable> clickos;
+//	private LinkedList<Clickable> clickos;
 
-	private Root root;
+//	private NodeView root;
 
 	private boolean dragBackGround;
 
@@ -27,29 +27,23 @@ public class Dragger implements MouseMotionListener, MouseListener {
 	private boolean connecting;
 	private Connector connectFrom;
 
-	public Dragger(Root root) {
-		dragos = new LinkedList<>();
-		clickos = new LinkedList<>();
-		this.root = root;
+	private Window wind;
+
+	private ValueContainer<View> viewCont;
+
+	public Dragger(ValueContainer<View> viewCont) {
+		this.wind = wind;
 		ch = new ControlHelper();
-	}
-
-	public void addDraggable(Draggable drago) {
-		dragos.add(drago);
-	}
-
-	public void addClickable(Clickable clickable) {
-		clickos.add(clickable);
-
+		this.viewCont = viewCont;
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		for (Clickable cl : clickos) {
+		for (Clickable cl : viewCont.x.getClickos()) {
 			if (cl.getCollider() != null && cl.getCollider().contains(e.getPoint())) {
 				cl.clicked();
 				System.out.println(cl.getName() + "  Clicked");
-				
+
 				if (cl.getChildren().size() == 0) {
 					break;
 				}
@@ -78,7 +72,8 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 		System.out.println("click down");
 		boolean backgroundClicked = true;
-		for (Draggable d : dragos) {
+
+		for (Draggable d : viewCont.x.getDragos()) {
 			if (d.getCollider() != null && d.getCollider().contains(e.getPoint())) {
 				toDrag = d;
 				d.dragStart();
@@ -104,7 +99,7 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 		if (connecting) {
 			boolean foundPort = false;
-			for (Draggable d : dragos) {
+			for (Draggable d : viewCont.x.getDragos()) {
 				if (d.getCollider() != null && d.getCollider().contains(e.getPoint())) {
 					if (d instanceof Connector) {
 						Connector connectTo = (Connector) d;
@@ -143,8 +138,8 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 			toDrag.move(ch.getDeltaX(), ch.getDeltaY(), ch);
 
-		} else if (dragBackGround) {
-			root.moveRoot(ch.getDeltaX(), ch.getDeltaY());
+		} else if (dragBackGround && viewCont.x.isDraggable()) {
+			viewCont.x.moveRoot(ch.getDeltaX(), ch.getDeltaY());
 		}
 
 	}

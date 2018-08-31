@@ -5,6 +5,7 @@ import javax.sound.midi.MidiSystem;
 import com.jsyn.midi.MidiSynthesizer;
 import com.jsyn.util.MultiChannelSynthesizer;
 
+import display.View;
 import helper.ValueContainer;
 import nodeSystem.KeyNode;
 import nodeSystem.Slider;
@@ -16,7 +17,7 @@ public class PianoNode extends KeyNode {
 	private Piano piano;
 	private Slider amplitude;
 	private Slider rate;
-	private ValueContainer octaveOffsetC;
+	private ValueContainer<Integer> octaveOffsetC;
 	private PlusMinusEntry plusMinus;
 
 	public PianoNode(int[] pos, String name) {
@@ -25,27 +26,26 @@ public class PianoNode extends KeyNode {
 		piano = new Piano();
 		piano.output.connect(output.getRightPorts().input);
 		System.out.println(piano.output);
-		OutputNode.getSynth().add(piano);
+		wind.getSynth().add(piano);
 		piano.start();
 
-		
-		octaveOffsetC = new ValueContainer();
-		octaveOffsetC.value = 4;
-		
+		octaveOffsetC = new ValueContainer<Integer>();
+		octaveOffsetC.x = 4;
+
 		addEntry(amplitude = new Slider(this, "Amplitude", 0, 0.2));
 		amplitude.getRightPorts().output.connect(piano.amplitude);
 
 		addEntry(rate = new Slider(this, "Falloff", 0, 10));
 		rate.getRightPorts().output.connect(piano.falloffspeed);
-		
-		addEntry(plusMinus = new PlusMinusEntry(this, "Octave",1,octaveOffsetC));
+
+		addEntry(plusMinus = new PlusMinusEntry(this, "Octave", 1, octaveOffsetC));
 	}
 
 	public void testMidi() {
 		MidiSynthesizer msys = new MidiSynthesizer(new MultiChannelSynthesizer());
-		
+
 	}
-	
+
 	@Override
 	public void keyOn(char key) {
 
@@ -54,10 +54,10 @@ public class PianoNode extends KeyNode {
 		if (ntoPlay != -1)
 			piano.pressKeyMidi(ntoPlay);
 	}
-	
-	//0 = 4
+
+	// 0 = 4
 	public void setOctaveOffset(int octaveOffset) {
-		this.octaveOffsetC.value = octaveOffset;
+		this.octaveOffsetC.x = octaveOffset;
 	}
 
 	private int getNoteToPlay(char key) {
@@ -106,7 +106,7 @@ public class PianoNode extends KeyNode {
 			break;
 		}
 
-		return (int) (ntoPlay + (octaveOffsetC.value-4) * 12);
+		return (int) (ntoPlay + (octaveOffsetC.x - 4) * 12);
 	}
 
 	@Override

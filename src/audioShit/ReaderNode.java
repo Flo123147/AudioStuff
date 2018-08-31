@@ -21,7 +21,7 @@ public class ReaderNode extends Node implements Triggerable {
 		super(pos, name);
 
 		reader = new VariableRateMonoReader();
-		OutputNode.getSynth().add(reader);
+		MidiOutputNode.getSynth().add(reader);
 		reader.start();
 		
 		addEntry(trigger = new TriggerEntry(this, "Trigger", this));

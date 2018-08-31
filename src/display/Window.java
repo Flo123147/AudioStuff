@@ -4,53 +4,78 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.image.BufferStrategy;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+
 import javax.swing.JFrame;
 
-import com.jsyn.instruments.DrumWoodFM;
-import com.jsyn.instruments.DualOscillatorSynthVoice;
-import com.jsyn.unitgen.*;
+import com.jsyn.JSyn;
+import com.jsyn.Synthesizer;
+import com.jsyn.ports.UnitInputPort;
+import com.jsyn.unitgen.LineOut;
+import com.jsyn.unitgen.UnitGenerator;
 
-import audioShit.AbsoluteNode;
-import audioShit.AdderNode;
-import audioShit.DelayNode;
-import audioShit.GenaeralNodeTest;
-import audioShit.MidiSynthNode;
-import audioShit.OutputNode;
-import audioShit.ReaderNode;
-import audioShit.SineOscillatorNode;
+import audioShit.Piano;
 import audioShit.PianoNode;
-import audioShit.WhiteNoiseNode;
-import graphics.Drawable;
-import graphics.Kreis;
-import graphics.Rect;
 import helper.ImHelping;
-import nodeSystem.KeyTestNode;
-import nodeSystem.Root;
-import testingInProgress.MidiTester;
-import uiShit.Spawner;
+import helper.KeyMngr;
+import helper.ValueContainer;
+import uiShit.UiBorder;
+import uiShit.UiElement;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements Runnable {
 	private boolean running;
-	private LinkedList<Drawable> rootParts;
+	private Map<String, View> views;
 
-	private Kreis[] kreises = new Kreis[3];
+//	private Kreis[] kreises = new Kreis[3];
 	private boolean initialized;
 
 	public static Window widow;
 	public static Dragger dragger;
-	public static Root root;
-	public static OutputNode outputNode;
+//	public static Root root;
 	public static KeyMngr keyMngr;
 
+	private static Synthesizer synth;
+	private UnitInputPort mainOutput;
+	private LineOut lineOut;
+
+	private ValueContainer<View> currentViewCont;
+	private View swichtTo;
+
+	public final UiBorder LEFT, TOP, RIGHT, BOT;
+
 	public Window() {
-		rootParts = new LinkedList<Drawable>();
+		views = new HashMap<>();
 		Window.widow = this;
 		ImHelping.wind = this;
+		LEFT = new UiBorder(0);
+		TOP = new UiBorder(0);
+		RIGHT = new UiBorder(0);
+		BOT = new UiBorder(0);
+	}
+
+	public View newNodeView(String name) {
+		views.put(name, new NodeView(name));
+		return views.get(name);
+	}
+
+	public Map<String, View> getViews() {
+		return views;
+	}
+
+	public View getCurrentView() {
+		return currentViewCont.x;
+	}
+
+	public void switchToView(String name) {
+
+		swichtTo = views.get(name);
+
 	}
 
 	private void init() {
@@ -61,17 +86,15 @@ public class Window extends JFrame implements Runnable {
 		setMinimumSize(new Dimension(getWidth(), getHeight()));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-		Root root = new Root(new int[2], "root");
 		int topMiddle = getWidth() / 2;
 		int leftMiddle = getHeight() / 2;
-		root.setSizes(leftMiddle, topMiddle, getWidth(), getHeight());
 
-		Dragger dragger = new Dragger(root);
+		currentViewCont = new ValueContainer<View>();
+		Dragger dragger = new Dragger(currentViewCont);
 		KeyMngr keyMngr = new KeyMngr();
 		addKeyListener(keyMngr);
 
 		Window.dragger = dragger;
-		Window.root = ImHelping.root = root;
 		Window.keyMngr = keyMngr;
 
 		addMouseListener(dragger);
@@ -79,66 +102,24 @@ public class Window extends JFrame implements Runnable {
 
 		setTitle("Wambo");
 
-		rootParts.add(root);
 		initialized = true;
-	}
 
-	private void test2() {
-		outputNode = new OutputNode(new int[] { 1100, 500 }, "Output");
-//		WhiteNoiseNode wnn = new WhiteNoiseNode(new int[] { 100, 100 }, "White Noise");
-//		SineOscillatorNode son = new SineOscillatorNode(new int[] { 700, 800 });
-//		son.setFreq(8f);
-//		SineOscillatorNode son2 = new SineOscillatorNode(new int[] { 700, 900 });
-//		son2.setFreq(300f);
-//
-//		DelayNode delayNode = new DelayNode(new int[] { 500, 620 }, "Delay");
-//
-//		AdderNode an = new AdderNode(new int[] { 55, 88 }, "AdderTest");
-//
-//		GenaeralNodeTest gnt = new GenaeralNodeTest(new int[] { 77, 77 }, "wuutwuuut", new Maximum());
-//
-//		GenaeralNodeTest gnt2 = new GenaeralNodeTest(new int[] { 77, 77 }, "wuutwuuut", new DualOscillatorSynthVoice());
-//
-//		AbsoluteNode ann = new AbsoluteNode(new int[] { 666, 666 }, "Basolute");
-//
-//		ReaderNode rn = new ReaderNode(new int[] { 676, 676 }, "Reader");
-//
-////		KeyTestNode ktn = new KeyTestNode(new int[] {987,77}, "KeyOutTest"); 
+		synth = JSyn.createSynthesizer();
+		lineOut = new LineOut();
+		synth.add(lineOut);
+		mainOutput = lineOut.input;
 
-		MidiSynthNode msn = new MidiSynthNode(new int[] { 300, 300 }, "Midi --Synth Test");
+		synth.start();
+		lineOut.start();
+		currentViewCont.x = new MainView("TimeLine");
+//		currentViewCont.value = newNodeView("NVT");
+//		((NodeView) currentViewCont.value).setSizes(leftMiddle, topMiddle, getWidth(), getHeight());
 
-		PianoNode tn = new PianoNode(new int[] { 900, 600 }, "Piano");
-
-		MidiTester nidiTester;
-		Thread t = (new Thread(nidiTester = new MidiTester(msn.getMidisynth())));
-		t.start();
-	}
-
-	private void uitest() {
-		Spawner sp = new Spawner(new int[] { 20, 20 });
-		rootParts.add(sp);
-		System.out.println("-lel");
-	}
-
-	@SuppressWarnings("unused")
-	private void test() {
-		Rect rrr;
-		Rect rrr2;
-
-		rootParts.add(rrr = new Rect(new int[] { 20, 40 }, 100, 800, "R"));
-
-		kreises[0] = new Kreis(new int[] { 100, 100 }, 20, "K1");
-		kreises[1] = new Kreis(new int[] { 1000, 1000 }, 20, "K2");
-		rrr2 = new Rect(new int[] { 20, 20 }, 60, 760, "Ri");
-
-		rrr2.setColor(Color.GREEN);
-		Kreis k3 = new Kreis(new int[] { 30, 30 }, 30, "Kred");
-		kreises[2] = k3;
-		rrr.addChild(k3);
-
-		k3.setColor(Color.pink);
-
-		rrr.addChild(rrr2);
+		Insets ins = getInsets();
+		LEFT.border = ins.left;
+		TOP.border = ins.top;
+		RIGHT.border = getWidth() - ins.right;
+		BOT.border = getHeight() - ins.bottom;
 
 	}
 
@@ -178,7 +159,6 @@ public class Window extends JFrame implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		outputNode.stop();
 		setVisible(false);
 		super.dispose();
 		System.exit(0);
@@ -186,8 +166,11 @@ public class Window extends JFrame implements Runnable {
 
 	private void draw(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		for (Drawable d : rootParts) {
-			d.preDraw(g, 0, 0);
+		currentViewCont.x.preDraw(g, 0, 0);
+
+		if (swichtTo != null) {
+			currentViewCont.x = swichtTo;
+			swichtTo = null;
 		}
 	}
 
@@ -209,27 +192,49 @@ public class Window extends JFrame implements Runnable {
 		Window wind;
 		Thread t = (new Thread(wind = new Window()));
 		wind.init();
-		for (String arg : args) {
-			switch (arg) {
-			case "test1":
-				wind.test();
-				break;
-			case "test2":
-				wind.test2();
-				break;
-
-			case "uitest":
-				wind.uitest();
-				break;
-			default:
-				break;
-			}
-		}
+//		for (String arg : args) {
+//			switch (arg) {
+//			case "test1":
+//				wind.test();
+//				break;
+//			case "test2":
+//				wind.test2();
+//				break;
+//
+//			case "uitest":
+//				wind.uitest();
+//				break;
+//			default:
+//				break;
+//			}
+//		}
 		t.start();
+
+		UiBorder a;
+		UiBorder b;
+		wind.getCurrentView().addConponent(
+				new UiElement(new UiBorder[] { wind.LEFT, wind.TOP, a = new UiBorder(300), b = new UiBorder(700) }));
+		wind.getCurrentView().addConponent(new UiElement(new UiBorder[] { a, wind.TOP, wind.RIGHT, b }));
 	}
 
 	public void jSynthStopped() {
 
+	}
+
+	private UnitInputPort getmainOutput() {
+		return mainOutput;
+	}
+
+	public static Synthesizer getSynth() {
+		return synth;
+	}
+
+	public void addToSynth(UnitGenerator unitg) {
+		synth.add(unitg);
+	}
+
+	public ValueContainer<View> getCurrentViewCont() {
+		return currentViewCont;
 	}
 
 }

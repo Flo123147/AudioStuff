@@ -16,14 +16,14 @@ public class DelayNode extends Node{
 		super(pos, name);
 		
 		delay = new InterpolatingDelay();
-		OutputNode.getSynth().add(delay);
+		wind.addToSynth(delay);
 		delay.start();
 		
 		addEntry(inOut = new AudioInOutEntry(this, ""));
 		inOut.getLeftPorts().output.connect(delay.input);
 		delay.output.connect(inOut.getRightPorts().input);
 		
-		delay.allocate(10*OutputNode.getSynth().getFrameRate());
+		delay.allocate(10*wind.getSynth().getFrameRate());
 		
 		
 		addEntry(slide = new Slider(this, "Delay", 0, 10));
@@ -35,7 +35,7 @@ public class DelayNode extends Node{
 			
 		}else {
 			delaySec = delay;
-			this.delay.allocate((int) (delaySec*OutputNode.getSynth().getFrameRate()));
+			this.delay.allocate((int) (delaySec*wind.getSynth().getFrameRate()));
 		}
 	}
 

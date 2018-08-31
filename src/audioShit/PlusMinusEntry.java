@@ -9,11 +9,11 @@ import nodeSystem.ValueOutField;
 public class PlusMinusEntry extends Entry {
 
 	private float stepSize;
-	private ValueContainer valueC;
+	private ValueContainer<Integer> valueC;
 	private ValueOutField tf;
 	private Clicker minus, plus;
 
-	public PlusMinusEntry(Node node, String name, float stepSize, ValueContainer valueC) {
+	public PlusMinusEntry(Node node, String name, float stepSize, ValueContainer<Integer> valueC) {
 		super(node, name, 20);
 		this.valueC = valueC;
 		this.stepSize = stepSize;
@@ -28,11 +28,11 @@ public class PlusMinusEntry extends Entry {
 	}
 
 	public void plus() {
-		valueC.value += stepSize;
+		valueC.x += (int) stepSize;
 	}
 
 	public void minus() {
-		valueC.value -= stepSize;
+		valueC.x -= (int)stepSize;
 	}
 
 	@Override

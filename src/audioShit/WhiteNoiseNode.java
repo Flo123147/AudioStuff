@@ -15,7 +15,7 @@ public class WhiteNoiseNode extends Node {
 
 		noise = new WhiteNoise();
 
-		OutputNode.getSynth().add(noise);
+		MidiOutputNode.getSynth().add(noise);
 
 		addEntry(out = new AudioOutEntry(this, getName() + "-Output"));
 		noise.output.connect(out.getRightPorts().input);

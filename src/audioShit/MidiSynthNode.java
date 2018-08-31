@@ -14,8 +14,8 @@ public class MidiSynthNode extends Node {
 		super(pos, name);
 
 		multiSynth = new MultiChannelSynthesizer();
-		System.out.println(OutputNode.getSynth());
-		multiSynth.setup(OutputNode.getSynth(), 0, 16, 6, WaveShapingVoice.getVoiceDescription());
+		System.out.println(MidiOutputNode.getSynth());
+		multiSynth.setup(MidiOutputNode.getSynth(), 0, 16, 6, WaveShapingVoice.getVoiceDescription());
 		midisynth = new MidiSynthesizer(multiSynth);
 
 		addEntry(left = new AudioOutEntry(this, "Left"));
