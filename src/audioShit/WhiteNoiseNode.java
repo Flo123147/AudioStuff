@@ -2,6 +2,7 @@ package audioShit;
 
 import com.jsyn.unitgen.WhiteNoise;
 
+import display.Window;
 import nodeSystem.Node;
 import nodeSystem.Slider;
 
@@ -15,7 +16,7 @@ public class WhiteNoiseNode extends Node {
 
 		noise = new WhiteNoise();
 
-		MidiOutputNode.getSynth().add(noise);
+		Window.getSynth().add(noise);
 
 		addEntry(out = new AudioOutEntry(this, getName() + "-Output"));
 		noise.output.connect(out.getRightPorts().input);

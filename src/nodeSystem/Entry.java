@@ -5,9 +5,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import com.jsyn.unitgen.PassThrough;
 
-import audioShit.MidiOutputNode;
 import display.View;
 import graphics.Drawable;
+import midi.MidiOutputNode;
 
 public abstract class Entry extends Drawable {
 

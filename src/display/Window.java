@@ -24,14 +24,15 @@ import audioShit.PianoNode;
 import helper.ImHelping;
 import helper.KeyMngr;
 import helper.ValueContainer;
+import uiShit.TimeLinesBox;
 import uiShit.UiBorder;
-import uiShit.UiElement;
+import uiShit.UiBaseElement;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements Runnable {
 	private boolean running;
 	private Map<String, View> views;
-
+	private final String MAIN_VIEW_NAME = "MainView";
 //	private Kreis[] kreises = new Kreis[3];
 	private boolean initialized;
 
@@ -53,15 +54,10 @@ public class Window extends JFrame implements Runnable {
 		views = new HashMap<>();
 		Window.widow = this;
 		ImHelping.wind = this;
-		LEFT = new UiBorder(0);
-		TOP = new UiBorder(0);
-		RIGHT = new UiBorder(0);
-		BOT = new UiBorder(0);
-	}
-
-	public View newNodeView(String name) {
-		views.put(name, new NodeView(name));
-		return views.get(name);
+		LEFT = new UiBorder(0, this);
+		TOP = new UiBorder(0, this);
+		RIGHT = new UiBorder(0, this);
+		BOT = new UiBorder(0, this);
 	}
 
 	public Map<String, View> getViews() {
@@ -83,7 +79,7 @@ public class Window extends JFrame implements Runnable {
 		setExtendedState(MAXIMIZED_BOTH);
 		setVisible(true);
 		setSize(getWidth(), getHeight());
-		setMinimumSize(new Dimension(getWidth(), getHeight()));
+		setMinimumSize(new Dimension(getWidth() / 2, getHeight() / 2));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		int topMiddle = getWidth() / 2;
@@ -111,15 +107,15 @@ public class Window extends JFrame implements Runnable {
 
 		synth.start();
 		lineOut.start();
-		currentViewCont.x = new MainView("TimeLine");
+		currentViewCont.x = new MainView(MAIN_VIEW_NAME, this);
 //		currentViewCont.value = newNodeView("NVT");
 //		((NodeView) currentViewCont.value).setSizes(leftMiddle, topMiddle, getWidth(), getHeight());
 
 		Insets ins = getInsets();
-		LEFT.border = ins.left;
-		TOP.border = ins.top;
-		RIGHT.border = getWidth() - ins.right;
-		BOT.border = getHeight() - ins.bottom;
+		LEFT.border = 0f;
+		TOP.border = 0f;
+		RIGHT.border = 1f;
+		BOT.border = 1f;
 
 	}
 
@@ -133,6 +129,8 @@ public class Window extends JFrame implements Runnable {
 		hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		Font font = new Font(Font.SERIF, Font.PLAIN, 12);
+
+		setBackground(Color.DARK_GRAY);
 
 		while (running) {
 
@@ -166,7 +164,7 @@ public class Window extends JFrame implements Runnable {
 
 	private void draw(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		currentViewCont.x.preDraw(g, 0, 0);
+		currentViewCont.x.drawView(g, 0, 0);
 
 		if (swichtTo != null) {
 			currentViewCont.x = swichtTo;
@@ -210,18 +208,17 @@ public class Window extends JFrame implements Runnable {
 //		}
 		t.start();
 
-		UiBorder a;
-		UiBorder b;
-		wind.getCurrentView().addConponent(
-				new UiElement(new UiBorder[] { wind.LEFT, wind.TOP, a = new UiBorder(300), b = new UiBorder(700) }));
-		wind.getCurrentView().addConponent(new UiElement(new UiBorder[] { a, wind.TOP, wind.RIGHT, b }));
+		TimeLinesBox tlb;
+		wind.getCurrentView().addComponent(tlb = new TimeLinesBox(new UiBorder[] { new UiBorder(0.3f, wind),
+				new UiBorder(0.2f, wind), new UiBorder(0.9f, wind), new UiBorder(0.7f, wind) }));
+		tlb.addTimeLine();
 	}
 
 	public void jSynthStopped() {
 
 	}
 
-	private UnitInputPort getmainOutput() {
+	public UnitInputPort getmainOutput() {
 		return mainOutput;
 	}
 
@@ -235,6 +232,15 @@ public class Window extends JFrame implements Runnable {
 
 	public ValueContainer<View> getCurrentViewCont() {
 		return currentViewCont;
+	}
+
+	public void addView(View view) {
+		views.put(view.getName(), view);
+
+	}
+
+	public void switchToMainView() {
+		switchToView(MAIN_VIEW_NAME);
 	}
 
 }

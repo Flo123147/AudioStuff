@@ -4,17 +4,19 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.util.LinkedList;
 
 import audioShit.PlusMinusEntry;
 import display.Clickable;
+import graphics.Drawable;
 
-public class Clicker extends Clickable {
+public class RoundButton extends ClickableNodeTree {
 
 	private boolean isMinus;
 	private PlusMinusEntry pluMin;
 	private int diameter = 20;
 
-	public Clicker(int[] pos, String name, boolean isMinus, PlusMinusEntry pluMin) {
+	public RoundButton(int[] pos, String name, boolean isMinus, PlusMinusEntry pluMin) {
 		super(pos, name);
 		
 		this.pluMin = pluMin;
@@ -54,5 +56,7 @@ public class Clicker extends Clickable {
 		g.setColor(Color.BLACK);
 		g.drawOval(x - getRadius(), y - getRadius(), diameter, diameter);
 	}
+
+
 
 }

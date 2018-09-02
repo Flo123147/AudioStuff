@@ -15,7 +15,6 @@ public class Root extends Drawable {
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
 		correspondingView.drawBackG(g, x, y);
-
 	}
 
 	@Override

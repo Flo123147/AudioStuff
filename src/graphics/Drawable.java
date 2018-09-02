@@ -41,27 +41,29 @@ public abstract class Drawable {
 	public void preDraw(Graphics2D g, int xOffset, int yOffset) {
 //		System.out.println(getName() + "    " + getClass() + "      " + initialized);
 		if (initialized) {
-		draw(g, getLocalX() + xOffset, getLocalY() + yOffset);
-		try {
-			for (Drawable d : children) {
-				d.preDraw(g, getX(), getY());
+			draw(g, getLocalX() + xOffset, getLocalY() + yOffset);
+			try {
+				for (Drawable d : children) {
+					d.preDraw(g, getX(), getY());
 
+				}
+			} catch (ConcurrentModificationException e) {
+				System.out.println("lel");
 			}
-		} catch (ConcurrentModificationException e) {
-			System.out.println("lel");
-		}
 		}
 	}
 
 	public final boolean addChild(Drawable child) {
 		if (children.contains(child))
 			return false;
+
+		children.addFirst(child);
+		child.setParent(this);
+		
 		if (this.initialized) {
 			child.setView(correspondingView);
 		}
 
-		children.addFirst(child);
-		child.setParent(this);
 		return true;
 	}
 
@@ -86,8 +88,13 @@ public abstract class Drawable {
 		if (this.parent != null) {
 			this.parent.removeChild(this);
 		}
-		this.parent = newParent;
 
+		this.parent = newParent;
+		System.out.println(this + "    " + this.parent + "   " + this.parent.children.get(0));
+	}
+
+	public Drawable getParent() {
+		return this.parent;
 	}
 
 	public void setColor(Color color) {

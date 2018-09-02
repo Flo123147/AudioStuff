@@ -1,22 +1,16 @@
 package display;
-
 import java.awt.Shape;
+import java.util.LinkedList;
 
 import graphics.Drawable;
 
-public abstract class Clickable extends Drawable {
-
-	public Clickable(int[] pos, String name) {
-		super(pos, name);
-
-	}
-
+public abstract interface Clickable {
 	public abstract void clicked();
 
 	public abstract Shape getCollider();
 
-	@Override
-	public void init() {
-		correspondingView.addClickable(this);
-	}
+	public abstract String getName();
+
+	public abstract LinkedList<Drawable> getChildren();
+
 }

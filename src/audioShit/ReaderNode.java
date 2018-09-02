@@ -21,9 +21,9 @@ public class ReaderNode extends Node implements Triggerable {
 		super(pos, name);
 
 		reader = new VariableRateMonoReader();
-		MidiOutputNode.getSynth().add(reader);
+		wind.addToSynth(reader);
 		reader.start();
-		
+
 		addEntry(trigger = new TriggerEntry(this, "Trigger", this));
 
 		addEntry(out = new AudioOutEntry(this, "Output"));
@@ -37,16 +37,7 @@ public class ReaderNode extends Node implements Triggerable {
 		rateSlider.setValue(reader.rate.getDefault());
 		rateSlider.getRightPorts().output.connect(reader.rate);
 
-		double[] data = { 
-				0.02, 1,
-				0.3, 0.8,
-				0.5, 0.7,
-				0.7, 0.55,
-				0.9, 0.4,
-				1.1, 0.3,
-				1.3, 0.2, 
-				1.5, 0.1, 
-				1.9, 0
+		double[] data = { 0.02, 1, 0.3, 0.8, 0.5, 0.7, 0.7, 0.55, 0.9, 0.4, 1.1, 0.3, 1.3, 0.2, 1.5, 0.1, 1.9, 0
 
 		};
 		myTestThingy = new SegmentedEnvelope(data);
@@ -57,22 +48,21 @@ public class ReaderNode extends Node implements Triggerable {
 	public void triggerOn() {
 		System.out.println("o----------n");
 		reader.dataQueue.clear();
-		reader.dataQueue.queue(myTestThingy,0,2);
-		reader.dataQueue.queueLoop(myTestThingy,0,2);
+		reader.dataQueue.queue(myTestThingy, 0, 2);
+		reader.dataQueue.queueLoop(myTestThingy, 0, 2);
 
 	}
 
 	@Override
 	public void triggerHold() {
 
-
 	}
+
 	@Override
 	public void triggerOff() {
 		System.out.println("o----------------------f-f");
-		reader.dataQueue.queue(myTestThingy, 2,7);
+		reader.dataQueue.queue(myTestThingy, 2, 7);
 
 	}
 
-	
 }

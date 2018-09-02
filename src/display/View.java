@@ -10,26 +10,35 @@ public abstract class View {
 	private LinkedList<Draggable> dragos;
 	private LinkedList<Clickable> clickos;
 
-	private Drawable root;
+	Drawable root;
 	private String name;
+	Window wind;
 
-	public View(String name) {
+	private boolean isInitializend;
+
+	public View(String name, Window wind) {
 		this.name = name;
+		this.wind = wind;
 		root = new Root(name);
 		root.setView(this);
 		dragos = new LinkedList<>();
 		clickos = new LinkedList<>();
+		wind.addView(this);
 	}
 
-	public void addConponent(Drawable comp) {
+	void init() {
+		isInitializend = true;
+	}
+
+	public void addComponent(Drawable comp) {
 		comp.setView(this);
 		root.addChild(comp);
 	}
-	
+
 	public Drawable getRoot() {
 		return root;
 	}
-	
+
 	public void addDraggable(Draggable drago) {
 		dragos.add(drago);
 	}
@@ -57,13 +66,16 @@ public abstract class View {
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return name;
 	}
 
-	public void preDraw(Graphics2D g, int x, int y) {
+	public void drawView(Graphics2D g, int x, int y) {
 		root.preDraw(g, x, y);
 	}
 
 	public abstract void drawBackG(Graphics2D g, int x, int y);
+
+	public boolean isInitializend() {
+		return isInitializend;
+	}
 }

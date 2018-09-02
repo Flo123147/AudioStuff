@@ -4,22 +4,25 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import com.jsyn.unitgen.PassThrough;
-import audioShit.MidiOutputNode;
+
 import graphics.Drawable;
 import helper.ValueContainer;
+import midi.MidiOutputNode;
 
-public class ValueOutField extends Drawable {
+public class ValueOutField<Type> extends Drawable {
 
 	private int height, width;
 	public PassThrough valueIn;
-	public ValueContainer valueC;
+	public ValueContainer<Type> valueC;
 	private boolean useCont;
 
 	public ValueOutField(int[] pos, String name, int width, int height) {
 		super(pos, name + "TextField");
 
+		valueC = new ValueContainer<Type>();
+		
 		valueIn = new PassThrough();
-		wind.getSynth().add(valueIn);
+		wind.addToSynth(valueIn);
 		valueIn.start();
 
 		this.width = width;
@@ -43,7 +46,6 @@ public class ValueOutField extends Drawable {
 		} else {
 			text = "" + valueC.x;
 		}
-
 		FontMetrics fm = g.getFontMetrics();
 		int hOffset = (height / 2) + (fm.getAscent() / 2);
 

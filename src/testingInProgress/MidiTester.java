@@ -2,7 +2,7 @@ package testingInProgress;
 
 import com.jsyn.midi.MidiSynthesizer;
 
-import audioShit.MidiOutputNode;
+import midi.MidiOutputNode;
 
 public class MidiTester implements Runnable {
 

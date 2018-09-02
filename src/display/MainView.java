@@ -4,8 +4,8 @@ import java.awt.Graphics2D;
 
 public class MainView extends View {
 
-	public MainView(String name) {
-		super(name);
+	public MainView(String name,Window wind) {
+		super(name, wind);
 	}
 
 	@Override

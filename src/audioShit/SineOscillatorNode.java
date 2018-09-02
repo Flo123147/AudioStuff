@@ -1,7 +1,5 @@
 package audioShit;
 
-import java.awt.Graphics2D;
-
 import com.jsyn.unitgen.SineOscillator;
 import nodeSystem.Node;
 import nodeSystem.Slider;
@@ -15,7 +13,7 @@ public class SineOscillatorNode extends Node {
 	public SineOscillatorNode(int[] pos) {
 		super(pos, "Sine Oscillator");
 		sine = new SineOscillator();
-		MidiOutputNode.getSynth().add(sine);
+		wind.addToSynth(sine);
 		sine.start();
 		sine.frequency.set(3);
 

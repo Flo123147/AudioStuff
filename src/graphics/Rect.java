@@ -23,4 +23,15 @@ public class Rect extends Drawable{
 		g.fillRoundRect(x, y, width, height, 20, 20);
 	}
 
+
+
+
+
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
