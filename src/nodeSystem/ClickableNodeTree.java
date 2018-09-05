@@ -16,6 +16,7 @@ public abstract class ClickableNodeTree extends Drawable implements Clickable {
 
 	@Override
 	public void init() {
+		System.out.println("meeAddo");
 		correspondingView.addClickable(this);
 	}
 }

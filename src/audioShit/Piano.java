@@ -24,10 +24,12 @@ import com.jsyn.unitgen.UnitGenerator;
 import com.jsyn.unitgen.UnitOscillator;
 import com.jsyn.unitgen.UnitVoice;
 import com.jsyn.unitgen.VariableRateMonoReader;
+import com.jsyn.util.VoiceDescription;
 import com.softsynth.shared.time.TimeStamp;
 
 import display.Window;
 
+@Deprecated
 public class Piano extends Circuit implements UnitVoice {
 	private Map<Integer, UnitOscillatorReaderPair> keyboardKeys;
 	private SegmentedEnvelope falloff, end;
@@ -178,8 +180,8 @@ public class Piano extends Circuit implements UnitVoice {
 
 	@Override
 	public UnitOutputPort getOutput() {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("got called yiiiiii");
+		return output;
 	}
 
 	@Override
@@ -214,6 +216,38 @@ public class Piano extends Circuit implements UnitVoice {
 //				reader.dataQueue.queue(end, 2, 1);
 //			}
 //		}
+	}
+
+	public static VoiceDescription getVoiceDescription() {
+		// TODO Auto-generated method stub
+		return new MyVoiceDescription();
+	}
+
+}
+
+class MyVoiceDescription extends VoiceDescription {
+
+	public MyVoiceDescription() {
+		super("Pianotest", null);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String[] getTags(int presetIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UnitVoice createUnitVoice() {
+		// TODO Auto-generated method stub
+		return new Piano();
+	}
+
+	@Override
+	public String getVoiceClassName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

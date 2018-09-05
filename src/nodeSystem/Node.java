@@ -7,14 +7,12 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import display.Draggable;
-import display.View;
 
 public abstract class Node extends Draggable {
 
 	private int width = 200, arcRadi = 10;
 
 	private int entryIndex;
-	// private LinkedList<Entry> entries;
 	private Entry[] entries;
 	private int borderWidth = 3;
 
@@ -25,9 +23,7 @@ public abstract class Node extends Draggable {
 	public Node(int[] pos, String name) {
 		super(pos, name);
 		entryIndex = 0;
-		// entries = new LinkedList<Entry>();
 		entries = new Entry[20];
-
 	}
 
 	@SuppressWarnings("unused")
@@ -38,6 +34,10 @@ public abstract class Node extends Draggable {
 		s.addOutCOnnector();
 	}
 
+	public Entry[] getEntries() {
+		return entries;
+	}
+
 	public void addEntry(Entry entry) {
 		if (addChild(entry)) {
 			entries[entryIndex] = entry;
@@ -46,7 +46,7 @@ public abstract class Node extends Draggable {
 
 	}
 
-	// untested++
+	// untested
 	public void removeEntry(String name) {
 		for (int i = 0; i > entries.length; i++) {
 			if (entries[i].getName() == name) {
@@ -120,6 +120,14 @@ public abstract class Node extends Draggable {
 
 	public int getBorderWidth() {
 		return borderWidth;
+	}
+
+	public void newConnection(Entry entry, Entry toAdd) {
+				
+	}
+	
+	public void removeConnection(Entry entry, Entry toRemove) {
+		
 	}
 
 }

@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
-
-import display.NodeView;
 import display.View;
 import display.Window;
 
@@ -39,7 +37,6 @@ public abstract class Drawable {
 	protected abstract void draw(Graphics2D g, int x, int y);
 
 	public void preDraw(Graphics2D g, int xOffset, int yOffset) {
-//		System.out.println(getName() + "    " + getClass() + "      " + initialized);
 		if (initialized) {
 			draw(g, getLocalX() + xOffset, getLocalY() + yOffset);
 			try {
@@ -59,8 +56,8 @@ public abstract class Drawable {
 
 		children.addFirst(child);
 		child.setParent(this);
-		
-		if (this.initialized) {
+
+		if (this.initialized && !child.initialized) {
 			child.setView(correspondingView);
 		}
 
@@ -90,7 +87,6 @@ public abstract class Drawable {
 		}
 
 		this.parent = newParent;
-		System.out.println(this + "    " + this.parent + "   " + this.parent.children.get(0));
 	}
 
 	public Drawable getParent() {
@@ -152,7 +148,6 @@ public abstract class Drawable {
 			parent.printPosX();
 		}
 		System.out.print(pos[0] + " ");
-
 	}
 
 	public void printPosY() {
@@ -168,10 +163,16 @@ public abstract class Drawable {
 
 	public void setView(View view) {
 		correspondingView = view;
-		init();
+		if (!initialized)
+			init();
 		for (Drawable c : children) {
 			c.setView(correspondingView);
 		}
 		initialized = true;
+	}
+
+	public View getView() {
+		// TODO Auto-generated method stub
+		return correspondingView;
 	}
 }

@@ -1,10 +1,11 @@
 package audioShit;
 
+import com.jsyn.midi.MidiConstants;
 import com.jsyn.unitgen.SineOscillator;
-import nodeSystem.Node;
 import nodeSystem.Slider;
+import testingInProgress.ClonableNode;
 
-public class SineOscillatorNode extends Node {
+public class SineOscillatorNode extends ClonableNode {
 	private SineOscillator sine;
 	private Slider slide;
 	private AudioOutEntry out;
@@ -12,21 +13,20 @@ public class SineOscillatorNode extends Node {
 
 	public SineOscillatorNode(int[] pos) {
 		super(pos, "Sine Oscillator");
-		sine = new SineOscillator();
+		setUnitGen(sine = new SineOscillator());
 		wind.addToSynth(sine);
 		sine.start();
-		sine.frequency.set(3);
+		sine.frequency.set(MidiConstants.convertPitchToFrequency(60));
 
-		addEntry(slide = new Slider(this, "Amplitude", -1, 1));
-		slide.getRightPorts().output.connect(sine.amplitude);
-		
+		addEntry(slide = new Slider(this, "Amplitude", 0, 1));
+		connect(slide.getRightPorts().output, sine.amplitude);
+
 		addEntry(slideFreq = new Slider(this, "Frequenzy", 0, 40000));
-		slideFreq.getRightPorts().output.connect(sine.frequency);
+		connect(slideFreq.getRightPorts().output, sine.frequency);
 
 		addEntry(out = new AudioOutEntry(this, "Output"));
-		sine.output.connect(out.getRightPorts().input);
+		connect(sine.output, out.getRightPorts().input);
 
-		
 	}
 
 	public void setFreq(float freq) {
@@ -34,9 +34,4 @@ public class SineOscillatorNode extends Node {
 		sine.frequency.set(freq);
 	}
 
-//	@Override
-//	protected void draw(Graphics2D g, int x, int y) {
-////		System.out.println(getName() + "    " + sine.frequency.get() + "   " + sine.amplitude.getValue());
-//		super.draw(g, x, y);
-//	}
 }

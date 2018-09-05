@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import graphics.Drawable;
 import nodeSystem.Root;
+import uiShit.ClickableUiShit;
 
 public abstract class View {
 	private LinkedList<Draggable> dragos;
@@ -49,12 +50,10 @@ public abstract class View {
 	}
 
 	public LinkedList<Draggable> getDragos() {
-		// TODO Auto-generated method stub
 		return dragos;
 	}
 
 	public LinkedList<Clickable> getClickos() {
-		// TODO Auto-generated method stub
 		return clickos;
 	}
 
@@ -77,5 +76,44 @@ public abstract class View {
 
 	public boolean isInitializend() {
 		return isInitializend;
+	}
+
+	public void migrateClicksAndDragos(Drawable partToMove) {
+		View from = partToMove.getView();
+
+		LinkedList<ClickableUiShit> partsClicks = new LinkedList<>();
+		LinkedList<Draggable> partsDrags = new LinkedList<>();
+
+		if (partToMove instanceof ClickableUiShit) {
+			partsClicks.add((ClickableUiShit) partToMove);
+		}
+		if (partToMove instanceof Draggable) {
+			partsDrags.add((Draggable) partToMove);
+		}
+		for (Drawable childPart : partToMove.getChildren()) {
+			migrateClicksAndDragos(childPart);
+		}
+
+		from.removeClicks(partsClicks);
+		from.removeDrags(partsDrags);
+
+		this.clickos.addAll(partsClicks);
+		this.dragos.addAll(partsDrags);
+	}
+
+	private void removeClicks(LinkedList<ClickableUiShit> partsClicks) {
+		clickos.removeAll(partsClicks);
+	}
+
+	private void removeDrags(LinkedList<Draggable> partsDrags) {
+		dragos.removeAll(partsDrags);
+	}
+
+	public void switchTo() {
+
+		if (!isInitializend()) {
+			init();
+		}
+		wind.switchToView(getName());
 	}
 }

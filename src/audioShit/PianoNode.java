@@ -10,6 +10,7 @@ import helper.ValueContainer;
 import nodeSystem.KeyNode;
 import nodeSystem.Slider;
 
+@Deprecated
 public class PianoNode extends KeyNode {
 
 	private AudioOutEntry output;

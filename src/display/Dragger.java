@@ -14,13 +14,7 @@ import nodeSystem.SliderKnob;
 
 public class Dragger implements MouseMotionListener, MouseListener {
 
-//	private LinkedList<Draggable> dragos;
 	private Draggable toDrag;
-
-//	private LinkedList<Clickable> clickos;
-
-//	private NodeView root;
-
 	private boolean dragBackGround;
 
 	private ControlHelper ch;
@@ -39,7 +33,9 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		
 		for (Clickable cl : viewCont.x.getClickos()) {
+			System.out.print(cl.getName() + "  ");
 			if (cl.getCollider() != null && cl.getCollider().contains(e.getPoint())) {
 				cl.clicked();
 				System.out.println(cl.getName() + "  Clicked");
@@ -50,6 +46,8 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 			}
 		}
+		System.out.println();
+
 	}
 
 	@Override

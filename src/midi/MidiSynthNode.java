@@ -8,6 +8,7 @@ import audioShit.AudioOutEntry;
 import display.Window;
 import nodeSystem.Node;
 
+@Deprecated
 public class MidiSynthNode extends Node {
 	private MidiSynthesizer midisynth;
 	private MultiChannelSynthesizer multiSynth;
@@ -17,7 +18,7 @@ public class MidiSynthNode extends Node {
 		super(pos, name);
 
 		multiSynth = new MultiChannelSynthesizer();
-		multiSynth.setup(Window.getSynth(), 0, 1, 6, WaveShapingVoice.getVoiceDescription());
+		multiSynth.setup(Window.getSynth(), 0, 1, 2, WaveShapingVoice.getVoiceDescription());
 		midisynth = new MidiSynthesizer(multiSynth);
 
 		addEntry(left = new AudioOutEntry(this, "Left"));

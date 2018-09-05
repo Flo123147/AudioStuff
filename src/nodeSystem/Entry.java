@@ -7,6 +7,7 @@ import com.jsyn.unitgen.PassThrough;
 
 import display.View;
 import graphics.Drawable;
+import jdk.management.resource.internal.TotalResourceContext;
 import midi.MidiOutputNode;
 
 public abstract class Entry extends Drawable {
@@ -21,7 +22,7 @@ public abstract class Entry extends Drawable {
 	private Connector connIn, connOut;
 
 	protected boolean isConnected;
-	PassThrough leftPorts, rightPorts;
+	TaggedPassThrough leftPorts, rightPorts;
 
 	private boolean hasInConnector, hasOutConnector;
 	private int connectorOffset = 6;
@@ -33,20 +34,20 @@ public abstract class Entry extends Drawable {
 		color = Color.black;
 		this.node = node;
 
-		this.leftPorts = new PassThrough();
-		wind.getSynth().add(leftPorts);
+		this.leftPorts = new TaggedPassThrough(name + "leftPorts");
+		wind.addToSynth(leftPorts);
 		this.leftPorts.start();
-		this.rightPorts = new PassThrough();
-		wind.getSynth().add(rightPorts);
+		this.rightPorts = new TaggedPassThrough(name + "rightPorts");
+		wind.addToSynth(rightPorts);
 		this.rightPorts.start();
 
 	}
 
-	public PassThrough getLeftPorts() {
+	public TaggedPassThrough getLeftPorts() {
 		return leftPorts;
 	}
 
-	public PassThrough getRightPorts() {
+	public TaggedPassThrough getRightPorts() {
 		return rightPorts;
 	}
 
@@ -124,6 +125,8 @@ public abstract class Entry extends Drawable {
 		toRemove.leftPorts.input.disconnect(getRightPorts().output);
 		toRemove.setDissconceted();
 		toRemove.isConnected = false;
+
+		node.removeConnection(this, toRemove);
 	}
 
 	protected abstract void setDissconceted();
@@ -133,6 +136,9 @@ public abstract class Entry extends Drawable {
 		rightPorts.output.connect(toAdd.getLeftPorts().input);
 		toAdd.setConnected();
 		toAdd.isConnected = true;
+
+		System.out.println("now adding  " + toAdd);
+		node.newConnection(this, toAdd);
 	}
 
 	protected abstract void setConnected();
@@ -140,6 +146,6 @@ public abstract class Entry extends Drawable {
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -31,6 +31,7 @@ public class TimeLinesBox extends UiBaseElement {
 	}
 
 	public void reAddTimeLine(BasicTimeLine basicTimeLine) {
+		correspondingView.migrateClicksAndDragos(basicTimeLine);
 		addChild(basicTimeLine);
 	}
 

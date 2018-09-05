@@ -1,27 +1,27 @@
 package audioShit;
 
+import java.util.ArrayList;
+
+import display.NodeView;
 import display.Window;
 import helper.SimpleEvent;
-import midi.MidiSynthNode;
 
 public class TimeLinePlayer implements Runnable {
 
-	private boolean initialized;
-	SimpleEvent[] events;
+	ArrayList<SimpleEvent> events;
 	private int pointer;
 	private boolean paused = true;
 	public Object lock = new Object();
-	private MidiSynthNode msn;
+	private NodeView corrView;
 
-	public TimeLinePlayer(MidiSynthNode msn) {
-		this.msn = msn;
-		events = new SimpleEvent[100];
+	public TimeLinePlayer(NodeView corrView) {
+		this.corrView = corrView;
+		events = new ArrayList<>();
 		pointer = 0;
-		for (int i = 0; i < 100; i += 2) {
+		for (int i = 0; i < 100; i++) {
 			int note = 30 + ((int) (Math.random() * 60));
-			events[i] = new SimpleEvent(0.5, note, true);
-			System.out.println(note);
-			events[i + 1] = new SimpleEvent(0.0, note, false);
+			events.add(new SimpleEvent(0.2, note, true));
+
 		}
 	}
 
@@ -43,17 +43,17 @@ public class TimeLinePlayer implements Runnable {
 
 	private void playLoop() {
 		while (!paused) {
-			play(events[pointer]);
+			play(events.get(pointer));
 
 			try {
-				Window.getSynth().sleepFor(events[pointer].sleepTime);
+				Window.getSynth().sleepFor(events.get(pointer).sleepTime);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println(pointer);
 			pointer++;
-			if (pointer >= 100) {
+			if (pointer >= events.size()) {
 				pointer = 0;
 				pause();
 			}
@@ -65,9 +65,9 @@ public class TimeLinePlayer implements Runnable {
 
 	private void play(SimpleEvent simpleEvent) {
 		if (simpleEvent.isOn) {
-			msn.noteOn(simpleEvent.pitch);
+			corrView.noteOn(0, simpleEvent.pitch, 100);
 		} else {
-			msn.noteOff(simpleEvent.pitch);
+			corrView.noteOff(0, simpleEvent.pitch, 100);
 		}
 	}
 
@@ -93,9 +93,7 @@ public class TimeLinePlayer implements Runnable {
 		pauseMethod();
 	}
 
-	public void add(double time, double duration, int pitch) {
-		if (initialized) {
-
-		}
+	public void add(double time, int pitch) {
+		//TODO  add new Events To event Thingy
 	}
 }
