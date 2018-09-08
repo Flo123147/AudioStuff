@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import com.jsyn.midi.MidiSynthesizer;
 import com.jsyn.util.MultiChannelSynthesizer;
 
-import audioShit.GeneralCircit;
+import audioShit.UnitVoiceConstructor;
 import audioShit.ReaderNode;
 import audioShit.SineOscillatorNode;
 import graphics.Drawable;
@@ -28,7 +28,7 @@ public class NodeView extends View {
 	private BasicTimeLine timeLine;
 	private MidiCotrollerNode contNode;
 
-	public GeneralCircit gc;
+	public UnitVoiceConstructor gc;
 
 	private boolean isReady;
 
@@ -43,7 +43,7 @@ public class NodeView extends View {
 		root.addChild(new SineOscillatorNode(new int[] { -100, -100 }));
 		root.addChild(new ReaderNode(new int[] { -200, 0 }, "reader"));
 		
-		gc = new GeneralCircit(this);
+		gc = new UnitVoiceConstructor(this);
 		
 	}
 	
