@@ -4,31 +4,54 @@ import java.util.LinkedList;
 
 import com.jsyn.ports.UnitOutputPort;
 import com.jsyn.unitgen.Circuit;
+import com.jsyn.unitgen.UnitGenerator;
 import com.jsyn.unitgen.UnitVoice;
+import com.jsyn.util.VoiceDescription;
 import com.softsynth.shared.time.TimeStamp;
 import display.NodeView;
+import display.Window;
+import graphics.Drawable;
 import nodeSystem.Entry;
+import nodeSystem.Node;
 import testingInProgress.ClonableNode;
 
 public class GeneralCircit extends Circuit implements UnitVoice {
 
+	@SuppressWarnings("unused")
 	private boolean underCostruction = true;
 
 	NodeView nodeView;
 
+	private Window window;
+
+	private UnitOutputPort circuitOut;
+
 	public GeneralCircit(NodeView nodeView) {
+		window = Window.widow;
 		this.nodeView = nodeView;
+		this.circuitOut = new UnitOutputPort();
 	}
 
+	public void addNode(Drawable comp) {
+		if(comp instanceof Node) {
+			System.out.println("yaaay");
+		}
+	}
+
+	
 	public void gatherUnits() {
 		underCostruction = true;
-
+		setEnabled(false);
 		System.out.println(nodeView.getNodes().size());
 		for (ClonableNode n : nodeView.getNodes()) {
-			System.out.println("-----------------------------------");
-			System.out.println(n.cloneUnitGen());
-			LinkedList<String[]> r = n.getInnerConnections();
 
+			UnitGenerator newGen = n.cloneUnitGen();
+			if (newGen != null) {
+				add(newGen);
+				window.addToSynth(newGen);
+			}
+//			System.out.println("-----------------------------------");
+			LinkedList<String[]> r = n.getInnerConnections();
 			LinkedList<Entry[]> waa = n.getOuterConnections();
 			for (String[] u : r) {
 				System.out.println(u[0] + "   -to-  " + u[1]);
@@ -50,7 +73,7 @@ public class GeneralCircit extends Circuit implements UnitVoice {
 	@Override
 	public UnitOutputPort getOutput() {
 
-		return null;
+		return circuitOut;
 	}
 
 	@Override
@@ -65,4 +88,35 @@ public class GeneralCircit extends Circuit implements UnitVoice {
 
 	}
 
+	public VoiceDescription voiceDesc() {
+		// TODO Auto-generated method stub
+		return new MyVoiceDescription();
+	}
+
+	private class MyVoiceDescription extends VoiceDescription{
+
+		public MyVoiceDescription() {
+			super("Genaeral Temp Name", null);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public String[] getTags(int presetIndex) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public UnitVoice createUnitVoice() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String getVoiceClassName() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
 }

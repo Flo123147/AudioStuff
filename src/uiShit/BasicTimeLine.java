@@ -72,6 +72,9 @@ public class BasicTimeLine extends UiSubElement implements ClickReciever {
 			}
 			break;
 		case "Play":
+			if(nodeView.hasChanged()) {
+				nodeView.startThisShit();
+			}
 			timeLinePlayer.unPause();
 			break;
 		case "Pause":

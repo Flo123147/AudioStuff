@@ -32,6 +32,8 @@ public class NodeView extends View {
 
 	private boolean isReady;
 
+	private boolean hasChanged = true;
+
 	public NodeView(String name, Window wind, BasicTimeLine timeLine) {
 		super(name, wind);
 		this.timeLine = timeLine;
@@ -40,9 +42,23 @@ public class NodeView extends View {
 		root.addChild(contNode = new MidiCotrollerNode(new int[] { 20, 20 }, "MidiCont"));
 		root.addChild(new SineOscillatorNode(new int[] { -100, -100 }));
 		root.addChild(new ReaderNode(new int[] { -200, 0 }, "reader"));
-		midiSynthesizer = new MidiSynthesizer(multiChannelSynthesizer);
+		
 		gc = new GeneralCircit(this);
+		
 	}
+	
+	public void startThisShit() {
+		midiSynthesizer = new MidiSynthesizer(multiChannelSynthesizer);
+		multiChannelSynthesizer = new MultiChannelSynthesizer();
+		multiChannelSynthesizer.setup(Window.getSynth(), 0, 2, 6, gc.voiceDesc());		
+	}
+	
+	@Override
+	public void addComponent(Drawable comp) {
+		gc.addNode(comp);
+		super.addComponent(comp);
+	}
+	
 
 	public void noteOn(int channel, int pitch, int velocity) {
 		if (isReady)
@@ -93,7 +109,6 @@ public class NodeView extends View {
 	}
 
 	public MidiSynthesizer getMidiSynth() {
-		// TODO Auto-generated method stub
 		return midiSynthesizer;
 	}
 
@@ -110,6 +125,10 @@ public class NodeView extends View {
 
 	public MidiOutputNode getOutput() {
 		return outputNode;
+	}
+
+	public boolean hasChanged() {
+		return hasChanged;
 	}
 
 }

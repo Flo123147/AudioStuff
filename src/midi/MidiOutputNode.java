@@ -1,21 +1,14 @@
 package midi;
 
-import nodeSystem.Node;
+import testingInProgress.ClonableNode;
 
 import java.awt.Graphics2D;
 
-import com.jsyn.JSyn;
-import com.jsyn.Synthesizer;
-import com.jsyn.midi.MidiConstants;
-import com.jsyn.midi.MidiSynthesizer;
 import com.jsyn.ports.UnitInputPort;
-import com.jsyn.ports.UnitOutputPort;
-import com.jsyn.unitgen.LineOut;
-import com.jsyn.util.MultiChannelSynthesizer;
 
 import audioShit.AudioInEntry;
 
-public class MidiOutputNode extends Node {
+public class MidiOutputNode extends ClonableNode {
 
 	private AudioInEntry left, right;
 	private UnitInputPort out;
@@ -26,9 +19,11 @@ public class MidiOutputNode extends Node {
 		addEntry(left = new AudioInEntry(this, "Left"));
 		addEntry(right = new AudioInEntry(this, "Right"));
 		out = wind.getmainOutput();
-		left.getLeftPorts().output.connect(0, out, 0);
-		right.getLeftPorts().output.connect(0, out, 1);
+		connect(left.getLeftPorts().output,0, out,0);
+		connect(right.getLeftPorts().output,0, out,1);
 	}
+
+	
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {

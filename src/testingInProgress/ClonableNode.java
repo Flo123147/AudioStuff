@@ -23,8 +23,12 @@ public class ClonableNode extends Node implements Clonable {
 	}
 
 	protected void connect(UnitOutputPort out, UnitInputPort in) {
-		out.connect(in);
-		connections.add(new String[] { out.getName(), in.getName() });
+		connect(out, 0, in, 0);
+	}
+
+	protected void connect(UnitOutputPort output, int i, UnitInputPort input, int j) {
+		output.connect(i, input, j);
+		connections.add(new String[] { output.getName(), input.getName() });
 	}
 
 	protected void setUnitGen(UnitGenerator unitGen) {
@@ -33,6 +37,8 @@ public class ClonableNode extends Node implements Clonable {
 
 	@Override
 	public UnitGenerator cloneUnitGen() {
+		if (unitGen == null)
+			return null;
 		try {
 			UnitGenerator uGen = unitGen.getClass().newInstance();
 
@@ -60,7 +66,7 @@ public class ClonableNode extends Node implements Clonable {
 
 			if (entries[0] == entry && entries[1] == toRemove) {
 				removeThis = entries;
-				break;				
+				break;
 			}
 		}
 
