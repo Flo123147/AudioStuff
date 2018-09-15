@@ -38,6 +38,7 @@ public abstract class Drawable {
 
 	public void preDraw(Graphics2D g, int xOffset, int yOffset) {
 		if (initialized) {
+			g.setColor(getColor());
 			draw(g, getLocalX() + xOffset, getLocalY() + yOffset);
 			try {
 				for (Drawable d : children) {

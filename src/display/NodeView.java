@@ -5,7 +5,9 @@ import java.awt.Graphics2D;
 import java.util.LinkedList;
 
 import com.jsyn.midi.MidiSynthesizer;
+import com.jsyn.unitgen.UnitVoice;
 import com.jsyn.util.MultiChannelSynthesizer;
+import com.sun.corba.se.impl.orbutil.concurrent.Mutex;
 
 import audioShit.UnitVoiceConstructor;
 import audioShit.ReaderNode;
@@ -28,7 +30,7 @@ public class NodeView extends View {
 	private BasicTimeLine timeLine;
 	private MidiCotrollerNode contNode;
 
-	public UnitVoiceConstructor gc;
+	public UnitVoiceConstructor voiceConstructor;
 
 	private boolean isReady;
 
@@ -42,25 +44,51 @@ public class NodeView extends View {
 		root.addChild(contNode = new MidiCotrollerNode(new int[] { 20, 20 }, "MidiCont"));
 		root.addChild(new SineOscillatorNode(new int[] { -100, -100 }));
 		root.addChild(new ReaderNode(new int[] { -200, 0 }, "reader"));
-		
-		gc = new UnitVoiceConstructor(this);
-		
+
+		voiceConstructor = new UnitVoiceConstructor(this);
+
 	}
-	
+
 	public void startThisShit() {
-		midiSynthesizer = new MidiSynthesizer(multiChannelSynthesizer);
+
+		if (multiChannelSynthesizer != null) {
+			multiChannelSynthesizer.getOutput().disconnectAll();
+
+		}
+
 		multiChannelSynthesizer = new MultiChannelSynthesizer();
-		multiChannelSynthesizer.setup(Window.getSynth(), 0, 2, 6, gc.voiceDesc());		
+
+		multiChannelSynthesizer.setup(Window.getSynth(), 0, 1, 12, voiceConstructor.voiceDesc());
+//		multiChannelSynthesizer.setVibratoDepth(0, 10);
+
+		midiSynthesizer = new MidiSynthesizer(multiChannelSynthesizer);
+		multiChannelSynthesizer.getOutput().connect(0, wind.getMainOutput(), 1);
+		multiChannelSynthesizer.getOutput().connect(0, wind.getMainOutput(), 0);
+//		multiChannelSynthesizer.setVolume(0, 0.8);
+		isReady = true;
 	}
-	
+
+	public void mute() {
+		if (multiChannelSynthesizer != null) {
+			multiChannelSynthesizer.setVolume(0, 0);
+		}
+
+	}
+
+	public void unmute() {
+		if (multiChannelSynthesizer != null) {
+			multiChannelSynthesizer.setVolume(0, 1);
+		}
+	}
+
 	@Override
 	public void addComponent(Drawable comp) {
-		gc.addNode(comp);
+		voiceConstructor.addNode(comp);
 		super.addComponent(comp);
 	}
-	
 
 	public void noteOn(int channel, int pitch, int velocity) {
+//		System.out.println("try to play on Channel: " + channel + " |pitch: " + pitch + " |velocity: " + velocity);
 		if (isReady)
 			midiSynthesizer.noteOn(channel, pitch, velocity);
 	}
@@ -78,7 +106,7 @@ public class NodeView extends View {
 
 		root.setX(wind.getWidth() / 2);
 		root.setY(wind.getHeight() / 2);
-		
+
 		super.init();
 	}
 
@@ -100,8 +128,6 @@ public class NodeView extends View {
 		g.drawLine(0, y, width, y);
 		g.drawLine(x, 0, x, height);
 	}
-
-
 
 	public void switchBack() {
 		wind.switchToMainView();

@@ -3,9 +3,18 @@ package audioShit;
 import java.util.HashMap;
 
 import com.jsyn.ports.UnitOutputPort;
+import com.jsyn.unitgen.ImpulseOscillator;
+import com.jsyn.unitgen.SawtoothOscillator;
+import com.jsyn.unitgen.SineOscillator;
+import com.jsyn.unitgen.SquareOscillator;
+import com.jsyn.unitgen.TriangleOscillator;
 import com.jsyn.unitgen.UnitGenerator;
+import com.jsyn.unitgen.UnitOscillator;
 import com.jsyn.unitgen.UnitVoice;
+import com.jsyn.unitgen.VariableRateMonoReader;
 import com.jsyn.util.VoiceDescription;
+import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry;
+
 import display.NodeView;
 import display.Window;
 import graphics.Drawable;
@@ -19,8 +28,6 @@ public class UnitVoiceConstructor {
 
 	private Window window;
 
-	private UnitOutputPort circuitOut;
-
 	HashMap<String, UnitGenerator> uGens;
 	HashMap<String[], String[]> connections;
 
@@ -29,7 +36,21 @@ public class UnitVoiceConstructor {
 		uGens = new HashMap<>();
 		connections = new HashMap<>();
 		this.nodeView = nodeView;
-		this.circuitOut = new UnitOutputPort();
+
+		System.out.println("Generating some Stuff-------------------------------------");
+
+		UnitOscillator ossie;
+		uGens.put("Sine", ossie = new TriangleOscillator());
+		MyVarRateReader reader;
+		uGens.put("Reader", reader = new MyVarRateReader());
+
+		connections.put(new String[] { "Sine", ossie.output.getName() }, new String[] { MyUnitVoice.ConnectToOut, "" });
+		connections.put(new String[] { MyUnitVoice.ConnectionFromFreq, "" },
+				new String[] { "Sine", ossie.frequency.getName() });
+		connections.put(new String[] { MyUnitVoice.ConnectionFromTrigger, "" },
+				new String[] { "Reader", reader.trigger.getName() });
+		connections.put(new String[] { "Reader", reader.output.getName() },
+				new String[] { "Sine", ossie.amplitude.getName() });
 	}
 
 	public void addNode(Drawable comp) {
@@ -46,7 +67,7 @@ public class UnitVoiceConstructor {
 	private class MyVoiceDescription extends VoiceDescription {
 
 		public MyVoiceDescription() {
-			super("Genaeral Temp Name", null);
+			super("Genaeral Temp Name", new String[] {});
 			// TODO Auto-generated constructor stub
 		}
 
@@ -68,7 +89,7 @@ public class UnitVoiceConstructor {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return null;
+			return uv;
 		}
 
 		@Override

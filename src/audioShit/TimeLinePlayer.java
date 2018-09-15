@@ -1,27 +1,179 @@
 package audioShit;
 
-import java.util.ArrayList;
+import java.awt.Graphics2D;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 import display.NodeView;
-import display.Window;
+import graphics.Drawable;
+import helper.Empty;
+import helper.NoteEvent;
 import helper.SimpleEvent;
+import helper.ValueContainer;
 
-public class TimeLinePlayer implements Runnable {
+public class TimeLinePlayer extends Drawable implements Runnable {
 
-	ArrayList<SimpleEvent> events;
-	private int pointer;
+	private static final double LOOK_BACK = 0.05;
+	private static final double TIME_STEP = 0.005;
+	private static final long TIME_STEP_MILIS = (long) (TIME_STEP * 1000);
+	LinkedList<NoteEvent> notes;
+	PriorityQueue<SimpleEvent> toPlay;
 	private boolean paused = true;
 	public Object lock = new Object();
 	private NodeView corrView;
 
-	public TimeLinePlayer(NodeView corrView) {
-		this.corrView = corrView;
-		events = new ArrayList<>();
-		pointer = 0;
-		for (int i = 0; i < 100; i++) {
-			int note = 30 + ((int) (Math.random() * 60));
-			events.add(new SimpleEvent(0.2, note, true));
+	private double currentTime;
+	private long currentTimeMilis;
 
+	private boolean recording;
+
+	private HashMap<Integer, SimpleEvent> currentlyRecordingPitches;
+	private boolean startFromBeginning;
+	public ValueContainer<Integer> pixelPerSecondCont;
+
+	private int x = 0;
+
+	private Drawable offsetter;
+
+	private int displayOctave;
+	private int octaveHeight = 12 * 20;
+
+	public TimeLinePlayer(int[] pos, String name, NodeView corrView) {
+		super(pos, name);
+		this.corrView = corrView;
+		notes = new LinkedList<>();
+		toPlay = new PriorityQueue<>();
+		currentlyRecordingPitches = new HashMap<>();
+		currentTime = 0;
+
+		pixelPerSecondCont = new ValueContainer<Integer>(40);
+		displayOctave = 4;
+
+		double length = 0.3;
+
+		addChild(offsetter = new Empty(new int[] { 0, -displayOctave * octaveHeight }, "Empty"));
+
+		addNote('E', 4, x * length, 2 * length);
+		x++;
+		addNote('B', 4, x * length, length);
+		addNote('C', 4, x * length, length);
+
+		addNote('D', 4, x * length, 2 * length);
+		x++;
+		addNote('C', 4, x * length, length);
+		addNote('B', 4, x * length, length);
+		addNote('A', 4, x * length, length);
+
+	}
+
+	public void draw(Graphics2D g, int x, int y) {
+		offsetter.setX((int) -(currentTime * pixelPerSecondCont.x));
+		offsetter.setY(-displayOctave * octaveHeight);
+	}
+
+	public void recordStart(char note, int octave) {
+		int pitch = getPitch(note, octave);
+		SimpleEvent startEvent;
+		toPlay.add(startEvent = new SimpleEvent(pitch, true, currentTime));
+		currentlyRecordingPitches.put(pitch, startEvent);
+
+	}
+
+	public void setOctaveToDisplay(int octave) {
+		displayOctave = octave;
+		offsetter.setY(-displayOctave * octaveHeight);
+	}
+
+	public void recordEnd(char note, int octave) {
+		int pitch = getPitch(note, octave);
+		if (currentlyRecordingPitches.get(pitch) != null) {
+			SimpleEvent startEvent = currentlyRecordingPitches.get(pitch);
+			SimpleEvent endEvent = new SimpleEvent(pitch, false, currentTime);
+			toPlay.add(endEvent);
+
+			NoteEvent nEvent;
+			notes.add(nEvent = new NoteEvent(startEvent.time, currentTime, pitch, pixelPerSecondCont));
+
+			nEvent.startEvent = startEvent;
+			nEvent.endEvent = endEvent;
+
+			offsetter.addChild(nEvent);
+		}
+	}
+
+	public void addNote(char note, int octave, double startTime, double length) {
+		x++;
+
+		int pitch = getPitch(note, octave);
+
+		NoteEvent nEvent;
+		notes.add(nEvent = new NoteEvent(startTime, startTime + length, pitch, pixelPerSecondCont));
+
+		SimpleEvent startEvent;
+		toPlay.add(startEvent = new SimpleEvent(pitch, true, startTime));
+		SimpleEvent endEvent;
+		toPlay.add(endEvent = new SimpleEvent(pitch, false, startTime + length));
+
+		nEvent.startEvent = startEvent;
+		nEvent.endEvent = endEvent;
+
+		offsetter.addChild(nEvent);
+	}
+
+	private void playLoop(long startTime) throws InterruptedException {
+		PriorityQueue<SimpleEvent> played = new PriorityQueue<>();
+		System.out.println(toPlay);
+
+		if (!startFromBeginning) {
+			currentTimeMilis = startTime;
+			currentTime = currentTimeMilis * 0.001;
+		} else {
+			startFromBeginning = false;
+		}
+
+		System.out.println("Starting Loop at: " + currentTime + "     " + currentTimeMilis);
+		long deltaTime = 0;
+		while (!paused) {
+			long lastTime = System.nanoTime();
+
+			SimpleEvent next = toPlay.peek();
+
+			if (next != null) {
+				boolean closeEvent;
+				do {
+					closeEvent = false;
+					if (next.time <= currentTime + TIME_STEP) {
+						if (next.isOn == false || next.time >= currentTime - LOOK_BACK) {
+							// TODO Perhaps wait 1 to 4 milis
+							play(next.pitch, next.isOn);
+						}
+						played.add(toPlay.poll());
+					}
+
+					if (toPlay.peek() != null && toPlay.peek().time < currentTime + TIME_STEP) {
+						closeEvent = true;
+						next = toPlay.peek();
+					}
+				} while (closeEvent);
+			}
+
+			Thread.sleep(TIME_STEP_MILIS);
+			deltaTime = System.nanoTime() - lastTime;
+			currentTimeMilis += deltaTime / 1000000;
+			currentTime = currentTimeMilis * 0.001;
+
+		}
+		toPlay.addAll(played);
+		paused = true;
+		pauseMethod(currentTimeMilis);
+	}
+
+	private void play(int pitch, boolean isOn) {
+		if (isOn) {
+			corrView.noteOn(0, pitch, 127);
+		} else {
+			corrView.noteOff(0, pitch, 127);
 		}
 	}
 
@@ -31,48 +183,21 @@ public class TimeLinePlayer implements Runnable {
 
 	public void unPause() {
 		synchronized (lock) {
-
 			paused = false;
 			lock.notify();
 		}
 	}
 
 	public void playBeginning() {
-
+		paused = true;
+		startFromBeginning = true;
+		currentTime = 0;
+		currentTimeMilis = 0;
+		offsetter.setX(0);
 	}
 
-	private void playLoop() {
-		while (!paused) {
-			play(events.get(pointer));
-
-			try {
-				Window.getSynth().sleepFor(events.get(pointer).sleepTime);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			System.out.println(pointer);
-			pointer++;
-			if (pointer >= events.size()) {
-				pointer = 0;
-				pause();
-			}
-
-		}
-
-		pauseMethod();
-	}
-
-	private void play(SimpleEvent simpleEvent) {
-		if (simpleEvent.isOn) {
-			corrView.noteOn(0, simpleEvent.pitch, 100);
-		} else {
-			corrView.noteOff(0, simpleEvent.pitch, 100);
-		}
-	}
-
-	private void pauseMethod() {
-		System.out.println("lel-------------------------------------");
+	private void pauseMethod(long pauseTime) {
+		System.out.println("me pause");
 		if (paused) {
 			synchronized (lock) {
 				while (paused) {
@@ -85,15 +210,64 @@ public class TimeLinePlayer implements Runnable {
 				}
 			}
 		}
-		playLoop();
+		try {
+			playLoop(pauseTime);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void run() {
-		pauseMethod();
+		pauseMethod(0);
 	}
 
-	public void add(double time, int pitch) {
-		//TODO  add new Events To event Thingy
+	private int getPitch(char note, int octave) {
+		int pitch = Notes.OCTACE * octave;
+		note = Character.toUpperCase(note);
+		switch (note) {
+		case 'A':
+			pitch += Notes.BASE_A;
+			break;
+		case 'B':
+			pitch += Notes.BASE_B;
+			break;
+		case 'C':
+			pitch += Notes.BASE_C;
+			break;
+		case 'D':
+			pitch += Notes.BASE_D;
+			break;
+		case 'E':
+			pitch += Notes.BASE_E;
+			break;
+		case 'F':
+			pitch += Notes.BASE_F;
+			break;
+		case 'G':
+			pitch += Notes.BASE_G;
+			break;
+		default:
+			break;
+		}
+
+		return pitch;
+	}
+
+	public LinkedList<NoteEvent> getNotes() {
+		// TODO Auto-generated method stub
+		return notes;
+	}
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public int getOctaveHeight() {
+		// TODO Auto-generated method stub
+		return octaveHeight;
 	}
 }

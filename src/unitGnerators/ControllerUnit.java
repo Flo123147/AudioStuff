@@ -16,21 +16,23 @@ public class ControllerUnit extends UnitGenerator{
 		psTrigger = new PassThrough();
 		psFreq = new PassThrough();
 		
+//		UnitGatePort ugp = new UnitGatePort("waa");
+//		psTrigger.input = ugp;
+		
+		
 		psTrigger.output = trigger;
 		psFreq.output = freq;
 	}
 
 	@Override
 	public void generate(int start, int limit) {
-//		double[] trigs = trigger.getValues();
-//		double[] freqs = freq.getValues();
-//		for (int i = start; i < limit; i++) {
-//			
-//			
-//		}
+		psFreq.generate(start,limit);
+		psTrigger.generate(start, limit);
+		
 	}
 
-	public void on(double frequency, double amplitude, TimeStamp timeStamp) {
+	public void trigger(double frequency, double amplitude, TimeStamp timeStamp) {
+		psFreq.input.set(frequency,timeStamp);
 		psTrigger.input.set(1, timeStamp);
 	}
 

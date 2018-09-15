@@ -218,7 +218,7 @@ public class Window extends JFrame implements Runnable {
 
 	}
 
-	public UnitInputPort getmainOutput() {
+	public UnitInputPort getMainOutput() {
 		return mainOutput;
 	}
 

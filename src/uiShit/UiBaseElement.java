@@ -3,29 +3,21 @@ package uiShit;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.Shape;
-
-import com.sun.javafx.geom.RoundRectangle2D;
-
 import graphics.Drawable;
 import helper.ValueContainer;
-import nodeSystem.Root;
 
 public abstract class UiBaseElement extends Drawable {
 
-	private static int[] test;
 	public UiBorder borderLeft, borderRight, borderTop, borderBot;
 	int roundCorner = 10;
 	int borderWidth = 3;
 	ValueContainer<Integer> spacing = new ValueContainer<>(2);
 	private boolean drawBG = true;
 
-	private int minWidth,minHeight;
-	
 	// LEFT = 0,TOP = 1,RIGHT = 2,BOT = 3
 	public UiBaseElement(UiBorder[] borders) {
 
-		super(test = new int[] { 0, 0 }, "UiTest");
+		super(new int[] { 0, 0 }, "UiTest");
 		borderLeft = borders[0];
 		borderTop = borders[1];
 		borderRight = borders[2];
@@ -53,8 +45,7 @@ public abstract class UiBaseElement extends Drawable {
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
-//		System.out.println(getHeight());
-//		System.out.println(getWidth());
+
 		if (drawBG) {
 			g.setColor(Color.BLACK);
 			g.fillRoundRect(x + spacing.x, y + spacing.x, getWidth() - spacing.x * 2, getHeight() - spacing.x * 2,
@@ -66,9 +57,6 @@ public abstract class UiBaseElement extends Drawable {
 		g.setClip(new Rectangle(x + borderWidth + spacing.x, y + borderWidth + spacing.x,
 				getWidth() - borderWidth * 2 - spacing.x * 2, getHeight() - borderWidth * 2 - spacing.x * 2));
 
-		// spacing.x++;
-//		borderBot.x.border+=1;
-//		test[0]++;
 	}
 
 	public void setCornerRoundnes(int round) {

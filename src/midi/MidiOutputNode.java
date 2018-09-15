@@ -18,7 +18,7 @@ public class MidiOutputNode extends ClonableNode {
 
 		addEntry(left = new AudioInEntry(this, "Left"));
 		addEntry(right = new AudioInEntry(this, "Right"));
-		out = wind.getmainOutput();
+		out = wind.getMainOutput();
 		connect(left.getLeftPorts().output,0, out,0);
 		connect(right.getLeftPorts().output,0, out,1);
 	}
