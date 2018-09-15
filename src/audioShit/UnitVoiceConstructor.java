@@ -40,7 +40,7 @@ public class UnitVoiceConstructor {
 		System.out.println("Generating some Stuff-------------------------------------");
 
 		UnitOscillator ossie;
-		uGens.put("Sine", ossie = new TriangleOscillator());
+		uGens.put("Sine", ossie = new SineOscillator());
 		MyVarRateReader reader;
 		uGens.put("Reader", reader = new MyVarRateReader());
 

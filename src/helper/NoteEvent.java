@@ -9,7 +9,7 @@ import audioShit.TimeLinePlayer;
 import display.Draggable;
 
 public class NoteEvent extends Draggable {
-	public double start, end;
+	public double start, end, length;
 	public int pitch;
 
 	public ValueContainer<Integer> pixelPerSecondCont;
@@ -31,23 +31,37 @@ public class NoteEvent extends Draggable {
 		this.end = end;
 		this.pitch = pitch;
 
-		setColor(Color.RED);
+		this.length = end - start;
+
+		setColor(new Color(100, 0, 0, 100));
+	}
+
+	public void updateVisuals() {
+		this.width = (int) ((end - start) * pixelPerSecondCont.x);
+		this.height = 20;
+
+		setX((int) (pixelPerSecondCont.x * start));
 	}
 
 	@Override
 	protected void dragStart() {
 		deltaY = 0;
-		super.dragStart();
+	}
+
+	@Override
+	protected void dragEnd() {
+		System.out.println(startEvent.time);
+		startEvent.time = start;
+		endEvent.time = end;
+		System.out.println(startEvent.time);
 	}
 
 	@Override
 	protected void move(int dX, int dY, ControlHelper ch) {
-		System.out.println("lel");
-		start += dX / pixelPerSecondCont.x;
-		end += dX / pixelPerSecondCont.x;
 
-		startEvent.time = start;
-		endEvent.time = end;
+		start += (double) dX / pixelPerSecondCont.x;
+		end += (double) dX / pixelPerSecondCont.x;
+		
 
 		deltaY += dY;
 
@@ -75,7 +89,10 @@ public class NoteEvent extends Draggable {
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
-		g.fillRect(x, y, width, height);
+//		g.fillRect(x, y, width, height);
+		g.fillRoundRect(x, y, width, height, 5, 5);
+		g.setColor(Color.BLACK);
+		g.drawString(""+pitch, x+1, y+10);
 	}
 
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
+import com.jsyn.midi.MidiConstants;
+
 import display.NodeView;
 import graphics.Drawable;
 import helper.Empty;
@@ -26,13 +28,11 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 	private double currentTime;
 	private long currentTimeMilis;
 
-	private boolean recording;
+	//private boolean recording;
 
 	private HashMap<Integer, SimpleEvent> currentlyRecordingPitches;
 	private boolean startFromBeginning;
 	public ValueContainer<Integer> pixelPerSecondCont;
-
-	private int x = 0;
 
 	private Drawable offsetter;
 
@@ -47,29 +47,71 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 		currentlyRecordingPitches = new HashMap<>();
 		currentTime = 0;
 
-		pixelPerSecondCont = new ValueContainer<Integer>(40);
+		pixelPerSecondCont = new ValueContainer<Integer>(80);
 		displayOctave = 4;
-
-		double length = 0.3;
 
 		addChild(offsetter = new Empty(new int[] { 0, -displayOctave * octaveHeight }, "Empty"));
 
-		addNote('E', 4, x * length, 2 * length);
-		x++;
-		addNote('B', 4, x * length, length);
-		addNote('C', 4, x * length, length);
+	}
 
-		addNote('D', 4, x * length, 2 * length);
+	public void test1() {
+		stop();
+		try {
+			Thread.sleep(600);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		clear();
+		displayOctave = 5;
+		for (int i = 0; i < 100; i+=2) {
+			int p = (6 * 12) + (int) (Math.random() * 5);
+			double start = (double) i / 4;
+			double length = 0.24;
+			addNoteByPitch(p, start, length);
+			addNoteByPitch(p + 3, start, length);
+			addNoteByPitch(p + 3 + 4, start, length);
+			p = (6 * 12) + (int) (Math.random() * 12);
+			addNoteByPitch(p, start+0.25, length);
+		}
+	}
+
+	public void tetris() {
+		stop();
+		clear();
+		double length = 0.3;
+
+		double x = 0;
+		displayOctave = 4;
+
+		addNote('E', 5, x * length, 2 * length);
 		x++;
-		addNote('C', 4, x * length, length);
+		x++;
 		addNote('B', 4, x * length, length);
+		x++;
+		addNote('C', 5, x * length, length);
+		x++;
+		addNote('D', 5, x * length, 2 * length);
+		x++;
+		x++;
+		addNote('C', 5, x * length, length);
+		x++;
+		addNote('B', 4, x * length, length);
+		x++;
 		addNote('A', 4, x * length, length);
+	}
 
+	private void clear() {
+		offsetter.removeAllChildren();
+		notes = new LinkedList<>();
+		toPlay = new PriorityQueue<>();
 	}
 
 	public void draw(Graphics2D g, int x, int y) {
 		offsetter.setX((int) -(currentTime * pixelPerSecondCont.x));
-		offsetter.setY(-displayOctave * octaveHeight);
+		offsetter.setY((-displayOctave-1) * octaveHeight);
+
+
 	}
 
 	public void recordStart(char note, int octave) {
@@ -102,10 +144,7 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 		}
 	}
 
-	public void addNote(char note, int octave, double startTime, double length) {
-		x++;
-
-		int pitch = getPitch(note, octave);
+	private void addNoteByPitch(int pitch, double startTime, double length) {
 
 		NoteEvent nEvent;
 		notes.add(nEvent = new NoteEvent(startTime, startTime + length, pitch, pixelPerSecondCont));
@@ -119,6 +158,14 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 		nEvent.endEvent = endEvent;
 
 		offsetter.addChild(nEvent);
+	}
+
+	public void addNote(char note, int octave, double startTime, double length) {
+
+		int pitch = getPitch(note, octave);
+
+		addNoteByPitch(pitch, startTime, length);
+
 	}
 
 	private void playLoop(long startTime) throws InterruptedException {
@@ -188,7 +235,7 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 		}
 	}
 
-	public void playBeginning() {
+	public void stop() {
 		paused = true;
 		startFromBeginning = true;
 		currentTime = 0;
@@ -224,7 +271,8 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 	}
 
 	private int getPitch(char note, int octave) {
-		int pitch = Notes.OCTACE * octave;
+		int pitch = Notes.OCTACE * (octave + 1);
+
 		note = Character.toUpperCase(note);
 		switch (note) {
 		case 'A':
@@ -251,7 +299,8 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 		default:
 			break;
 		}
-
+		System.out
+				.println(note + "   " + octave + "   " + pitch + "    " + MidiConstants.convertPitchToFrequency(pitch));
 		return pitch;
 	}
 

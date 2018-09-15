@@ -69,6 +69,11 @@ public abstract class Drawable {
 		children.remove(child);
 	}
 
+	public void removeAllChildren() {
+		children = new LinkedList<>();
+
+	}
+
 	public LinkedList<Drawable> getChildren() {
 		return children;
 	}
@@ -176,4 +181,5 @@ public abstract class Drawable {
 		// TODO Auto-generated method stub
 		return correspondingView;
 	}
+
 }

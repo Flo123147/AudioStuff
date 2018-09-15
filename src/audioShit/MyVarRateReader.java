@@ -15,8 +15,8 @@ public class MyVarRateReader extends VariableRateMonoReader {
 
 		double[] data = { 0.02, 1, 0.3, 0.8, 0.5, 0.7, 0.7, 0.55, 0.9, 0.4, 1.1, 0.3, 1.3, 0.2, 1.5, 0.1, 1.9, 0 };
 		myTestThingy = new SegmentedEnvelope(data);
-		amplitude.set(0.2);
-		rate.set(10);
+		amplitude.set(0.1);
+		rate.set(1);
 	}
 
 	@Override
@@ -41,6 +41,7 @@ public class MyVarRateReader extends VariableRateMonoReader {
 	}
 
 	public void triggerOn() {
+		rate.set(1);
 		dataQueue.clear();
 		dataQueue.queue(myTestThingy, 0, 9);
 	}
@@ -50,7 +51,10 @@ public class MyVarRateReader extends VariableRateMonoReader {
 	}
 
 	public void triggerOff() {
-		dataQueue.clear();
-		dataQueue.queue(myTestThingy, 7, 2);
+		if (dataQueue.hasMore()) {
+			dataQueue.clear();
+			rate.set(8);
+			dataQueue.queue(myTestThingy, 7, 2);
+		}
 	}
 }

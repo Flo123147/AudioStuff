@@ -14,7 +14,7 @@ import helper.NoteEvent;
 
 public class BasicTimeLine extends UiSubElement implements ClickReciever {
 	public NodeView nodeView;
-	private Button butt, butt2, butt3, butt4;
+	private Button butt, butt2, butt3, butt4, butt5, butt6;
 	private int divider, redLine;
 	private boolean isNodeView;
 	private TimeLinesBox timeLineBox;
@@ -32,7 +32,8 @@ public class BasicTimeLine extends UiSubElement implements ClickReciever {
 		addChild(butt2 = new Button(new int[] { 0, 20 }, "Play", this));
 		addChild(butt3 = new Button(new int[] { 0, 40 }, "Pause", this));
 		addChild(butt4 = new Button(new int[] { 0, 60 }, "Stop", this));
-
+		addChild(butt5 = new Button(new int[] { 0, 80 }, "Test1", this));
+		addChild(butt6 = new Button(new int[] { 0, 100 }, "Tetris", this));
 		nodeView = new NodeView(getName() + "NodeView", wind, this);
 
 		this.timeLineBox = timeLinesBox;
@@ -48,7 +49,7 @@ public class BasicTimeLine extends UiSubElement implements ClickReciever {
 		setHeight(timeLinePlayer.getOctaveHeight());
 		super.init();
 	}
-	
+
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
 
@@ -100,7 +101,13 @@ public class BasicTimeLine extends UiSubElement implements ClickReciever {
 			timeLinePlayer.pause();
 			break;
 		case "Stop":
-			timeLinePlayer.playBeginning();
+			timeLinePlayer.stop();
+			break;
+		case "Test1":
+			timeLinePlayer.test1();
+			break;
+		case "Tetris":
+			timeLinePlayer.tetris();
 			break;
 		default:
 			break;
