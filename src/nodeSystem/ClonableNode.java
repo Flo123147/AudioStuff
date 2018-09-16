@@ -1,41 +1,66 @@
-package testingInProgress;
-
-import java.util.LinkedList;
+package nodeSystem;
 
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
 import com.jsyn.unitgen.UnitGenerator;
-import helper.Clonable;
-import nodeSystem.Entry;
-import nodeSystem.Node;
 
-public class ClonableNode extends Node implements Clonable {
+import audioShit.AudioOutEntry;
+import display.NodeView;
+import helper.ImHelping;
+
+public abstract class ClonableNode extends Node {
 
 	protected UnitGenerator unitGen;
+	protected int uid;
 
-	private LinkedList<String[]> connections;
-	private LinkedList<Entry[]> outConnections;
+//	private LinkedList<String[]> connections;
+//	private LinkedList<Entry[]> outConnections;
 
 	public ClonableNode(int[] pos, String name) {
 		super(pos, name);
-		connections = new LinkedList<>();
-		outConnections = new LinkedList<>();
+//		connections = new LinkedList<>();
+//		outConnections = new LinkedList<>();
+		uid = ImHelping.getNextUid();
 	}
 
-	protected void connect(UnitOutputPort out, UnitInputPort in) {
-		connect(out, 0, in, 0);
+	@Override
+	public void newConnection(Entry entry, Entry toAdd) {
+		System.out.println(entry + "    " + toAdd);
+		System.out.println(entry.connectedFrom + "    "+ toAdd.connectedTo);
+		System.out.println(entry.connectedFrom[0] + "    " + entry.connectedFrom[1] + "-------" + toAdd.connectedTo[0]
+				+ "    " + toAdd.connectedTo[1]);
+		
+		NodeView nv = (NodeView) correspondingView;
+		nv.voiceConstructor.connectUnit(entry.connectedFrom, toAdd.connectedTo);
+		super.newConnection(entry, toAdd);
 	}
 
-	protected void connect(UnitOutputPort output, int i, UnitInputPort input, int j) {
+	public void connectOutwards(UnitOutputPort portOnUGen, Entry entry) {
+		connectOutwards(0, portOnUGen, entry, 0);
+	}
+
+	public void connectOutwards(int part, UnitOutputPort portOnUGen, Entry entry, int part2) {
+		entry.connectedFrom = new String[] { getUnikeName(), portOnUGen.getName() };
+		connect(portOnUGen, part, entry.rightPorts.input, part2);
+	}
+
+	public void connectInwards(Entry entry, UnitInputPort portOnUGen) {
+		connectInwards(0, entry, portOnUGen, 0);
+	}
+
+	public void connectInwards(int part, Entry entry, UnitInputPort portOnUGen, int part2) {
+		entry.connectedTo = new String[] { getUnikeName(), portOnUGen.getName() };
+		connect(entry.rightPorts.output, part, portOnUGen, part2);
+	}
+
+	private void connect(UnitOutputPort output, int i, UnitInputPort input, int j) {
 		output.connect(i, input, j);
-		connections.add(new String[] { output.getName(), input.getName() });
 	}
 
 	protected void setUnitGen(UnitGenerator unitGen) {
 		this.unitGen = unitGen;
 	}
 
-	@Override
 	public UnitGenerator cloneUnitGen() {
 		if (unitGen == null)
 			return null;
@@ -53,39 +78,32 @@ public class ClonableNode extends Node implements Clonable {
 		return null;
 	}
 
-	@Override
-	public void newConnection(Entry entry, Entry toAdd) {
-		outConnections.add(new Entry[] { entry, toAdd });
-		super.newConnection(entry, toAdd);
-	}
+//	@Override
+//	public void newConnection(Entry entry, Entry toAdd) {
+////		outConnections.add(new Entry[] { entry, toAdd });
+//		super.newConnection(entry, toAdd);
+//	}
 
-	@Override
-	public void removeConnection(Entry entry, Entry toRemove) {
-		Entry[] removeThis = null;
-		for (Entry[] entries : outConnections) {
+//	@Override
+//	public void removeConnection(Entry entry, Entry toRemove) {
+////		Entry[] removeThis = null;
+////		for (Entry[] entries : outConnections) {
+////
+////			if (entries[0] == entry && entries[1] == toRemove) {
+////				removeThis = entries;
+////				break;
+////			}
+////		}
+////
+////		if (removeThis != null)
+////			outConnections.remove(removeThis);
+//
+//		super.removeConnection(entry, toRemove);
+//	}
 
-			if (entries[0] == entry && entries[1] == toRemove) {
-				removeThis = entries;
-				break;
-			}
-		}
-
-		if (removeThis != null)
-			outConnections.remove(removeThis);
-
-		super.removeConnection(entry, toRemove);
-	}
-
-	@Override
-	public LinkedList<String[]> getInnerConnections() {
-		// TODO Auto-generated method stub
-		return connections;
-	}
-
-	@Override
-	public LinkedList<Entry[]> getOuterConnections() {
-		// TODO Auto-generated method stub
-		return outConnections;
+	public String getUnikeName() {
+		System.out.println(uid + "   " + unitGen);
+		return uid + "-" + unitGen.getClass().getSimpleName();
 	}
 
 }

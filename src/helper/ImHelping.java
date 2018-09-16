@@ -14,7 +14,7 @@ public class ImHelping {
 	public static NodeView root;
 
 	public static void drawConnectionBezier(Graphics2D g, int startX, int startY, int endX, int endY) {
-		int cuviness = Math.abs(startX -endX);
+		int cuviness = Math.abs(startX - endX);
 		cuviness /= 2;
 		drawConnectionBezier(g, startX, startY, endX, endY, cuviness);
 	}
@@ -28,4 +28,12 @@ public class ImHelping {
 		drawConnectionBezier(g, d1.getX(), d1.getY(), d2.getX(), d2.getY());
 
 	}
+
+	private static int nextUid = -1;
+
+	public static int getNextUid() {
+		nextUid++;
+		return nextUid;
+	}
+
 }

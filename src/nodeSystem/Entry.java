@@ -5,10 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import com.jsyn.unitgen.PassThrough;
 
-import display.View;
 import graphics.Drawable;
-import jdk.management.resource.internal.TotalResourceContext;
-import midi.MidiOutputNode;
 
 public abstract class Entry extends Drawable {
 
@@ -22,10 +19,12 @@ public abstract class Entry extends Drawable {
 	private Connector connIn, connOut;
 
 	protected boolean isConnected;
-	TaggedPassThrough leftPorts, rightPorts;
+	PassThrough leftPorts, rightPorts;
 
 	private boolean hasInConnector, hasOutConnector;
 	private int connectorOffset = 6;
+
+	public String[] connectedTo, connectedFrom;
 
 	public Entry(Node node, String name, int neededHeight) {
 		super(new int[] { node.getBorderWidth(), 0 }, name);
@@ -34,20 +33,20 @@ public abstract class Entry extends Drawable {
 		color = Color.black;
 		this.node = node;
 
-		this.leftPorts = new TaggedPassThrough(name + "leftPorts");
+		this.leftPorts = new PassThrough();
 		wind.addToSynth(leftPorts);
 		this.leftPorts.start();
-		this.rightPorts = new TaggedPassThrough(name + "rightPorts");
+		this.rightPorts = new PassThrough();
 		wind.addToSynth(rightPorts);
 		this.rightPorts.start();
 
 	}
 
-	public TaggedPassThrough getLeftPorts() {
+	public PassThrough getLeftPorts() {
 		return leftPorts;
 	}
 
-	public TaggedPassThrough getRightPorts() {
+	public PassThrough getRightPorts() {
 		return rightPorts;
 	}
 

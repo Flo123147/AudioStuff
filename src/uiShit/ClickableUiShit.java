@@ -12,8 +12,6 @@ public abstract class ClickableUiShit extends UiSubElement implements Clickable 
 	@Override
 	public void init() {
 		correspondingView.addClickable(this);
-		System.out.println("meeAddo");
-
 	}
 
 }

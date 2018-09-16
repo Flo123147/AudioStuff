@@ -3,8 +3,8 @@ package midi;
 import java.awt.Graphics2D;
 
 import audioShit.AudioOutEntry;
-import nodeSystem.Node;
-import testingInProgress.ClonableNode;
+import audioShit.MyUnitVoice;
+import nodeSystem.ClonableNode;
 import unitGnerators.ControllerUnit;
 
 public class MidiCotrollerNode extends ClonableNode {
@@ -21,12 +21,18 @@ public class MidiCotrollerNode extends ClonableNode {
 
 		setUnitGen(controller = new ControllerUnit());
 
-		connect(controller.freq, freq.getRightPorts().input);
-		connect(controller.trigger, trigger.getRightPorts().input);
+		connectOutwards(controller.freq, freq);
+		connectOutwards(controller.trigger, trigger);
 	}
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
 		super.draw(g, x, y);
+	}
+	
+	@Override
+	public String getUnikeName() {
+		// TODO Auto-generated method stub
+		return MyUnitVoice.ConnectFromController;
 	}
 }

@@ -14,21 +14,21 @@ import unitGnerators.ControllerUnit;
 
 public class MyUnitVoice extends Circuit implements UnitVoice {
 
-	public static final String ConnectionFromTrigger = "connFromTrigger", ConnectionFromFreq = "connFromFreq",
-			ConnectToOut = "connToOut";
+	public static final String ConnectFromController = "connFromcontroller", ConnectToOut = "connToOut";
 
 	private ControllerUnit controller;
+//	private String controllerName;
 	private UnitOutputPort output;
+//	private String outName;
 
 	private HashMap<String, UnitGenerator> myUGens;
 
 	private PassThrough outPS;
 
-	public enum VoiceState{
-		Idle,
-		Holding,
-		Releasing
+	public enum VoiceState {
+		Idle, Holding, Releasing
 	}
+
 	public VoiceState state;
 
 	public MyUnitVoice() {
@@ -66,17 +66,17 @@ public class MyUnitVoice extends Circuit implements UnitVoice {
 			add(u);
 			myUGens.put(key, u);
 		}
-		System.out.println(myUGens.values());
+		System.out.println("Start-----------------------");
+//		System.out.println(myUGens.values());
+//		System.out.println(connections);
 		for (String[] key : connections.keySet()) {
 			UnitOutputPort connectionStart = null;
 
 			switch (key[0]) {
-			case ConnectionFromTrigger:
+			case ConnectFromController:
 				connectionStart = controller.trigger;
 				break;
-			case ConnectionFromFreq:
-				connectionStart = controller.freq;
-				break;
+
 			default:
 				for (String key2 : myUGens.keySet()) {
 					if (key[0] == key2) {
@@ -96,21 +96,26 @@ public class MyUnitVoice extends Circuit implements UnitVoice {
 					break;
 				default:
 					for (String key2 : myUGens.keySet()) {
+						System.out.println(connections.get(key)[0] + "    " + connections.get(key)[1] +"     "+ key2 +"           " + (connections.get(key)[0] == key2) );
+
 						if (connections.get(key)[0] == key2) {
 							connectionTo = (UnitInputPort) myUGens.get(key2).getPortByName(connections.get(key)[1]);
 							break;
-						}
+						} 
 					}
 					break;
 
 				}
-				if (connectionTo != null)
+				System.out.println(connectionTo);
+				if (connectionTo != null) {
 					System.out.println(connectionStart.getName() + "   connection to    " + connectionTo.getName());
-				connectionStart.connect(connectionTo);
-
+					connectionStart.connect(connectionTo);
+				}
 			}
 
 		}
+		System.out.println("End-----------------------");
+
 		setEnabled(true);
 	}
 

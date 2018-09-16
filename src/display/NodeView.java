@@ -5,18 +5,14 @@ import java.awt.Graphics2D;
 import java.util.LinkedList;
 
 import com.jsyn.midi.MidiSynthesizer;
-import com.jsyn.unitgen.UnitVoice;
 import com.jsyn.util.MultiChannelSynthesizer;
-import com.sun.corba.se.impl.orbutil.concurrent.Mutex;
-
 import audioShit.UnitVoiceConstructor;
 import audioShit.ReaderNode;
 import audioShit.SineOscillatorNode;
 import graphics.Drawable;
 import midi.MidiCotrollerNode;
 import midi.MidiOutputNode;
-import nodeSystem.Node;
-import testingInProgress.ClonableNode;
+import nodeSystem.ClonableNode;
 import uiShit.BasicTimeLine;
 
 public class NodeView extends View {
@@ -39,13 +35,11 @@ public class NodeView extends View {
 	public NodeView(String name, Window wind, BasicTimeLine timeLine) {
 		super(name, wind);
 		this.timeLine = timeLine;
-
-		root.addChild(outputNode = new MidiOutputNode(new int[] { -400, 0 }, "MidiOut"));
-		root.addChild(contNode = new MidiCotrollerNode(new int[] { 20, 20 }, "MidiCont"));
-		root.addChild(new SineOscillatorNode(new int[] { -100, -100 }));
-		root.addChild(new ReaderNode(new int[] { -200, 0 }, "reader"));
-
 		voiceConstructor = new UnitVoiceConstructor(this);
+		addComponent(outputNode = new MidiOutputNode(new int[] { -400, 0 }, "MidiOut"));
+		addComponent(contNode = new MidiCotrollerNode(new int[] { 20, 20 }, "MidiCont"));
+		addComponent(new SineOscillatorNode(new int[] { -100, -100 }));
+		addComponent(new ReaderNode(new int[] { -200, 0 }, "reader"));
 
 	}
 
@@ -59,12 +53,10 @@ public class NodeView extends View {
 		multiChannelSynthesizer = new MultiChannelSynthesizer();
 
 		multiChannelSynthesizer.setup(Window.getSynth(), 0, 1, 12, voiceConstructor.voiceDesc());
-//		multiChannelSynthesizer.setVibratoDepth(0, 10);
 
 		midiSynthesizer = new MidiSynthesizer(multiChannelSynthesizer);
 		multiChannelSynthesizer.getOutput().connect(0, wind.getMainOutput(), 1);
 		multiChannelSynthesizer.getOutput().connect(0, wind.getMainOutput(), 0);
-//		multiChannelSynthesizer.setVolume(0, 0.8);
 		isReady = true;
 	}
 

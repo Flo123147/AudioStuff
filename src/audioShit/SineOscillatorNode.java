@@ -1,9 +1,11 @@
 package audioShit;
 
 import com.jsyn.midi.MidiConstants;
+import com.jsyn.ports.UnitOutputPort;
 import com.jsyn.unitgen.SineOscillator;
+
+import nodeSystem.ClonableNode;
 import nodeSystem.Slider;
-import testingInProgress.ClonableNode;
 
 public class SineOscillatorNode extends ClonableNode {
 	private SineOscillator sine;
@@ -19,15 +21,16 @@ public class SineOscillatorNode extends ClonableNode {
 		sine.frequency.set(MidiConstants.convertPitchToFrequency(60));
 
 		addEntry(slide = new Slider(this, "Amplitude", 0, 1));
-		connect(slide.getRightPorts().output, sine.amplitude);
+		connectInwards(slide, sine.amplitude);
 
 		addEntry(slideFreq = new Slider(this, "Frequenzy", 0, 40000));
-		connect(slideFreq.getRightPorts().output, sine.frequency);
+		connectInwards(slideFreq, sine.frequency);
 
 		addEntry(out = new AudioOutEntry(this, "Output"));
-		connect(sine.output, out.getRightPorts().input);
-
+		connectOutwards(sine.output,out);
 	}
+
+
 
 	public void setFreq(float freq) {
 		slideFreq.setValue(freq);

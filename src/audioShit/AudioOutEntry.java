@@ -17,7 +17,6 @@ public class AudioOutEntry extends Entry {
 		addChild(vOutField = new ValueOutField(new int[] { getWidth() - textSpace, 0 }, "Value", textSpace,
 				totalHeight));
 		getRightPorts().output.connect(vOutField.valueIn.input);
-		System.out.println(totalHeight);
 	}
 
 	@Override

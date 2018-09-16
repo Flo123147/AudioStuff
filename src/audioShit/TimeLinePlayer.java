@@ -244,7 +244,6 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 	}
 
 	private void pauseMethod(long pauseTime) {
-		System.out.println("me pause");
 		if (paused) {
 			synchronized (lock) {
 				while (paused) {
