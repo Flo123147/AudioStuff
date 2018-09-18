@@ -1,4 +1,4 @@
-package nodeSystem;
+package oldNodeSystem;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -8,7 +8,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import display.Draggable;
 
-public abstract class Node extends Draggable {
+@Deprecated
+public abstract class OldNode extends Draggable {
 
 	private int width = 200, arcRadi = 10;
 
@@ -20,7 +21,7 @@ public abstract class Node extends Draggable {
 
 	private int nameHeight = 0;
 
-	public Node(int[] pos, String name) {
+	public OldNode(int[] pos, String name) {
 		super(pos, name);
 		entryIndex = 0;
 		entries = new Entry[20];

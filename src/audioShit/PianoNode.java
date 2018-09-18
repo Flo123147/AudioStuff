@@ -7,8 +7,8 @@ import com.jsyn.util.MultiChannelSynthesizer;
 
 import display.View;
 import helper.ValueContainer;
-import nodeSystem.KeyNode;
-import nodeSystem.Slider;
+import oldNodeSystem.KeyNode;
+import oldNodeSystem.Slider;
 
 @Deprecated
 public class PianoNode extends KeyNode {

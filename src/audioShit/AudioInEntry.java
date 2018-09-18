@@ -1,12 +1,12 @@
 package audioShit;
 
 
-import nodeSystem.Entry;
-import nodeSystem.Node;
+import oldNodeSystem.Entry;
+import oldNodeSystem.OldNode;
 
 public class AudioInEntry extends Entry{
 
-	public AudioInEntry( Node node, String name) {
+	public AudioInEntry( OldNode node, String name) {
 		super(node, name, 00);
 		addInConnector();
 	}

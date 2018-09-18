@@ -1,4 +1,4 @@
-package nodeSystem;
+package oldNodeSystem;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -11,7 +11,7 @@ public abstract class Entry extends Drawable {
 
 	protected int neededHeight;
 	protected int totalHeight;
-	protected Node node;
+	protected OldNode node;
 	protected int nameHeight = 16;
 	private int topMiddle;
 	private int width;
@@ -26,7 +26,7 @@ public abstract class Entry extends Drawable {
 
 	public String[] connectedTo, connectedFrom;
 
-	public Entry(Node node, String name, int neededHeight) {
+	public Entry(OldNode node, String name, int neededHeight) {
 		super(new int[] { node.getBorderWidth(), 0 }, name);
 		width = node.getEntryWidth();
 		this.neededHeight = neededHeight;

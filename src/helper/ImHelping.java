@@ -7,7 +7,7 @@ import display.Draggable;
 import display.NodeView;
 import display.Window;
 import graphics.Drawable;
-import nodeSystem.Connector;
+import oldNodeSystem.Connector;
 
 public class ImHelping {
 	public static Window wind;

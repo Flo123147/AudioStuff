@@ -1,13 +1,14 @@
-package nodeSystem;
+package oldNodeSystem;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+
 import com.jsyn.unitgen.PassThrough;
 
 import graphics.Drawable;
 import helper.ValueContainer;
-import midi.MidiOutputNode;
 
 public class ValueOutField<Type> extends Drawable {
 
@@ -15,19 +16,26 @@ public class ValueOutField<Type> extends Drawable {
 	public PassThrough valueIn;
 	public ValueContainer<Type> valueC;
 	private boolean useCont;
+	private boolean outPutChanged;
+	private Object lastText;
 
-	public ValueOutField(int[] pos, String name, int width, int height) {
+	public ValueOutField(int[] pos, String name) {
 		super(pos, name + "TextField");
 
 		valueC = new ValueContainer<Type>();
-		
+
 		valueIn = new PassThrough();
 		wind.addToSynth(valueIn);
 		valueIn.start();
+		height = 20;
+	}
 
-		this.width = width;
-		this.height = height;
+	public int getWidth() {
+		return width;
+	}
 
+	public int getHeight() {
+		return height;
 	}
 
 	public void useValueVontainer(boolean useCont) {
@@ -46,12 +54,25 @@ public class ValueOutField<Type> extends Drawable {
 		} else {
 			text = "" + valueC.x;
 		}
+
+		if(text.equals(lastText)) {
+			outPutChanged = true;
+		}
+		
 		FontMetrics fm = g.getFontMetrics();
+		if (outPutChanged) {
+			Rectangle2D bounds = fm.getStringBounds(text, g);
+			this.width = (int) (bounds.getWidth());
+			this.height = (int) (bounds.getHeight());
+			outPutChanged = false;
+		}
 		int hOffset = (height / 2) + (fm.getAscent() / 2);
 
 		g.setClip(x, y, width, height);
 		g.drawString(text, x + 3, y + hOffset);
-		g.setClip(null);
+//		g.setClip(null);
+		
+		lastText = text;
 	}
 
 	public void setHeight(int height) {

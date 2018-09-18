@@ -5,17 +5,20 @@ import com.jsyn.data.SequentialData;
 import com.jsyn.unitgen.VariableRateMonoReader;
 import com.softsynth.shared.time.TimeStamp;
 
-import nodeSystem.ClonableNode;
-import nodeSystem.Node;
-import nodeSystem.Slider;
+import oldNodeSystem.ClonableNode;
+import oldNodeSystem.OldNode;
+import oldNodeSystem.Slider;
+import unitGnerators.MyVarRateReader;
 
 public class ReaderNode extends ClonableNode implements Triggerable {
 
-	private AudioOutEntry out;
+	public AudioOutEntry out;
+	public Slider amplitudeSlider;
+	public Slider rateSlider;	
+	public TriggerEntry trigger;
+	
 	private MyVarRateReader reader;
-	private Slider amplitudeSlider;
-	private Slider rateSlider;
-	private TriggerEntry trigger;
+
 	private SegmentedEnvelope myTestThingy;
 
 	public ReaderNode(int[] pos, String name) {
@@ -46,6 +49,8 @@ public class ReaderNode extends ClonableNode implements Triggerable {
 
 		};
 		myTestThingy = new SegmentedEnvelope(data);
+
+//		reader.setEnabled(false);
 
 	}
 

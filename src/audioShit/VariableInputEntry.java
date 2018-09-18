@@ -1,8 +1,8 @@
 package audioShit;
 
-import nodeSystem.Entry;
-import nodeSystem.Node;
-import nodeSystem.ValueOutField;
+import oldNodeSystem.Entry;
+import oldNodeSystem.OldNode;
+import oldNodeSystem.ValueOutField;
 
 public class VariableInputEntry extends Entry{
 	private double value;
@@ -10,9 +10,9 @@ public class VariableInputEntry extends Entry{
 
 	private int textSpace = 100;
 	private int divider;
-	public VariableInputEntry(Node node, String name) {
+	public VariableInputEntry(OldNode node, String name) {
 		super(node, name, 20);
-		textField = new ValueOutField(new int[] { divider, 0 }, name, textSpace, neededHeight);
+		textField = new ValueOutField(new int[] { divider, 0 }, name);
 		getRightPorts().output.connect(textField.valueIn.input);
 	}
 

@@ -2,10 +2,10 @@ package audioShit;
 
 import com.jsyn.unitgen.InterpolatingDelay;
 
-import nodeSystem.Node;
-import nodeSystem.Slider;
+import oldNodeSystem.OldNode;
+import oldNodeSystem.Slider;
 
-public class DelayNode extends Node{
+public class DelayNode extends OldNode{
  
 	private AudioInOutEntry inOut;
 	private InterpolatingDelay delay;

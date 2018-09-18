@@ -1,10 +1,10 @@
 package audioShit;
 
 import helper.ValueContainer;
-import nodeSystem.RoundButton;
-import nodeSystem.Entry;
-import nodeSystem.Node;
-import nodeSystem.ValueOutField;
+import oldNodeSystem.Entry;
+import oldNodeSystem.OldNode;
+import oldNodeSystem.RoundButton;
+import oldNodeSystem.ValueOutField;
 import uiShit.ClickReciever;
 
 public class PlusMinusEntry extends Entry implements ClickReciever{
@@ -14,14 +14,14 @@ public class PlusMinusEntry extends Entry implements ClickReciever{
 	private ValueOutField tf;
 	private RoundButton roundButtMinus, roundButtPlus;
 
-	public PlusMinusEntry(Node node, String name, float stepSize, ValueContainer<Integer> valueC) {
+	public PlusMinusEntry(OldNode node, String name, float stepSize, ValueContainer<Integer> valueC) {
 		super(node, name, 20);
 		this.valueC = valueC;
 		this.stepSize = stepSize;
 
 		int middle = getWidth() / 2;
 
-		addChild(tf = new ValueOutField(new int[] { middle - 15, nameHeight }, "OctaveDisp", 30, 20));
+		addChild(tf = new ValueOutField(new int[] { middle - 15, nameHeight }, "OctaveDisp"));
 		tf.valueC = this.valueC;
 		tf.useValueVontainer(true);
 		addChild(roundButtMinus = new RoundButton(new int[] { middle - 50, nameHeight + 10 }, "Minus", true, this));

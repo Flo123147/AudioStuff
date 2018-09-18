@@ -6,10 +6,10 @@ import com.jsyn.ports.UnitPort;
 import com.jsyn.ports.UnitVariablePort;
 import com.jsyn.unitgen.UnitGenerator;
 
-import nodeSystem.Node;
-import nodeSystem.Slider;
+import oldNodeSystem.OldNode;
+import oldNodeSystem.Slider;
 
-public class GenaeralNodeTest extends Node {
+public class GenaeralNodeTest extends OldNode {
 
 	private UnitGenerator ug;
 

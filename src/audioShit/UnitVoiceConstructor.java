@@ -1,6 +1,7 @@
 package audioShit;
 
 import java.util.HashMap;
+
 import com.jsyn.unitgen.UnitGenerator;
 import com.jsyn.unitgen.UnitVoice;
 import com.jsyn.util.VoiceDescription;
@@ -9,8 +10,8 @@ import display.Window;
 import graphics.Drawable;
 import midi.MidiCotrollerNode;
 import midi.MidiOutputNode;
-import nodeSystem.ClonableNode;
-import nodeSystem.Node;
+import oldNodeSystem.ClonableNode;
+import oldNodeSystem.OldNode;
 
 public class UnitVoiceConstructor {
 
@@ -33,20 +34,21 @@ public class UnitVoiceConstructor {
 		connections = new HashMap<>();
 		this.nodeView = nodeView;
 
-//		System.out.println("Generating some Stuff-------------------------------------");
-//
+		System.out.println("Generating some Stuff-------------------------------------");
+
 //		UnitOscillator ossie;
-//		uGens.put("Sine", ossie = new SineOscillator());
-//		MyVarRateReader reader;
-//		uGens.put("Reader", reader = new MyVarRateReader());
+//		uGens.put("Sine", ossie = new MyOscillator());
+////		MyVarRateReader reader;
+////		uGens.put("Reader", reader = new MyVarRateReader());
 //
-//		connections.put(new String[] { "Sine", ossie.output.getName() }, new String[] { MyUnitVoice.ConnectToOut, "" });
-//		connections.put(new String[] { MyUnitVoice.ConnectionFromFreq, "" },
-//				new String[] { "Sine", ossie.frequency.getName() });
-//		connections.put(new String[] { MyUnitVoice.ConnectionFromTrigger, "" },
-//				new String[] { "Reader", reader.trigger.getName() });
-//		connections.put(new String[] { "Reader", reader.output.getName() },
-//				new String[] { "Sine", ossie.amplitude.getName() });
+//		connections.put(new String[] { "Sine", UnitOscillator.PORT_NAME_OUTPUT },
+//				new String[] { MyUnitVoice.ConnectToOut, "" });
+//		connections.put(new String[] { MyUnitVoice.ConnectFromController, "Frequency" },
+//				new String[] { "Sine", UnitOscillator.PORT_NAME_FREQUENCY });
+////		connections.put(new String[] { MyUnitVoice.ConnectFromController, "Trigger" },
+////				new String[] { "Reader", reader.trigger.getName() });
+////		connections.put(new String[] { "Reader", reader.output.getName() },
+////				new String[] { "Sine", ossie.amplitude.getName() });
 	}
 
 	public void connectUnit(String from, String portFrom, String to, String portTo) {
@@ -57,9 +59,13 @@ public class UnitVoiceConstructor {
 		connections.put(connectedFrom, connectedTo);
 	}
 
+	public void unConnectUnit(String[] connectedFrom) {
+		connections.remove(connectedFrom);
+	}
+
 	public void addNode(Drawable comp) {
 
-		if (comp instanceof Node) {
+		if (comp instanceof OldNode) {
 			if (comp instanceof MidiCotrollerNode) {
 				this.controllerNode = (MidiCotrollerNode) comp;
 			} else if (comp instanceof MidiOutputNode) {
@@ -69,7 +75,7 @@ public class UnitVoiceConstructor {
 				uGens.put(cn.getUnikeName(), cn.cloneUnitGen());
 			}
 		}
-		System.out.println(uGens);
+//		System.out.println(uGens);
 	}
 
 	public VoiceDescription voiceDesc() {
@@ -92,16 +98,7 @@ public class UnitVoiceConstructor {
 
 		@Override
 		public UnitVoice createUnitVoice() {
-			MyUnitVoice uv = new MyUnitVoice();
-			try {
-				uv.setup(uGens, connections);
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			MyUnitVoice uv = new MyUnitVoice(uGens, connections);
 			return uv;
 		}
 

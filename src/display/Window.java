@@ -107,11 +107,14 @@ public class Window extends JFrame implements Runnable {
 
 		synth.start();
 		lineOut.start();
-		currentViewCont.x = new MainView(MAIN_VIEW_NAME, this);
+		MainView mv;
+		addView(mv = new MainView(MAIN_VIEW_NAME, this));
+		currentViewCont.x = mv;
+		
 //		currentViewCont.value = newNodeView("NVT");
 //		((NodeView) currentViewCont.value).setSizes(leftMiddle, topMiddle, getWidth(), getHeight());
 
-		Insets ins = getInsets();
+//		Insets ins = getInsets();
 		LEFT.border = 0f;
 		TOP.border = 0f;
 		RIGHT.border = 1f;
@@ -190,28 +193,10 @@ public class Window extends JFrame implements Runnable {
 		Window wind;
 		Thread t = (new Thread(wind = new Window()));
 		wind.init();
-//		for (String arg : args) {
-//			switch (arg) {
-//			case "test1":
-//				wind.test();
-//				break;
-//			case "test2":
-//				wind.test2();
-//				break;
-//
-//			case "uitest":
-//				wind.uitest();
-//				break;
-//			default:
-//				break;
-//			}
-//		}
+
 		t.start();
 
-		TimeLinesBox tlb;
-		wind.getCurrentView().addComponent(tlb = new TimeLinesBox(new UiBorder[] { new UiBorder(0.3f, wind),
-				new UiBorder(0.2f, wind), new UiBorder(0.9f, wind), new UiBorder(0.7f, wind) }));
-		tlb.addTimeLine();
+
 	}
 
 	public void jSynthStopped() {

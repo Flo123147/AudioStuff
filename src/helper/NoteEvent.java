@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 
-import audioShit.TimeLinePlayer;
 import display.Draggable;
 
 public class NoteEvent extends Draggable {
@@ -19,7 +18,7 @@ public class NoteEvent extends Draggable {
 	public SimpleEvent startEvent, endEvent;
 
 	public NoteEvent(double start, double end, int pitch, ValueContainer<Integer> pixelPerSec) {
-		super(new int[] { (int) (start * pixelPerSec.x), pitch * 20 }, "NoteEvent");
+		super(new int[] { (int) (start * pixelPerSec.x), (-pitch * 20)-20 }, "NoteEvent");
 		this.pixelPerSecondCont = pixelPerSec;
 
 //		setY(0);
@@ -68,11 +67,11 @@ public class NoteEvent extends Draggable {
 		if (deltaY >= 20) {
 			dY = 20;
 			deltaY = 0;
-			pitch++;
+			pitch--;
 		} else if (deltaY <= -20) {
 			dY = -20;
 			deltaY = 0;
-			pitch--;
+			pitch++;
 		} else {
 			dY = 0;
 		}

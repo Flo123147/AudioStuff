@@ -1,4 +1,4 @@
-package audioShit;
+package unitGnerators;
 
 import com.jsyn.data.SegmentedEnvelope;
 import com.jsyn.ports.UnitInputPort;
@@ -41,6 +41,7 @@ public class MyVarRateReader extends VariableRateMonoReader {
 	}
 
 	public void triggerOn() {
+//		System.out.println("TriggerD");
 		rate.set(1);
 		dataQueue.clear();
 		dataQueue.queue(myTestThingy, 0, 9);
@@ -51,6 +52,7 @@ public class MyVarRateReader extends VariableRateMonoReader {
 	}
 
 	public void triggerOff() {
+//		System.out.println("UNTriGErEd");
 		if (dataQueue.hasMore()) {
 			dataQueue.clear();
 			rate.set(8);

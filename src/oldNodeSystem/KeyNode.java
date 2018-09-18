@@ -1,9 +1,9 @@
-package nodeSystem;
+package oldNodeSystem;
 
 import display.View;
 import display.Window;
 
-public abstract class KeyNode extends Node {
+public abstract class KeyNode extends OldNode {
 
 	public KeyNode(int[] pos, String name) {
 		super(pos, name);

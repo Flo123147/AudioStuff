@@ -1,8 +1,8 @@
 package audioShit;
 
-import nodeSystem.Node;
+import oldNodeSystem.OldNode;
 
-public class AdderNode extends Node {
+public class AdderNode extends OldNode {
 
 	private AudioOutEntry out;
 	private AudioInEntry in1, in2;

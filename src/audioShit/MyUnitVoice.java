@@ -5,12 +5,15 @@ import java.util.HashMap;
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
 import com.jsyn.unitgen.Circuit;
-import com.jsyn.unitgen.PassThrough;
+import com.jsyn.unitgen.SineOscillator;
 import com.jsyn.unitgen.UnitGenerator;
 import com.jsyn.unitgen.UnitVoice;
 import com.softsynth.shared.time.TimeStamp;
 
+import testingInProgress.MyPassTrough;
 import unitGnerators.ControllerUnit;
+import unitGnerators.MyOscillator;
+import unitGnerators.MyVarRateReader;
 
 public class MyUnitVoice extends Circuit implements UnitVoice {
 
@@ -23,23 +26,63 @@ public class MyUnitVoice extends Circuit implements UnitVoice {
 
 	private HashMap<String, UnitGenerator> myUGens;
 
-	private PassThrough outPS;
+	private MyPassTrough outPS;
 
-	public enum VoiceState {
-		Idle, Holding, Releasing
-	}
+//	public enum VoiceState {
+//		Idle, Holding, Releasing
+//	}
 
-	public VoiceState state;
+//	public VoiceState state;
 
-	public MyUnitVoice() {
+	SineOscillator sine;
+
+	private MyVarRateReader reader;
+
+	public MyUnitVoice(HashMap<String, UnitGenerator> uGens, HashMap<String[], String[]> connections) {
 		setEnabled(false);
 		add(controller = new ControllerUnit());
-		addPort(output = new UnitOutputPort());
-		add(outPS = new PassThrough());
-
-		outPS.output = this.output;
+		add(outPS = new MyPassTrough());
+		addPort(output = outPS.output);
 
 		myUGens = new HashMap<>();
+
+//		test();
+
+		try {
+			setup(uGens, connections);
+//			test(uGens);
+		} catch (InstantiationException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void test(HashMap<String, UnitGenerator> uGens) throws InstantiationException, IllegalAccessException {
+		System.out.println(uGens.values());
+		for (UnitGenerator g : uGens.values()) {
+			if (g instanceof MyVarRateReader) {
+				System.out.println("ReaderFound");
+				MyVarRateReader mvrr = (MyVarRateReader) g;
+				reader = mvrr.getClass().newInstance();
+			} else if (g instanceof MyOscillator) {
+				System.out.println("OssieFound");
+				MyOscillator mo = (MyOscillator) g;
+				sine = mo.getClass().newInstance();
+			}
+		}
+
+		add(sine);
+		sine.output.connect(outPS.input);
+
+		controller.freq.connect(sine.frequency);
+
+		add(reader);
+		reader.output.connect(sine.amplitude);
+
+		controller.trigger.connect(reader.trigger);
+
+		setEnabled(true);
 	}
 
 	@Override
@@ -49,8 +92,9 @@ public class MyUnitVoice extends Circuit implements UnitVoice {
 
 	@Override
 	public void noteOn(double frequency, double amplitude, TimeStamp timeStamp) {
-//		System.out.println("Note ON");
+		System.out.println("Note ON");
 		controller.trigger(frequency, amplitude, timeStamp);
+
 	}
 
 	@Override
@@ -67,54 +111,79 @@ public class MyUnitVoice extends Circuit implements UnitVoice {
 			myUGens.put(key, u);
 		}
 		System.out.println("Start-----------------------");
-//		System.out.println(myUGens.values());
-//		System.out.println(connections);
-		for (String[] key : connections.keySet()) {
-			UnitOutputPort connectionStart = null;
+		System.out.println(myUGens.values());
 
-			switch (key[0]) {
+		for (String[] a : connections.keySet()) {
+			String[] b = connections.get(a);
+			System.out.println(a[0] + " " + a[1] + "   " + b[0] + " " + b[1]);
+		}
+
+		for (String[] key : connections.keySet()) {
+			System.out.println("--------------------");
+			UnitOutputPort startConnectionFrom = null;
+			String connectFrom = key[0];
+			String connectFromPart = key[1];
+
+			System.out.println("Finding start part: " + connectFrom + "    " + connectFromPart);
+
+			switch (connectFrom) {
 			case ConnectFromController:
-				connectionStart = controller.trigger;
+				startConnectionFrom = (UnitOutputPort) controller.getPortByName(connectFromPart);
 				break;
 
 			default:
 				for (String key2 : myUGens.keySet()) {
-					if (key[0] == key2) {
-						connectionStart = (UnitOutputPort) myUGens.get(key[0]).getPortByName(key[1]);
+					if (connectFrom.compareTo(key2) == 0) {
+						startConnectionFrom = (UnitOutputPort) myUGens.get(connectFrom).getPortByName(connectFromPart);
 						break;
 					}
 				}
 				break;
 			}
+			System.out.println("Found Start? " + startConnectionFrom);
+			if (startConnectionFrom != null) {
+				UnitInputPort makeconnectionTo = null;
 
-			if (connectionStart != null) {
-				UnitInputPort connectionTo = null;
-				switch (connections.get(key)[0]) {
+				String connectTo = connections.get(key)[0];
+				String connectToPart = connections.get(key)[1];
+
+				
+				System.out.println("Finding end part: " + connectTo + "    " + connectToPart);
+
+				switch (connectTo) {
 
 				case ConnectToOut:
-					connectionTo = outPS.input;
+//					System.out.println("connToOut");
+					makeconnectionTo = outPS.input;
 					break;
 				default:
 					for (String key2 : myUGens.keySet()) {
-						System.out.println(connections.get(key)[0] + "    " + connections.get(key)[1] +"     "+ key2 +"           " + (connections.get(key)[0] == key2) );
 
-						if (connections.get(key)[0] == key2) {
-							connectionTo = (UnitInputPort) myUGens.get(key2).getPortByName(connections.get(key)[1]);
+//						System.out.println(connectTo + "    " + connectToPart + "     " + key2 + "           "
+//								+ (connectTo.compareTo(key2)));
+
+						if (connectTo.compareTo(key2) == 0) {
+							makeconnectionTo = (UnitInputPort) myUGens.get(key2).getPortByName(connectToPart);
+//							System.out.println("FOUND");
 							break;
-						} 
+						}
 					}
 					break;
 
 				}
-				System.out.println(connectionTo);
-				if (connectionTo != null) {
-					System.out.println(connectionStart.getName() + "   connection to    " + connectionTo.getName());
-					connectionStart.connect(connectionTo);
+				System.out.println("Found End? " + makeconnectionTo);
+				if (makeconnectionTo != null) {
+					System.out.println("connecting: " + connectFrom + " part " + connectFromPart + " to: " + connectTo
+							+ " part " + connectToPart);
+//					System.out.println(connectionStart.getName() + "   connection to    " + connectionTo.getName());
+					startConnectionFrom.connect(makeconnectionTo);
+				} else {
+					System.out.println("Fail");
 				}
 			}
 
 		}
-		System.out.println("End-----------------------");
+		System.out.println("MyUnitVoice constructed-----------------------------------------");
 
 		setEnabled(true);
 	}

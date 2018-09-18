@@ -1,4 +1,4 @@
-package nodeSystem;
+package oldNodeSystem;
 
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
@@ -8,28 +8,29 @@ import audioShit.AudioOutEntry;
 import display.NodeView;
 import helper.ImHelping;
 
-public abstract class ClonableNode extends Node {
+public abstract class ClonableNode extends OldNode {
 
 	protected UnitGenerator unitGen;
 	protected int uid;
 
-//	private LinkedList<String[]> connections;
-//	private LinkedList<Entry[]> outConnections;
+
 
 	public ClonableNode(int[] pos, String name) {
 		super(pos, name);
-//		connections = new LinkedList<>();
-//		outConnections = new LinkedList<>();
 		uid = ImHelping.getNextUid();
 	}
 
 	@Override
+	public void removeConnection(Entry entry, Entry toRemove) {
+		NodeView nv = (NodeView) correspondingView;
+		nv.voiceConstructor.unConnectUnit(entry.connectedFrom);
+
+		super.removeConnection(entry, toRemove);
+	}
+
+	@Override
 	public void newConnection(Entry entry, Entry toAdd) {
-		System.out.println(entry + "    " + toAdd);
-		System.out.println(entry.connectedFrom + "    "+ toAdd.connectedTo);
-		System.out.println(entry.connectedFrom[0] + "    " + entry.connectedFrom[1] + "-------" + toAdd.connectedTo[0]
-				+ "    " + toAdd.connectedTo[1]);
-		
+
 		NodeView nv = (NodeView) correspondingView;
 		nv.voiceConstructor.connectUnit(entry.connectedFrom, toAdd.connectedTo);
 		super.newConnection(entry, toAdd);

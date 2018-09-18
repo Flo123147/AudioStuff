@@ -1,9 +1,9 @@
 package audioShit;
 
-import nodeSystem.Node;
+import oldNodeSystem.OldNode;
 import unitGnerators.Absolute;
 
-public class AbsoluteNode extends Node {
+public class AbsoluteNode extends OldNode {
 
 	private AudioInOutEntry inOut;
 	Absolute absolute;

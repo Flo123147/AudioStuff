@@ -3,10 +3,10 @@ package audioShit;
 import com.jsyn.unitgen.WhiteNoise;
 
 import display.Window;
-import nodeSystem.Node;
-import nodeSystem.Slider;
+import oldNodeSystem.OldNode;
+import oldNodeSystem.Slider;
 
-public class WhiteNoiseNode extends Node {
+public class WhiteNoiseNode extends OldNode {
 	private WhiteNoise noise;
 	private Slider slider;
 	private AudioOutEntry out;

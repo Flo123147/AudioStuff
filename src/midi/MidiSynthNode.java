@@ -6,10 +6,10 @@ import com.jsyn.util.MultiChannelSynthesizer;
 
 import audioShit.AudioOutEntry;
 import display.Window;
-import nodeSystem.Node;
+import oldNodeSystem.OldNode;
 
 @Deprecated
-public class MidiSynthNode extends Node {
+public class MidiSynthNode extends OldNode {
 	private MidiSynthesizer midisynth;
 	private MultiChannelSynthesizer multiSynth;
 	private AudioOutEntry left, right;

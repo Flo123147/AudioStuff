@@ -1,7 +1,7 @@
 package audioShit;
 
-import nodeSystem.Entry;
-import nodeSystem.Node;
+import oldNodeSystem.Entry;
+import oldNodeSystem.OldNode;
 import unitGnerators.TriggerUnit;
 
 public class TriggerEntry extends Entry {
@@ -9,7 +9,7 @@ public class TriggerEntry extends Entry {
 	TriggerUnit triggerUnit;
 	Triggerable tr;
 
-	public TriggerEntry(Node node, String name, Triggerable tr) {
+	public TriggerEntry(OldNode node, String name, Triggerable tr) {
 		super(node, name, 0);
 		this.tr = tr;
 		triggerUnit = new TriggerUnit(this);

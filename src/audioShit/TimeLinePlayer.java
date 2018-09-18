@@ -50,7 +50,7 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 		pixelPerSecondCont = new ValueContainer<Integer>(80);
 		displayOctave = 4;
 
-		addChild(offsetter = new Empty(new int[] { 0, -displayOctave * octaveHeight }, "Empty"));
+		addChild(offsetter = new Empty(new int[] { 0, displayOctave * octaveHeight }, "Empty"));
 
 	}
 
@@ -63,7 +63,7 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 			e.printStackTrace();
 		}
 		clear();
-		displayOctave = 5;
+		displayOctave = 6;
 		for (int i = 0; i < 100; i+=2) {
 			int p = (6 * 12) + (int) (Math.random() * 5);
 			double start = (double) i / 4;
@@ -82,7 +82,7 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 		double length = 0.3;
 
 		double x = 0;
-		displayOctave = 4;
+		displayOctave = 5;
 
 		addNote('E', 5, x * length, 2 * length);
 		x++;
@@ -109,7 +109,7 @@ public class TimeLinePlayer extends Drawable implements Runnable {
 
 	public void draw(Graphics2D g, int x, int y) {
 		offsetter.setX((int) -(currentTime * pixelPerSecondCont.x));
-		offsetter.setY((-displayOctave-1) * octaveHeight);
+		offsetter.setY((displayOctave+1) * octaveHeight);
 
 
 	}

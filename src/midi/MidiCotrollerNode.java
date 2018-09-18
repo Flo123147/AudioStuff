@@ -4,15 +4,17 @@ import java.awt.Graphics2D;
 
 import audioShit.AudioOutEntry;
 import audioShit.MyUnitVoice;
-import nodeSystem.ClonableNode;
+import oldNodeSystem.ClonableNode;
 import unitGnerators.ControllerUnit;
 
 public class MidiCotrollerNode extends ClonableNode {
 
-	private AudioOutEntry trigger;
-	private AudioOutEntry freq;
+	public AudioOutEntry trigger;
+	public AudioOutEntry freq;
 	private ControllerUnit controller;
-
+	
+	
+	
 	public MidiCotrollerNode(int[] pos, String name) {
 		super(pos, name);
 		addEntry(trigger = new AudioOutEntry(this, "Trigger"));
@@ -23,6 +25,9 @@ public class MidiCotrollerNode extends ClonableNode {
 
 		connectOutwards(controller.freq, freq);
 		connectOutwards(controller.trigger, trigger);
+		
+		
+		controller.setEnabled(false);
 	}
 
 	@Override
@@ -32,7 +37,6 @@ public class MidiCotrollerNode extends ClonableNode {
 	
 	@Override
 	public String getUnikeName() {
-		// TODO Auto-generated method stub
 		return MyUnitVoice.ConnectFromController;
 	}
 }

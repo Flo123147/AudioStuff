@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.util.LinkedList;
 
 import graphics.Drawable;
-import nodeSystem.Root;
+import oldNodeSystem.Root;
 import uiShit.ClickableUiShit;
 
 public abstract class View {
@@ -57,6 +57,10 @@ public abstract class View {
 		return clickos;
 	}
 
+	/**
+	 * Set weather or not a your View can be dragged around;
+	 * @return true if draggable
+	 */
 	public abstract boolean isDraggable();
 
 	public void moveRoot(int deltaX, int deltaY) {

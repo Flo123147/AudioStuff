@@ -12,7 +12,8 @@ import audioShit.SineOscillatorNode;
 import graphics.Drawable;
 import midi.MidiCotrollerNode;
 import midi.MidiOutputNode;
-import nodeSystem.ClonableNode;
+import oldNodeSystem.ClonableNode;
+import oldNodeSystem.Entry;
 import uiShit.BasicTimeLine;
 
 public class NodeView extends View {
@@ -32,17 +33,29 @@ public class NodeView extends View {
 
 	private boolean hasChanged = true;
 
+	private SineOscillatorNode sine;
+	private ReaderNode reader;
+
 	public NodeView(String name, Window wind, BasicTimeLine timeLine) {
 		super(name, wind);
 		this.timeLine = timeLine;
 		voiceConstructor = new UnitVoiceConstructor(this);
 		addComponent(outputNode = new MidiOutputNode(new int[] { -400, 0 }, "MidiOut"));
 		addComponent(contNode = new MidiCotrollerNode(new int[] { 20, 20 }, "MidiCont"));
-		addComponent(new SineOscillatorNode(new int[] { -100, -100 }));
-		addComponent(new ReaderNode(new int[] { -200, 0 }, "reader"));
+		addComponent(sine = new SineOscillatorNode(new int[] { -100, -100 }));
+		addComponent(reader = new ReaderNode(new int[] { -200, 0 }, "reader"));
+
+		contNode.trigger.addOutConnection(reader.trigger);
+		contNode.freq.addOutConnection(sine.slideFreq);
+
+		reader.out.addOutConnection(sine.slideAmplitude);
+
+		sine.out.addOutConnection(outputNode.left);
 
 	}
 
+	
+	
 	public void startThisShit() {
 
 		if (multiChannelSynthesizer != null) {
@@ -52,7 +65,7 @@ public class NodeView extends View {
 
 		multiChannelSynthesizer = new MultiChannelSynthesizer();
 
-		multiChannelSynthesizer.setup(Window.getSynth(), 0, 1, 12, voiceConstructor.voiceDesc());
+		multiChannelSynthesizer.setup(Window.getSynth(), 0, 1, 6, voiceConstructor.voiceDesc());
 
 		midiSynthesizer = new MidiSynthesizer(multiChannelSynthesizer);
 		multiChannelSynthesizer.getOutput().connect(0, wind.getMainOutput(), 1);

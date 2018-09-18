@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.LinkedList;
 
-import nodeSystem.KeyNode;
+import oldNodeSystem.KeyNode;
 
 public class KeyMngr implements KeyListener {
 

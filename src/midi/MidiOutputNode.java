@@ -5,20 +5,22 @@ import unitGnerators.MyVoiceOut;
 import java.awt.Graphics2D;
 
 import com.jsyn.ports.UnitInputPort;
+import com.jsyn.unitgen.UnitGenerator;
 
 import audioShit.AudioInEntry;
 import audioShit.MyUnitVoice;
-import nodeSystem.ClonableNode;
+import oldNodeSystem.ClonableNode;
 
 public class MidiOutputNode extends ClonableNode {
 
-	private AudioInEntry left, right;
+	public AudioInEntry left, right;
 	private UnitInputPort out;
 
 	public MidiOutputNode(int[] pos, String name) {
 		super(pos, name);
 
-		setUnitGen(new MyVoiceOut());
+		UnitGenerator u;
+		setUnitGen(u = new MyVoiceOut());
 		addEntry(left = new AudioInEntry(this, "Left"));
 		addEntry(right = new AudioInEntry(this, "Right"));
 		out = wind.getMainOutput();
@@ -26,8 +28,7 @@ public class MidiOutputNode extends ClonableNode {
 		connectInwards(0, left, out, 0);
 		connectInwards(0, right, out, 1);
 
-//		connect(left.getLeftPorts().output,0, out,0);
-//		connect(right.getLeftPorts().output,0, out,1);
+		u.setEnabled(false);
 	}
 
 	@Override
@@ -46,9 +47,5 @@ public class MidiOutputNode extends ClonableNode {
 		// TODO Auto-generated method stub
 
 	}
-//	public UnitInputPort[] getConnectors() {
-//		return new UnitInputPort[] {left.getLeftPorts().input,right.};
-//		// TODO Auto-generated method stub
-//		
-//	}
+
 }

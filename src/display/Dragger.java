@@ -9,8 +9,8 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import helper.ControlHelper;
 import helper.ValueContainer;
-import nodeSystem.Connector;
-import nodeSystem.SliderKnob;
+import oldNodeSystem.Connector;
+import oldNodeSystem.SliderKnob;
 
 public class Dragger implements MouseMotionListener, MouseListener {
 

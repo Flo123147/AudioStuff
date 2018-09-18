@@ -1,4 +1,4 @@
-package nodeSystem;
+package oldNodeSystem;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -25,7 +25,7 @@ public class Slider extends Entry {
 	double valueRange;
 	private double speed;
 
-	public Slider(Node node, String name, double start, double end) {
+	public Slider(OldNode node, String name, double start, double end) {
 		super(node, name, 20);
 
 		addInConnector();
@@ -37,7 +37,7 @@ public class Slider extends Entry {
 		
 		divider = getWidth() - textSpace;
 
-		textField = new ValueOutField(new int[] { divider, nameHeight }, name, textSpace, neededHeight);
+		textField = new ValueOutField(new int[] { divider, nameHeight }, name);
 		rightPorts.output.connect(textField.valueIn.input);
 		
 		addChild(slideKreis);
