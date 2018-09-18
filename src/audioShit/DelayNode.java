@@ -2,6 +2,7 @@ package audioShit;
 
 import com.jsyn.unitgen.InterpolatingDelay;
 
+import oldEntries.AudioInOutEntry;
 import oldNodeSystem.OldNode;
 import oldNodeSystem.Slider;
 

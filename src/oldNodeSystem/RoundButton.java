@@ -6,9 +6,9 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.util.LinkedList;
 
-import audioShit.PlusMinusEntry;
 import display.Clickable;
 import graphics.Drawable;
+import oldEntries.PlusMinusEntry;
 
 public class RoundButton extends ClickableNodeTree {
 
@@ -51,7 +51,7 @@ public class RoundButton extends ClickableNodeTree {
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
-		g.setColor(getColor());
+		g.setColor(getBaseColor());
 		g.fillOval(x - getRadius(), y - getRadius(), diameter, diameter);
 		g.setColor(Color.BLACK);
 		g.drawOval(x - getRadius(), y - getRadius(), diameter, diameter);

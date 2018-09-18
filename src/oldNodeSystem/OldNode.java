@@ -96,7 +96,7 @@ public abstract class OldNode extends Draggable {
 
 		g.setColor(Color.black);
 		g.fillRoundRect(x, y, width, getEntriesHeight() + arcRadi + nameHeight, arcRadi, arcRadi);
-		g.setColor(color);
+		g.setColor(baseColor);
 		g.fillRoundRect(x + borderWidth, y + borderWidth, width - 2 * borderWidth,
 				getEntriesHeight() - 2 * borderWidth + arcRadi + nameHeight, arcRadi, arcRadi);
 

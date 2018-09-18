@@ -4,8 +4,8 @@ import com.jsyn.instruments.WaveShapingVoice;
 import com.jsyn.midi.MidiSynthesizer;
 import com.jsyn.util.MultiChannelSynthesizer;
 
-import audioShit.AudioOutEntry;
 import display.Window;
+import oldEntries.AudioOutEntry;
 import oldNodeSystem.OldNode;
 
 @Deprecated

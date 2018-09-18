@@ -17,7 +17,7 @@ public class SliderKnob extends Draggable {
 
 	public SliderKnob(int[] pos, String name, Slider slider) {
 		super(pos, name + "-Handle");
-		color = Color.LIGHT_GRAY;
+		baseColor = Color.LIGHT_GRAY;
 		this.slider = slider;
 
 	}
@@ -50,7 +50,7 @@ public class SliderKnob extends Draggable {
 			g.setColor(new Color(100, 100, 100, 100));
 
 		} else {
-			g.setColor(getColor());
+			g.setColor(getBaseColor());
 		}
 		g.fillOval(x - getRadius(), y - getRadius(), diameter, diameter);
 	}

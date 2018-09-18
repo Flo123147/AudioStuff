@@ -6,6 +6,9 @@ import com.jsyn.ports.UnitPort;
 import com.jsyn.ports.UnitVariablePort;
 import com.jsyn.unitgen.UnitGenerator;
 
+import oldEntries.AudioInEntry;
+import oldEntries.AudioOutEntry;
+import oldEntries.VariableInputEntry;
 import oldNodeSystem.OldNode;
 import oldNodeSystem.Slider;
 

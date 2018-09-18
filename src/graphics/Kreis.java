@@ -16,7 +16,7 @@ public class Kreis extends Draggable {
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
-		g.setColor(color);
+		g.setColor(baseColor);
 		g.fillOval(x - getRadius(), y - getRadius(), diameter, diameter);
 	}
 

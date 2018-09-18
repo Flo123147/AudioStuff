@@ -7,8 +7,8 @@ import java.awt.Graphics2D;
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.unitgen.UnitGenerator;
 
-import audioShit.AudioInEntry;
 import audioShit.MyUnitVoice;
+import oldEntries.AudioInEntry;
 import oldNodeSystem.ClonableNode;
 
 public class MidiOutputNode extends ClonableNode {

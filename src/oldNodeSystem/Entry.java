@@ -7,6 +7,7 @@ import com.jsyn.unitgen.PassThrough;
 
 import graphics.Drawable;
 
+@Deprecated
 public abstract class Entry extends Drawable {
 
 	protected int neededHeight;
@@ -30,7 +31,7 @@ public abstract class Entry extends Drawable {
 		super(new int[] { node.getBorderWidth(), 0 }, name);
 		width = node.getEntryWidth();
 		this.neededHeight = neededHeight;
-		color = Color.black;
+		baseColor = Color.black;
 		this.node = node;
 
 		this.leftPorts = new PassThrough();
@@ -52,7 +53,7 @@ public abstract class Entry extends Drawable {
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
-		g.setColor(color);
+		g.setColor(baseColor);
 		g.drawLine(x, y, x + width, y);
 		g.drawLine(x, y + totalHeight, x + width, y + totalHeight);
 		drawName(g, x, y);

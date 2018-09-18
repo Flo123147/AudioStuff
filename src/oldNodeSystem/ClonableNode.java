@@ -4,9 +4,9 @@ import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
 import com.jsyn.unitgen.UnitGenerator;
 
-import audioShit.AudioOutEntry;
 import display.NodeView;
 import helper.ImHelping;
+import oldEntries.AudioOutEntry;
 
 public abstract class ClonableNode extends OldNode {
 

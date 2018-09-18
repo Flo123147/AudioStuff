@@ -19,7 +19,7 @@ public class Rect extends Drawable{
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
-		g.setColor(color);
+		g.setColor(baseColor);
 		g.fillRoundRect(x, y, width, height, 20, 20);
 	}
 

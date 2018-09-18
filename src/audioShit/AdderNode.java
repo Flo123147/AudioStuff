@@ -1,5 +1,7 @@
 package audioShit;
 
+import oldEntries.AudioInEntry;
+import oldEntries.AudioOutEntry;
 import oldNodeSystem.OldNode;
 
 public class AdderNode extends OldNode {

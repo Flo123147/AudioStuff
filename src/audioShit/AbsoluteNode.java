@@ -1,5 +1,6 @@
 package audioShit;
 
+import oldEntries.AudioInOutEntry;
 import oldNodeSystem.OldNode;
 import unitGnerators.Absolute;
 

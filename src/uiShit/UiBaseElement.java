@@ -50,7 +50,7 @@ public abstract class UiBaseElement extends Drawable {
 			g.setColor(Color.BLACK);
 			g.fillRoundRect(x + spacing.x, y + spacing.x, getWidth() - spacing.x * 2, getHeight() - spacing.x * 2,
 					roundCorner, roundCorner);
-			g.setColor(getColor());
+			g.setColor(getBaseColor());
 			g.fillRect(x + borderWidth + spacing.x, y + borderWidth + spacing.x,
 					getWidth() - borderWidth * 2 - spacing.x * 2, getHeight() - borderWidth * 2 - spacing.x * 2);
 		}

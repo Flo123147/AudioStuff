@@ -7,6 +7,8 @@ import com.jsyn.util.MultiChannelSynthesizer;
 
 import display.View;
 import helper.ValueContainer;
+import oldEntries.AudioOutEntry;
+import oldEntries.PlusMinusEntry;
 import oldNodeSystem.KeyNode;
 import oldNodeSystem.Slider;
 

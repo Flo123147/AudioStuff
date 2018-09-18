@@ -3,6 +3,7 @@ package audioShit;
 import com.jsyn.unitgen.WhiteNoise;
 
 import display.Window;
+import oldEntries.AudioOutEntry;
 import oldNodeSystem.OldNode;
 import oldNodeSystem.Slider;
 

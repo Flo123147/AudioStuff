@@ -30,7 +30,7 @@ public class Connector extends Draggable {
 
 	public Connector(int[] pos, String name, boolean isIn, Entry entry) {
 		super(pos, name);
-		color = Color.gray;
+		baseColor = Color.gray;
 		this.isInput = isIn;
 		this.dragger = Window.dragger;
 		cs = ConnStatus.noConnect;
@@ -56,7 +56,7 @@ public class Connector extends Draggable {
 		g.setColor(Color.BLACK);
 		g.fillOval(x - getRadius() - borderExtr, y - getRadius() - borderExtr, diameter + 2 * borderExtr,
 				diameter + 2 * borderExtr);
-		g.setColor(color);
+		g.setColor(baseColor);
 		g.fillOval(x - getRadius(), y - getRadius(), diameter, diameter);
 		if (tempTarget != null) {
 			ImHelping.drawConnectionBezier(g, this, tempTarget);

@@ -2,8 +2,8 @@ package midi;
 
 import java.awt.Graphics2D;
 
-import audioShit.AudioOutEntry;
 import audioShit.MyUnitVoice;
+import oldEntries.AudioOutEntry;
 import oldNodeSystem.ClonableNode;
 import unitGnerators.ControllerUnit;
 

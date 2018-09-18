@@ -5,6 +5,7 @@ import com.jsyn.data.SequentialData;
 import com.jsyn.unitgen.VariableRateMonoReader;
 import com.softsynth.shared.time.TimeStamp;
 
+import oldEntries.AudioOutEntry;
 import oldNodeSystem.ClonableNode;
 import oldNodeSystem.OldNode;
 import oldNodeSystem.Slider;

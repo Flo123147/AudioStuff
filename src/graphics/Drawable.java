@@ -11,7 +11,7 @@ public abstract class Drawable {
 	private int[] pos;
 	private String name;
 
-	protected Color color;
+	protected Color baseColor;
 	protected Window wind;
 //	protected Root root;
 
@@ -26,7 +26,7 @@ public abstract class Drawable {
 		this.name = name;
 		wind = Window.widow;
 //		root = Window.root;
-		color = Color.WHITE;
+		baseColor = Color.WHITE;
 		children = new LinkedList<Drawable>();
 
 	}
@@ -38,7 +38,7 @@ public abstract class Drawable {
 
 	public void preDraw(Graphics2D g, int xOffset, int yOffset) {
 		if (initialized) {
-			g.setColor(getColor());
+			g.setColor(getBaseColor());
 			draw(g, getLocalX() + xOffset, getLocalY() + yOffset);
 			try {
 				for (Drawable d : children) {
@@ -100,11 +100,11 @@ public abstract class Drawable {
 	}
 
 	public void setColor(Color color) {
-		this.color = color;
+		this.baseColor = color;
 	}
 
-	public Color getColor() {
-		return color;
+	public Color getBaseColor() {
+		return baseColor;
 	}
 
 	public final int getX() {

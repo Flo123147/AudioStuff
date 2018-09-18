@@ -54,7 +54,7 @@ public class BasicTimeLine extends UiSubElement implements ClickReciever {
 	protected void draw(Graphics2D g, int x, int y) {
 
 		super.draw(g, x, y);
-		g.setColor(getColor());
+		g.setColor(getBaseColor());
 		g.fillRect(x, y, getWidth(), getHeight());
 
 		timeLinePlayer.draw(g, x + divider, y);

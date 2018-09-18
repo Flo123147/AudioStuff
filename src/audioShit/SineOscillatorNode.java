@@ -3,6 +3,7 @@ package audioShit;
 import com.jsyn.midi.MidiConstants;
 import com.jsyn.unitgen.SineOscillator;
 
+import oldEntries.AudioOutEntry;
 import oldNodeSystem.ClonableNode;
 import oldNodeSystem.Slider;
 import unitGnerators.MyOscillator;
