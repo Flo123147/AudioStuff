@@ -2,46 +2,41 @@ package unitGnerators;
 
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.unitgen.UnitGenerator;
-import com.jsyn.unitgen.UnitSink;
+import helper.Triggerable;
 
-import audioShit.TriggerEntry;
-
-public class TriggerUnit extends UnitGenerator implements UnitSink {
+public class TriggerUnit extends UnitGenerator {
 
 	public UnitInputPort input;
-	private TriggerEntry te;
+	private Triggerable toTrigger;
 	private boolean triggered;
 
-	public TriggerUnit(TriggerEntry triggerEntry) {
-		addPort(input = new UnitInputPort("Input"), "Input");
-		te = triggerEntry;
+	public String triggerName;
 
+	public TriggerUnit(Triggerable toTrigger, String triggerName) {
+		addPort(input = new UnitInputPort("Input"), "Input");
+		this.toTrigger = toTrigger;
+		this.triggerName = triggerName;
 	}
 
 	@Override
 	public void generate(int start, int limit) {
 		double[] ins = input.getValues();
 		for (int i = start; i < limit; i++) {
+
 			if (ins[i] >= 0.1) {
 				if (!triggered) {
-					te.triggerOn();
+					toTrigger.triggerOn(triggerName);
 					triggered = true;
-				}else {
-					te.triggerHold();
+				} else {
+					toTrigger.triggerHold(triggerName);
 				}
 			} else {
 				if (triggered) {
-					te.triggerOff();
+					toTrigger.triggerOff(triggerName);
 					triggered = false;
 				}
 			}
 		}
-	}
-
-	@Override
-	public UnitInputPort getInput() {
-		// TODO Auto-generated method stub
-		return getInput();
 	}
 
 }

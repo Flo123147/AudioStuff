@@ -1,5 +1,6 @@
 package audioShit;
 
+import helper.Triggerable;
 import oldNodeSystem.Entry;
 import oldNodeSystem.OldNode;
 import unitGnerators.TriggerUnit;

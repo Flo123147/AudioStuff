@@ -9,10 +9,11 @@ import com.jsyn.unitgen.UnitGenerator;
 
 import graphics.Drawable;
 import helper.Empty;
+import helper.UnitEventReciever;
 import nodeComponents.NodeComponent;
 import uiShit.ClickReciever;
 
-public abstract class Node extends BaseNode implements ClickReciever{
+public abstract class Node extends BaseNode implements ClickReciever, UnitEventReciever {
 
 	private LinkedList<NodeInPort> inPorts;
 	private int nrInPorts = 0;
@@ -48,6 +49,8 @@ public abstract class Node extends BaseNode implements ClickReciever{
 	protected void setUnitGenerator(UnitGenerator unitGenerator) {
 		this.unitGenerator = unitGenerator;
 		wind.addToSynth(unitGenerator);
+		unitGenerator.setSynthesisEngine(unitGenerator.getSynthesisEngine());
+		System.out.println(unitGenerator.getClass().getSimpleName() + "     " + unitGenerator.getPorts());
 		for (UnitPort up : unitGenerator.getPorts()) {
 			if (up instanceof UnitInputPort) {
 				UnitInputPort uip = (UnitInputPort) up;
@@ -57,6 +60,16 @@ public abstract class Node extends BaseNode implements ClickReciever{
 				UnitOutputPort uop = (UnitOutputPort) up;
 				addOutPort(uop);
 
+			}
+		}
+		unitGenerator.start();
+	}
+
+	public void setAutoPorts(String[] names) {
+		for (String name : names) {
+			for (NodeOutPort port : outPorts) {
+				if (port.getName().equals(name))
+					port.autoTrigger = true;
 			}
 		}
 	}
@@ -97,6 +110,20 @@ public abstract class Node extends BaseNode implements ClickReciever{
 			}
 	}
 
-	
+	public NodeInPort getInPort(String name) {
+		for (NodeInPort in : inPorts) {
+			if (in.getName() == name)
+				return in;
+		}
+		return null;
+	}
 
+	public NodeOutPort getOutPort(String name) {
+		for (NodeOutPort out : outPorts) {
+			System.out.println(out.getName());
+			if (out.getName() == name)
+				return out;
+		}
+		return null;
+	}
 }

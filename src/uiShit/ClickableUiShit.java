@@ -1,6 +1,6 @@
 package uiShit;
 
-import display.Clickable;
+import helper.Clickable;
 
 public abstract class ClickableUiShit extends UiSubElement implements Clickable {
 

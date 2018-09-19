@@ -4,8 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.util.LinkedList;
 
-import display.Clickable;
 import graphics.Drawable;
+import helper.Clickable;
 
 public abstract class ClickableNodeTree extends Drawable implements Clickable {
 

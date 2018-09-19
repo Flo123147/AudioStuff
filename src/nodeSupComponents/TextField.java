@@ -1,12 +1,10 @@
-package nodeSystem;
+package nodeSupComponents;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-
 import graphics.Drawable;
-import nodeComponents.NodeComponent;
 
 public class TextField extends Drawable {
 
@@ -44,16 +42,17 @@ public class TextField extends Drawable {
 	}
 
 	private void firstTime(Graphics2D g) {
-		FontMetrics fm = g.getFontMetrics();
-		Rectangle2D bounds = fm.getStringBounds(text, g);
-		if (centered) {
-			offsetX = (int) -(bounds.getWidth() / 2);
-		} else {
-			offsetX = 0;
+		if (text != null) {
+			FontMetrics fm = g.getFontMetrics();
+			Rectangle2D bounds = fm.getStringBounds(text, g);
+			if (centered) {
+				offsetX = (int) -(bounds.getWidth() / 2);
+			} else {
+				offsetX = 0;
+			}
+
+			offsetY = fm.getAscent();
 		}
-
-		offsetY = fm.getAscent();
-
 	}
 
 }

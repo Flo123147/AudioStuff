@@ -7,8 +7,8 @@ import java.awt.Shape;
 
 import com.sun.javafx.geom.RoundRectangle2D;
 
-import display.Clickable;
 import display.MainControl;
+import helper.Clickable;
 import oldNodeSystem.ClickableNodeTree;
 import oldNodeSystem.ValueOutField;
 

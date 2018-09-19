@@ -10,6 +10,7 @@ import display.Draggable;
 import graphics.Drawable;
 import helper.Empty;
 import nodeComponents.NodeComponent;
+import nodeSupComponents.TextField;
 
 public abstract class BaseNode extends Draggable {
 
@@ -44,7 +45,7 @@ public abstract class BaseNode extends Draggable {
 
 		updateMetrics();
 	}
-
+	
 	public void addNodeComponent(String compName, NodeComponent comp, int xGridPos, int yGridPos) {
 		comp.setX(GRID_SPACING * xGridPos);
 		comp.setY(GRID_SPACING * yGridPos);

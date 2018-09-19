@@ -213,6 +213,7 @@ public class Window extends JFrame implements Runnable {
 
 	public void addToSynth(UnitGenerator unitg) {
 		synth.add(unitg);
+		unitg.start();
 	}
 
 	public ValueContainer<View> getCurrentViewCont() {

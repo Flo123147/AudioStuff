@@ -16,22 +16,27 @@ public class MyMainControllerUnit extends Circuit {
 	public MyMainControllerUnit() {
 		addPort(start = new UnitOutputPort("Start"));
 		addPort(stop = new UnitOutputPort("Stop"));
+
 		add(psStart = new PassThrough());
 		add(psStop = new PassThrough());
 
 		psStart.output = start;
 		psStop.output = stop;
-
+		
+	
 	}
 
-	public void start(TimeStamp time) {
-		psStart.input.set(1, time);
-		psStart.input.set(0, time.makeRelative(SIGNAL_LENGTH));
+	public void startPlayback(TimeStamp time) {
+		System.out.println();
+		psStart.input.set(TRUE, time);
+		psStart.input.set(FALSE, time.makeRelative(SIGNAL_LENGTH));
+		System.out.println("Starting Playback");
 	}
 
-	public void stop(TimeStamp time) {
-		psStart.input.set(0, time);
-		psStop.input.set(1, time);
-		psStop.input.set(1, time.makeRelative(SIGNAL_LENGTH));
+	public void stopPlayback(TimeStamp time) {
+		psStart.input.set(FALSE, time);
+		psStop.input.set(TRUE, time);
+		psStop.input.set(FALSE, time.makeRelative(SIGNAL_LENGTH));
+		System.out.println("Stoping Playback");
 	}
 }

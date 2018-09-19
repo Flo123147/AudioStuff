@@ -12,7 +12,7 @@ import display.Window;
 import graphics.Kreis;
 import helper.ControlHelper;
 import helper.ImHelping;
-
+@Deprecated
 public class Connector extends Draggable {
 	private enum ConnStatus {
 		noConnect, connecting, connected

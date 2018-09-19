@@ -6,8 +6,8 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.util.LinkedList;
 
-import display.Clickable;
 import graphics.Drawable;
+import helper.Clickable;
 import oldEntries.PlusMinusEntry;
 
 public class RoundButton extends ClickableNodeTree {

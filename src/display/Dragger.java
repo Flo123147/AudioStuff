@@ -7,8 +7,11 @@ import java.util.LinkedList;
 
 import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
+import helper.Clickable;
 import helper.ControlHelper;
 import helper.ValueContainer;
+import nodeSystem.NodeInPort;
+import nodeSystem.NodeOutPort;
 import oldNodeSystem.Connector;
 import oldNodeSystem.SliderKnob;
 
@@ -19,7 +22,7 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 	private ControlHelper ch;
 	private boolean connecting;
-	private Connector connectFrom;
+	private NodeOutPort connectFrom;
 
 	private Window wind;
 
@@ -33,12 +36,10 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+
 		for (Clickable cl : viewCont.x.getClickos()) {
-			System.out.print(cl.getName() + "  ");
 			if (cl.getCollider() != null && cl.getCollider().contains(e.getPoint())) {
 				cl.clicked();
-				System.out.println(cl.getName() + "  Clicked");
 
 				if (cl.getChildren().size() == 0) {
 					break;
@@ -46,7 +47,6 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 			}
 		}
-		System.out.println();
 
 	}
 
@@ -68,14 +68,12 @@ public class Dragger implements MouseMotionListener, MouseListener {
 		ch.setStartXOnPanel(e.getX());
 		ch.setStartYOnPanel(e.getY());
 
-		System.out.println("click down");
 		boolean backgroundClicked = true;
 
 		for (Draggable d : viewCont.x.getDragos()) {
 			if (d.getCollider() != null && d.getCollider().contains(e.getPoint())) {
 				toDrag = d;
 				d.dragStart();
-				System.out.println(d.getName());
 				backgroundClicked = false;
 				if (d.getChildren().size() == 0) {
 					break;
@@ -93,26 +91,21 @@ public class Dragger implements MouseMotionListener, MouseListener {
 	public void mouseReleased(MouseEvent e) {
 		ch.update(e);
 
-		System.out.println("click up");
-
 		if (connecting) {
 			boolean foundPort = false;
 			for (Draggable d : viewCont.x.getDragos()) {
 				if (d.getCollider() != null && d.getCollider().contains(e.getPoint())) {
-					if (d instanceof Connector) {
-						Connector connectTo = (Connector) d;
-						if (connectTo.isInput() && !connectFrom.isSameNode(connectTo)) {
-							connectTo.newInConnection(connectFrom);
-							connectFrom.connentionSucc(connectTo);
-							foundPort = true;
-							break;
-						}
+					if (d instanceof NodeInPort) {
+						NodeInPort nip = (NodeInPort) d;
+						nip.addInConnection(connectFrom);
+						connectFrom.connectingEnd(true, nip, toDrag);
+						foundPort = true;
 					}
 
 				}
 			}
 			if (!foundPort) {
-				connectFrom.connentionFailed();
+				connectFrom.connectingEnd(false, null, toDrag);
 
 			}
 		}
@@ -131,7 +124,6 @@ public class Dragger implements MouseMotionListener, MouseListener {
 	public void mouseDragged(MouseEvent e) {
 		ch.update(e);
 
-//		System.out.println(wind.getOffsetX() + "   " + wind.getOffsetY());
 		if (toDrag != null) {
 
 			toDrag.move(ch.getDeltaX(), ch.getDeltaY(), ch);
@@ -147,12 +139,12 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 	}
 
-	public void makeConnection(Draggable temp, Connector connectFrom) {
-		System.out.println("connecting...");
+	public void startConnecting(NodeOutPort start, Draggable temp) {
 
-		toDrag = temp;
 		connecting = true;
-		this.connectFrom = connectFrom;
+		connectFrom = start;
+		toDrag = temp;
+
 	}
 
 }
