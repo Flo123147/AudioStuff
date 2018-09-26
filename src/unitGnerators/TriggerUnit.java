@@ -13,7 +13,7 @@ public class TriggerUnit extends UnitGenerator {
 	public String triggerName;
 
 	public TriggerUnit(Triggerable toTrigger, String triggerName) {
-		addPort(input = new UnitInputPort("Input"), "Input");
+		addPort(input = new UnitInputPort("Trigger"), "Trigger");
 		this.toTrigger = toTrigger;
 		this.triggerName = triggerName;
 	}

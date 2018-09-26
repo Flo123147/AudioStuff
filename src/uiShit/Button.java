@@ -9,6 +9,7 @@ import com.sun.javafx.geom.RoundRectangle2D;
 
 import display.MainControl;
 import helper.Clickable;
+import helper.ControlHelper;
 import oldNodeSystem.ClickableNodeTree;
 import oldNodeSystem.ValueOutField;
 
@@ -30,7 +31,7 @@ public class Button extends ClickableNodeTree {
 	}
 
 	public void clicked() {
-		sendTo.click(getName());
+		
 	}
 
 	public Shape getCollider() {
@@ -56,6 +57,11 @@ public class Button extends ClickableNodeTree {
 	public int getWidth() {
 		// TODO Auto-generated method stub
 		return width;
+	}
+
+	@Override
+	public void clicked(ControlHelper ch) {
+		sendTo.click(getName(),ch);
 	}
 
 }

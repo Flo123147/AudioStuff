@@ -20,7 +20,7 @@ public class TimerUnit extends MyBaseUnit {
 	private boolean playing;
 
 	public TimerUnit(int howMany, Node node) {
-		super(node);
+
 		samplesPerSecond = Window.getSynth().getFrameRate();
 		int samplesPerMin = samplesPerSecond * 60;
 		samplesPerBeat = samplesPerMin / 120;
@@ -65,7 +65,7 @@ public class TimerUnit extends MyBaseUnit {
 			playing = false;
 
 		case RESET:
-			counter = 0;
+			counter = samplesPerBeat;
 			break;
 		default:
 			break;
@@ -74,7 +74,8 @@ public class TimerUnit extends MyBaseUnit {
 	}
 
 	@Override
-	void baseTrigger() {
+	protected void baseTrigger() {
+		counter = samplesPerBeat;
 		playing = true;
 	}
 

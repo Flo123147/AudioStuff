@@ -3,6 +3,8 @@ package unitGnerators;
 import java.util.LinkedList;
 
 import com.jsyn.ports.UnitInputPort;
+import com.jsyn.ports.UnitOutputPort;
+import com.jsyn.ports.UnitPort;
 import com.jsyn.unitgen.Circuit;
 
 import helper.Triggerable;
@@ -15,19 +17,18 @@ public abstract class MyBaseUnit extends Circuit implements Triggerable {
 	public UnitInputPort startProcedure;
 
 	public Node node;
-	
+
 	/**
 	 * Base Class for everything with at least one Trigger input. One is added by
 	 * Default (baseTrigger). To add more use addTrigger() and override triggerOn.
 	 * (make sure it still calls super.triggerOn())
-	 * @param node 
+	 * 
+	 * @param node
 	 */
-	public MyBaseUnit(Node node) {
+	public MyBaseUnit() {
 		add(baseTriggerUnit = new TriggerUnit(this, BASETRIGGER_NAME));
 		addPort(startProcedure = baseTriggerUnit.input);
 		triggerList = new LinkedList<>();
-	
-		this.node = node;
 	}
 
 	public void addTrigger(String portName, String triggerName) {
@@ -37,13 +38,31 @@ public abstract class MyBaseUnit extends Circuit implements Triggerable {
 		addPort(newTrigger.input);
 		add(newTrigger);
 	}
+	/**
+	 * For adding a Port to a Node after Constructor has been called.
+	 * Basicly just a simple way to register it to the Node.
+	 * Do not use in Constructor.(Double Ports)
+	 * 
+	 * Make sure to name the port correctly.
+	 * 
+	 * @param port
+	 */
+	public void addPortRuntime(UnitPort port) {
+		addPort(port);
+		if(port instanceof UnitInputPort) {
+			UnitInputPort uip = (UnitInputPort)port;
+			node.addInPort(uip);
+		}else if(port instanceof UnitOutputPort) {
+			UnitOutputPort uop = (UnitOutputPort)port;
+			node.addOutPort(uop);
+		}
+	}
 
-	abstract void baseTrigger();
+	protected abstract void baseTrigger();
 
 	@Override
 	public void triggerOn(String triggerName) {
 		if (triggerName == BASETRIGGER_NAME) {
-			
 			baseTrigger();
 		}
 

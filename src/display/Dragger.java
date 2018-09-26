@@ -39,7 +39,7 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 		for (Clickable cl : viewCont.x.getClickos()) {
 			if (cl.getCollider() != null && cl.getCollider().contains(e.getPoint())) {
-				cl.clicked();
+				cl.clicked(ch);
 
 				if (cl.getChildren().size() == 0) {
 					break;

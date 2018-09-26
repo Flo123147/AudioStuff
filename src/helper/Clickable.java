@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import graphics.Drawable;
 
 public abstract interface Clickable {
-	public abstract void clicked();
+	public abstract void clicked(ControlHelper ch);
 
 	public abstract Shape getCollider();
 

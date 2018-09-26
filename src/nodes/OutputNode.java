@@ -1,5 +1,6 @@
 package nodes;
 
+import helper.ControlHelper;
 import nodeComponents.KnobComponent;
 import nodeSystem.Node;
 import unitGnerators.OutputUnit;
@@ -21,7 +22,7 @@ public class OutputNode extends Node {
 	}
 
 	@Override
-	public void click(String button) {
+	public void click(String button,ControlHelper ch) {
 		// TODO Auto-generated method stub
 
 	}

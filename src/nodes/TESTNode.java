@@ -2,6 +2,7 @@ package nodes;
 
 import com.jsyn.unitgen.WhiteNoise;
 
+import helper.ControlHelper;
 import nodeSystem.Node;
 
 public class TESTNode extends Node {
@@ -14,7 +15,7 @@ public class TESTNode extends Node {
 	
 	
 	@Override
-	public void click(String button) {
+	public void click(String button,ControlHelper ch) {
 		// TODO Auto-generated method stub
 
 	}

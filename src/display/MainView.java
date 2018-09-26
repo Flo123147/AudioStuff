@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import nodes.MainControllerNode;
 import nodes.OutputNode;
+import nodes.LinearSequenzerNode;
+import nodes.SimpleSoundNode;
 import nodes.TESTNode;
 import nodes.TimerNode;
+import testingInProgress.Testinstrument;
 
 public class MainView extends View {
 
@@ -20,7 +23,8 @@ public class MainView extends View {
 		addComponent(new MainControllerNode(new int[] { 100, 200 }));
 		addComponent(new TimerNode(new int[] { 400, 200 }));
 		addComponent(new OutputNode(new int[] { 800, 200 }));
-		addComponent(new TESTNode(new int[] { 800, 200 }));
+		addComponent(new LinearSequenzerNode(new int[] { 500, 500 }));
+		addComponent(new SimpleSoundNode(new int[] { 800, 700 }, new Testinstrument()));
 	}
 
 	@Override

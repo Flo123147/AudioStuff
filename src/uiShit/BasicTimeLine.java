@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import audioShit.TimeLinePlayer;
 import display.NodeView;
 import display.Window;
+import helper.ControlHelper;
 import helper.NoteEvent;
 
 public class BasicTimeLine extends UiSubElement implements ClickReciever {
@@ -72,7 +73,7 @@ public class BasicTimeLine extends UiSubElement implements ClickReciever {
 	}
 
 	@Override
-	public void click(String button) {
+	public void click(String button,ControlHelper ch) {
 		System.out.println("WUUUUUUUUUUUUUUUUUUUUUUUUUUU");
 		switch (button) {
 		case "Switch":

@@ -2,12 +2,11 @@ package display;
 
 import java.util.LinkedList;
 
+import helper.ControlHelper;
 import oldNodeSystem.ButtonEntry;
 import oldNodeSystem.OldNode;
 import uiShit.Button;
 import uiShit.ClickReciever;
-import uiShit.UiBaseElement;
-import uiShit.UiBorder;
 
 public class MainControl extends OldNode implements ClickReciever {
 
@@ -26,11 +25,11 @@ public class MainControl extends OldNode implements ClickReciever {
 		butts.add(new Button(new int[] { 0, 0 }, ADD_RYTHM, this));
 		butts.add(new Button(new int[] { 0, 0 }, PAUSE_UNPAUSE, this));
 
-		addEntry(new ButtonEntry(this, this, butts,"Controls"));
+		addEntry(new ButtonEntry(this, this, butts, "Controls"));
 	}
 
 	@Override
-	public void click(String button) {
+	public void click(String button, ControlHelper ch) {
 		switch (button) {
 		case PLAY:
 

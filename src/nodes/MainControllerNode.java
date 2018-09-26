@@ -1,6 +1,7 @@
 package nodes;
 
 import display.Window;
+import helper.ControlHelper;
 import nodeComponents.ButtonComponent;
 import nodeSystem.Node;
 import unitGnerators.MyMainControllerUnit;
@@ -20,7 +21,7 @@ public class MainControllerNode extends Node {
 	}
 
 	@Override
-	public void click(String button) {
+	public void click(String button,ControlHelper ch) {
 		switch (button) {
 		case "Start":
 			mycontr.startPlayback(Window.getSynth().createTimeStamp());

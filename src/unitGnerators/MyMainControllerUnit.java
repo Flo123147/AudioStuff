@@ -30,13 +30,13 @@ public class MyMainControllerUnit extends Circuit {
 		System.out.println();
 		psStart.input.set(TRUE, time);
 		psStart.input.set(FALSE, time.makeRelative(SIGNAL_LENGTH));
-		System.out.println("Starting Playback");
+//		System.out.println("Starting Playback");
 	}
 
 	public void stopPlayback(TimeStamp time) {
 		psStart.input.set(FALSE, time);
 		psStop.input.set(TRUE, time);
 		psStop.input.set(FALSE, time.makeRelative(SIGNAL_LENGTH));
-		System.out.println("Stoping Playback");
+//		System.out.println("Stoping Playback");
 	}
 }

@@ -12,6 +12,7 @@ import helper.Empty;
 import helper.UnitEventReciever;
 import nodeComponents.NodeComponent;
 import uiShit.ClickReciever;
+import unitGnerators.MyBaseUnit;
 
 public abstract class Node extends BaseNode implements ClickReciever, UnitEventReciever {
 
@@ -48,6 +49,10 @@ public abstract class Node extends BaseNode implements ClickReciever, UnitEventR
 	 */
 	protected void setUnitGenerator(UnitGenerator unitGenerator) {
 		this.unitGenerator = unitGenerator;
+		if (unitGenerator instanceof MyBaseUnit) {
+			MyBaseUnit mbu = (MyBaseUnit) unitGenerator;
+			mbu.node = this;
+		}
 		wind.addToSynth(unitGenerator);
 		unitGenerator.setSynthesisEngine(unitGenerator.getSynthesisEngine());
 		System.out.println(unitGenerator.getClass().getSimpleName() + "     " + unitGenerator.getPorts());
