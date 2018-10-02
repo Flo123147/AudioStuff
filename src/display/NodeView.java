@@ -71,6 +71,7 @@ public class NodeView extends View {
 		multiChannelSynthesizer.getOutput().connect(0, wind.getMainOutput(), 1);
 		multiChannelSynthesizer.getOutput().connect(0, wind.getMainOutput(), 0);
 		isReady = true;
+		
 	}
 
 	public void mute() {

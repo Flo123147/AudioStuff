@@ -1,10 +1,9 @@
 package testingInProgress;
 
 import com.jsyn.unitgen.SineOscillator;
-import com.jsyn.unitgen.TriangleOscillator;
 import com.jsyn.unitgen.UnitOscillator;
 
-import nodes.SimpleInstument;
+import unitGnerators.SimpleInstument;
 
 public class Testinstrument extends SimpleInstument {
 
@@ -16,13 +15,13 @@ public class Testinstrument extends SimpleInstument {
 		add(sine2 = new SineOscillator());
 //		add(sine1 = new SineOscillator());
 //		sine1.frequency.set(20);
-		sine2.frequency.set(440);
+		sine2.frequency.set(528);
 
 		sine2.output.connect(outPs.input);
 //		sine1.output.connect(sine2.amplitude);
 
 		reader.output.connect(sine2.amplitude);
-
+//
 	}
 
 	@Override

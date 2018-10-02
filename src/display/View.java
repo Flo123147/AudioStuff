@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import graphics.Drawable;
 import helper.Clickable;
+import nodeSystem.Node;
 import oldNodeSystem.Root;
 import uiShit.ClickableUiShit;
 
@@ -32,6 +33,10 @@ public abstract class View {
 		isInitializend = true;
 	}
 
+	public void addNode(Node node) {
+		addComponent(node);
+	}
+	
 	public void addComponent(Drawable comp) {
 		comp.setView(this);
 		root.addChild(comp);

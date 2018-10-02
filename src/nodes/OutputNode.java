@@ -13,16 +13,24 @@ public class OutputNode extends Node {
 	public OutputNode(int[] pos) {
 		super(pos, "OutputNode");
 		setUnitGenerator(outUnit = new OutputUnit(wind.getMainOutput()));
-		
-		addNodeComponent("Volume",volumeKnob = new KnobComponent("Volume",0,1,0.002), 0, 0);
+
+		addNodeComponent("Volume", volumeKnob = new KnobComponent(outUnit, "Volume", 0, 1, 0.002), 0, 0);
 		volumeKnob.input.setName("Volume");
 		addInPort(volumeKnob.input);
-		
+
 		volumeKnob.output.connect(outUnit.volume);
+
+//		SawtoothOscillator sine = new SawtoothOscillator();
+//		wind.addToSynth(sine);
+//		sine.frequency.set(500);
+//		sine.output.connect(wind.getMainOutput());
+//		sine.output.connect(0, wind.getMainOutput(), 1);
 	}
 
+	
+	
 	@Override
-	public void click(String button,ControlHelper ch) {
+	public void click(String button, ControlHelper ch) {
 		// TODO Auto-generated method stub
 
 	}
@@ -30,7 +38,7 @@ public class OutputNode extends Node {
 	@Override
 	public void event(String event) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

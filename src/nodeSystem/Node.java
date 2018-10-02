@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
 import com.jsyn.ports.UnitPort;
+import com.jsyn.unitgen.Circuit;
 import com.jsyn.unitgen.UnitGenerator;
 
 import graphics.Drawable;
@@ -41,22 +42,20 @@ public abstract class Node extends BaseNode implements ClickReciever, UnitEventR
 		addNodeComponent("TEST2", new NodeComponent("TEST2", 100, 100), 5, 0);
 		addNodeComponent("TEST2", new NodeComponent("TEST3", 200, 100), 0, 5);
 		addNodeComponent("TEST3", new NodeComponent("TEST3", 100, 100), 15, 0);
-
 	}
+
 
 	/*
 	 * Only set this once.
 	 */
-	protected void setUnitGenerator(UnitGenerator unitGenerator) {
-		this.unitGenerator = unitGenerator;
-		if (unitGenerator instanceof MyBaseUnit) {
-			MyBaseUnit mbu = (MyBaseUnit) unitGenerator;
+	protected void setUnitGenerator(UnitGenerator myUnit) {
+		this.unitGenerator = myUnit;
+		if (myUnit instanceof MyBaseUnit) {
+			MyBaseUnit mbu = (MyBaseUnit) myUnit;
 			mbu.node = this;
 		}
-		wind.addToSynth(unitGenerator);
-		unitGenerator.setSynthesisEngine(unitGenerator.getSynthesisEngine());
-		System.out.println(unitGenerator.getClass().getSimpleName() + "     " + unitGenerator.getPorts());
-		for (UnitPort up : unitGenerator.getPorts()) {
+//		unitGenerator.setSynthesisEngine(unitGenerator.getSynthesisEngine());
+		for (UnitPort up : myUnit.getPorts()) {
 			if (up instanceof UnitInputPort) {
 				UnitInputPort uip = (UnitInputPort) up;
 				addInPort(uip);
@@ -67,7 +66,9 @@ public abstract class Node extends BaseNode implements ClickReciever, UnitEventR
 
 			}
 		}
-		unitGenerator.start();
+		wind.addToSynth(myUnit,myUnit.isStartRequired());
+
+//		unitGenerator.start();
 	}
 
 	public void setAutoPorts(String[] names) {

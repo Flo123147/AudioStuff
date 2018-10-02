@@ -6,11 +6,13 @@ import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
 import com.jsyn.ports.UnitPort;
 import com.jsyn.unitgen.Circuit;
+import com.jsyn.unitgen.UnitSink;
+import com.jsyn.unitgen.UnitSource;
 
 import helper.Triggerable;
 import nodeSystem.Node;
 
-public abstract class MyBaseUnit extends Circuit implements Triggerable {
+public abstract class MyBaseUnit extends Circuit implements Triggerable, UnitSink {
 	public static final String BASETRIGGER_NAME = "baseTrigger";
 	public TriggerUnit baseTriggerUnit;
 	public LinkedList<TriggerUnit> triggerList;
@@ -38,10 +40,11 @@ public abstract class MyBaseUnit extends Circuit implements Triggerable {
 		addPort(newTrigger.input);
 		add(newTrigger);
 	}
+
 	/**
-	 * For adding a Port to a Node after Constructor has been called.
-	 * Basicly just a simple way to register it to the Node.
-	 * Do not use in Constructor.(Double Ports)
+	 * For adding a Port to a Node after Constructor has been called. Basicly just a
+	 * simple way to register it to the Node. Do not use in Constructor.(Double
+	 * Ports)
 	 * 
 	 * Make sure to name the port correctly.
 	 * 
@@ -49,11 +52,11 @@ public abstract class MyBaseUnit extends Circuit implements Triggerable {
 	 */
 	public void addPortRuntime(UnitPort port) {
 		addPort(port);
-		if(port instanceof UnitInputPort) {
-			UnitInputPort uip = (UnitInputPort)port;
+		if (port instanceof UnitInputPort) {
+			UnitInputPort uip = (UnitInputPort) port;
 			node.addInPort(uip);
-		}else if(port instanceof UnitOutputPort) {
-			UnitOutputPort uop = (UnitOutputPort)port;
+		} else if (port instanceof UnitOutputPort) {
+			UnitOutputPort uop = (UnitOutputPort) port;
 			node.addOutPort(uop);
 		}
 	}
@@ -90,6 +93,12 @@ public abstract class MyBaseUnit extends Circuit implements Triggerable {
 	void baseTriggerOff() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public UnitInputPort getInput() {
+		// TODO Auto-generated method stub
+		return startProcedure;
 	}
 
 }

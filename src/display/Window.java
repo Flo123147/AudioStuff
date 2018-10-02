@@ -16,16 +16,21 @@ import javax.swing.JFrame;
 import com.jsyn.JSyn;
 import com.jsyn.Synthesizer;
 import com.jsyn.ports.UnitInputPort;
+import com.jsyn.unitgen.Circuit;
 import com.jsyn.unitgen.LineOut;
+import com.jsyn.unitgen.SineOscillator;
 import com.jsyn.unitgen.UnitGenerator;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.UnmarshallingContext;
 
 import audioShit.Piano;
 import audioShit.PianoNode;
 import helper.ImHelping;
 import helper.KeyMngr;
 import helper.ValueContainer;
+import testingInProgress.TESTCIRCUIT;
 import uiShit.TimeLinesBox;
 import uiShit.UiBorder;
+import unitGnerators.PropertiyUnit;
 import uiShit.UiBaseElement;
 
 @SuppressWarnings("serial")
@@ -102,19 +107,28 @@ public class Window extends JFrame implements Runnable {
 
 		synth = JSyn.createSynthesizer();
 		lineOut = new LineOut();
-		synth.add(lineOut);
-		mainOutput = lineOut.input;
 
 		synth.start();
+		synth.add(lineOut);
 		lineOut.start();
+
+		mainOutput = lineOut.input;
+
+//		TESTCIRCUIT tc = new TESTCIRCUIT();
+//		synth.add(tc);
+//		tc.out.connect(mainOutput);
+
+		// Testing output
+//		SineOscillator sine = new SineOscillator();
+//		synth.add(sine);
+//		sine.frequency.set(500);
+//		sine.output.connect(lineOut.input);
+//		sine.output.connect(0,lineOut.input,1);
+
 		MainView mv;
 		addView(mv = new MainView(MAIN_VIEW_NAME, this));
 		currentViewCont.x = mv;
-		
-//		currentViewCont.value = newNodeView("NVT");
-//		((NodeView) currentViewCont.value).setSizes(leftMiddle, topMiddle, getWidth(), getHeight());
 
-//		Insets ins = getInsets();
 		LEFT.border = 0f;
 		TOP.border = 0f;
 		RIGHT.border = 1f;
@@ -196,7 +210,6 @@ public class Window extends JFrame implements Runnable {
 
 		t.start();
 
-
 	}
 
 	public void jSynthStopped() {
@@ -211,9 +224,12 @@ public class Window extends JFrame implements Runnable {
 		return synth;
 	}
 
-	public void addToSynth(UnitGenerator unitg) {
+	public void addToSynth(UnitGenerator unitg, boolean startit) {
 		synth.add(unitg);
-		unitg.start();
+		if (startit) {
+			unitg.start();
+			System.out.println("Starting ugen: " + unitg.getClass().getSimpleName());
+		}
 	}
 
 	public ValueContainer<View> getCurrentViewCont() {

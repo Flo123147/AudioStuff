@@ -3,11 +3,11 @@ package unitGnerators;
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.unitgen.UnitFilter;
 
-public class AmplitudeScalerUnit extends UnitFilter {
+public class ScalerUnit extends UnitFilter {
 
 	public UnitInputPort scale;
 
-	public AmplitudeScalerUnit() {
+	public ScalerUnit() {
 		addPort(scale = new UnitInputPort("Scaler"));
 		scale.setDefault(0.1);
 		scale.set(scale.getDefault());

@@ -3,9 +3,10 @@ package unitGnerators;
 import com.jsyn.ports.UnitOutputPort;
 import com.jsyn.unitgen.Circuit;
 import com.jsyn.unitgen.PassThrough;
+import com.jsyn.unitgen.UnitSource;
 import com.softsynth.shared.time.TimeStamp;
 
-public class MyMainControllerUnit extends Circuit {
+public class MyMainControllerUnit extends Circuit implements UnitSource{
 
 	public static double SIGNAL_LENGTH = 0.1;
 
@@ -22,12 +23,16 @@ public class MyMainControllerUnit extends Circuit {
 
 		psStart.output = start;
 		psStop.output = stop;
-		
-	
+
 	}
 
+	@Override
+	public boolean isStartRequired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
 	public void startPlayback(TimeStamp time) {
-		System.out.println();
 		psStart.input.set(TRUE, time);
 		psStart.input.set(FALSE, time.makeRelative(SIGNAL_LENGTH));
 //		System.out.println("Starting Playback");
@@ -38,5 +43,11 @@ public class MyMainControllerUnit extends Circuit {
 		psStop.input.set(TRUE, time);
 		psStop.input.set(FALSE, time.makeRelative(SIGNAL_LENGTH));
 //		System.out.println("Stoping Playback");
+	}
+
+	@Override
+	public UnitOutputPort getOutput() {
+		// TODO Auto-generated method stub
+		return start;
 	}
 }

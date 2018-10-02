@@ -3,13 +3,16 @@ package unitGnerators;
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.unitgen.Circuit;
 import com.jsyn.unitgen.PassThrough;
+import com.jsyn.unitgen.SineOscillator;
+
+import display.Window;
 
 public class OutputUnit extends Circuit {
 
 	public UnitInputPort left, right;
 	private PassThrough leftPs, rightPs;
 
-	private AmplitudeScalerUnit amplitudeScalerLeft, amplitudeScalerRight;
+	private ScalerUnit amplitudeScalerLeft, amplitudeScalerRight;
 	public UnitInputPort volume;
 	private PassThrough volumePs;
 
@@ -30,8 +33,8 @@ public class OutputUnit extends Circuit {
 		volume = new UnitInputPort("Volume");
 		volumePs.input = volume;
 
-		add(amplitudeScalerLeft = new AmplitudeScalerUnit());
-		add(amplitudeScalerRight = new AmplitudeScalerUnit());
+		add(amplitudeScalerLeft = new ScalerUnit());
+		add(amplitudeScalerRight = new ScalerUnit());
 
 		leftPs.output.connect(amplitudeScalerLeft.input);
 		rightPs.output.connect(amplitudeScalerRight.input);
@@ -41,6 +44,21 @@ public class OutputUnit extends Circuit {
 
 		volumePs.output.connect(amplitudeScalerLeft.scale);
 		volumePs.output.connect(amplitudeScalerRight.scale);
+		
+//		SineOscillator sine = new SineOscillator();
+//		add(sine);
+//		sine.frequency.set(500);
+//		sine.output.connect(mainOut);
+//		sine.output.connect(0,mainOut,1);
+//		sine.amplitude.set(0.1);
+	}
+	
+	//
+	
+	@Override
+	public boolean isStartRequired() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

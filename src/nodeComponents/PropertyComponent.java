@@ -2,6 +2,7 @@ package nodeComponents;
 
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
+import com.jsyn.unitgen.Circuit;
 
 import nodeSupComponents.TextField;
 import nodeSupComponents.ValueField;
@@ -22,16 +23,16 @@ public abstract class PropertyComponent extends NodeComponent {
 	/*
 	 * Top and Bottom 20 Pixel already used
 	 */
-	public PropertyComponent(String name, int maxWidth, int maxHeight, double min, double max,
+	public PropertyComponent(Circuit circuit, String name, int maxWidth, int maxHeight, double min, double max,
 			double valueChangePerPixel) {
 		super(name, maxWidth, maxHeight);
+
+		circuit.add(propertyUnit = new PropertiyUnit(this));
 
 		value = (max - min) / 2;
 		this.min = min;
 		this.max = max;
 		this.valueChangePerPixel = valueChangePerPixel;
-
-		wind.addToSynth(propertyUnit = new PropertiyUnit(this));
 
 		output = propertyUnit.output;
 		input = propertyUnit.input;
@@ -60,7 +61,6 @@ public abstract class PropertyComponent extends NodeComponent {
 	}
 
 	public double getValue() {
-		// TODO Auto-generated method stub
 		return value;
 	}
 }

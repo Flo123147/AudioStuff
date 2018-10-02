@@ -59,6 +59,8 @@ public abstract class BaseNode extends Draggable {
 		componentsHeight = Math.max(botEx, componentsHeight);
 
 		updateMetrics();
+		
+	
 	}
 
 	/**
