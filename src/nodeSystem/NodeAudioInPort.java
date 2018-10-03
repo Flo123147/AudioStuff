@@ -5,15 +5,15 @@ import java.awt.Graphics2D;
 
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
-import com.jsyn.unitgen.PassThrough;
 
 import helper.ControlHelper;
 
-public class NodeInPort extends NodePort {
+public class NodeAudioInPort extends NodePort {
 
-	public NodeOutPort connectionFrom;
+	public NodeAudioOutPort connectionFrom;
+	public UnitInputPort port;
 
-	public NodeInPort(UnitInputPort in) {
+	public NodeAudioInPort(UnitInputPort in) {
 		super(in.getName());
 		port = in;
 		portNameDisplay.setText(port.getName());
@@ -28,16 +28,16 @@ public class NodeInPort extends NodePort {
 
 	@Override
 	protected void move(int dX, int dY, ControlHelper ch) {
-		if(this.connectionFrom != null)
-		removeInConnection();
+		if (this.connectionFrom != null)
+			removeInConnection();
 	}
 
-	public void addInConnection(NodeOutPort connectionFrom) {
+	public void addInConnection(NodeAudioOutPort connectionFrom) {
 		if (this.connectionFrom != null) {
 			removeInConnection();
 		}
 		this.connectionFrom = connectionFrom;
-		((UnitOutputPort) connectionFrom.port).connect((UnitInputPort) this.port);
+		connectionFrom.port.connect(this.port);
 	}
 
 	public void removeInConnection() {

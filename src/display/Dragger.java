@@ -10,8 +10,8 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 import helper.Clickable;
 import helper.ControlHelper;
 import helper.ValueContainer;
-import nodeSystem.NodeInPort;
-import nodeSystem.NodeOutPort;
+import nodeSystem.NodeAudioInPort;
+import nodeSystem.NodeAudioOutPort;
 import oldNodeSystem.Connector;
 import oldNodeSystem.SliderKnob;
 
@@ -22,7 +22,7 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 	private ControlHelper ch;
 	private boolean connecting;
-	private NodeOutPort connectFrom;
+	private NodeAudioOutPort connectFrom;
 
 	private Window wind;
 
@@ -95,8 +95,8 @@ public class Dragger implements MouseMotionListener, MouseListener {
 			boolean foundPort = false;
 			for (Draggable d : viewCont.x.getDragos()) {
 				if (d.getCollider() != null && d.getCollider().contains(e.getPoint())) {
-					if (d instanceof NodeInPort) {
-						NodeInPort nip = (NodeInPort) d;
+					if (d instanceof NodeAudioInPort) {
+						NodeAudioInPort nip = (NodeAudioInPort) d;
 						nip.addInConnection(connectFrom);
 						connectFrom.connectingEnd(true, nip, toDrag);
 						foundPort = true;
@@ -139,7 +139,7 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 	}
 
-	public void startConnecting(NodeOutPort start, Draggable temp) {
+	public void startConnecting(NodeAudioOutPort start, Draggable temp) {
 
 		connecting = true;
 		connectFrom = start;

@@ -44,21 +44,7 @@ public class OutputUnit extends Circuit {
 
 		volumePs.output.connect(amplitudeScalerLeft.scale);
 		volumePs.output.connect(amplitudeScalerRight.scale);
-		
-//		SineOscillator sine = new SineOscillator();
-//		add(sine);
-//		sine.frequency.set(500);
-//		sine.output.connect(mainOut);
-//		sine.output.connect(0,mainOut,1);
-//		sine.amplitude.set(0.1);
-	}
-	
-	//
-	
-	@Override
-	public boolean isStartRequired() {
-		// TODO Auto-generated method stub
-		return true;
+
 	}
 
 }

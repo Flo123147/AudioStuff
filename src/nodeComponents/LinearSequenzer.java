@@ -2,25 +2,25 @@ package nodeComponents;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import helper.ControlHelper;
-import unitGnerators.SimpleSequenzer;
+
+import nodes.BasicSequenzerNode;
 
 public class LinearSequenzer extends BaseSequenzerComponent {
 
 	private int thingSize, thingyBorderWidth;
 
-	public LinearSequenzer(String name, int maxWidth, int maxHeight, SimpleSequenzer simpS) {
-		super(name, maxWidth, maxHeight, simpS);
+	public LinearSequenzer(String name, int maxWidth, int maxHeight, BasicSequenzerNode seqNode) {
+		super(name, maxWidth, maxHeight, seqNode);
 
 	}
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
 		super.draw(g, x, y);
-		int currentStep = seq.getStep();
+		int currentStep = getStep();
 
 		int nrOfTracks = tracks.size();
-		int length = seq.getLength();
+		int length = getLength();
 
 		thingSize = Math.min(getWidth() / length, getHeight() / nrOfTracks);
 		thingyBorderWidth = (int) (thingSize * 0.1);
@@ -33,13 +33,13 @@ public class LinearSequenzer extends BaseSequenzerComponent {
 				g.fillRoundRect(x + i * thingSize, y + t * thingSize, thingSize, thingSize, 2, 2);
 
 				if (i == currentStep) {
-					if (seq.hasToTrigger(t, i)) {
+					if (hasToTrigger(t, i)) {
 						g.setColor(Color.CYAN);
 					} else {
 						g.setColor(Color.red);
 					}
 				} else {
-					if (seq.hasToTrigger(t, i)) {
+					if (hasToTrigger(t, i)) {
 						g.setColor(Color.darkGray);
 					} else {
 						g.setColor(Color.lightGray);
@@ -49,6 +49,7 @@ public class LinearSequenzer extends BaseSequenzerComponent {
 						thingSize - thingyBorderWidth * 2, thingSize - thingyBorderWidth * 2, 2, 2);
 
 			}
+
 		}
 
 	}

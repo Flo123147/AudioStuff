@@ -4,22 +4,17 @@ import java.util.LinkedList;
 
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
-import com.jsyn.ports.UnitPort;
-import com.jsyn.unitgen.Circuit;
 import com.jsyn.unitgen.UnitGenerator;
 
 import graphics.Drawable;
 import helper.Empty;
-import helper.UnitEventReciever;
-import nodeComponents.NodeComponent;
 import uiShit.ClickReciever;
-import unitGnerators.MyBaseUnit;
 
-public abstract class Node extends BaseNode implements ClickReciever, UnitEventReciever {
+public abstract class Node extends BaseNode implements ClickReciever {
 
-	private LinkedList<NodeInPort> inPorts;
+	private LinkedList<NodeAudioInPort> inPorts;
 	private int nrInPorts = 0;
-	private LinkedList<NodeOutPort> outPorts;
+	private LinkedList<NodeAudioOutPort> outPorts;
 	private int nrOutPorts = 0;
 
 	private Drawable inOutRoot;
@@ -33,47 +28,13 @@ public abstract class Node extends BaseNode implements ClickReciever, UnitEventR
 
 		addChild(inOutRoot = new Empty(new int[] { 0, 1 * BORDER_THICKNESS + NAME_HEIGHT }, "InOutRoot"));
 
-//		test();
 	}
 
-	@SuppressWarnings("unused")
-	private void test() {
-		addNodeComponent("TEST", new NodeComponent("TEST", 100, 100), 0, 0);
-		addNodeComponent("TEST2", new NodeComponent("TEST2", 100, 100), 5, 0);
-		addNodeComponent("TEST2", new NodeComponent("TEST3", 200, 100), 0, 5);
-		addNodeComponent("TEST3", new NodeComponent("TEST3", 100, 100), 15, 0);
-	}
-
-
-	/*
-	 * Only set this once.
-	 */
-	protected void setUnitGenerator(UnitGenerator myUnit) {
-		this.unitGenerator = myUnit;
-		if (myUnit instanceof MyBaseUnit) {
-			MyBaseUnit mbu = (MyBaseUnit) myUnit;
-			mbu.node = this;
-		}
-//		unitGenerator.setSynthesisEngine(unitGenerator.getSynthesisEngine());
-		for (UnitPort up : myUnit.getPorts()) {
-			if (up instanceof UnitInputPort) {
-				UnitInputPort uip = (UnitInputPort) up;
-				addInPort(uip);
-
-			} else if (up instanceof UnitOutputPort) {
-				UnitOutputPort uop = (UnitOutputPort) up;
-				addOutPort(uop);
-
-			}
-		}
-		wind.addToSynth(myUnit,myUnit.isStartRequired());
-
-//		unitGenerator.start();
-	}
+	
 
 	public void setAutoPorts(String[] names) {
 		for (String name : names) {
-			for (NodeOutPort port : outPorts) {
+			for (NodeAudioOutPort port : outPorts) {
 				if (port.getName().equals(name))
 					port.autoTrigger = true;
 			}
@@ -81,8 +42,8 @@ public abstract class Node extends BaseNode implements ClickReciever, UnitEventR
 	}
 
 	public void addInPort(UnitInputPort in) {
-		NodeInPort port;
-		inOutRoot.addChild(port = new NodeInPort(in));
+		NodeAudioInPort port;
+		inOutRoot.addChild(port = new NodeAudioInPort(in));
 		port.setPos(new int[] { 0, nrInPorts * NodePort.PORT_HEIGHT });
 		inPorts.add(port);
 
@@ -95,8 +56,8 @@ public abstract class Node extends BaseNode implements ClickReciever, UnitEventR
 	}
 
 	public void addOutPort(UnitOutputPort out) {
-		NodeOutPort port;
-		inOutRoot.addChild(port = new NodeOutPort(out));
+		NodeAudioOutPort port;
+		inOutRoot.addChild(port = new NodeAudioOutPort(out));
 		port.setPos(new int[] { getWidth(), nrOutPorts * NodePort.PORT_HEIGHT });
 		outPorts.add(port);
 
@@ -111,21 +72,21 @@ public abstract class Node extends BaseNode implements ClickReciever, UnitEventR
 	public void updateMetrics() {
 		super.updateMetrics();
 		if (outPorts != null)
-			for (NodeOutPort nop : outPorts) {
+			for (NodeAudioOutPort nop : outPorts) {
 				nop.setX(getWidth());
 			}
 	}
 
-	public NodeInPort getInPort(String name) {
-		for (NodeInPort in : inPorts) {
+	public NodeAudioInPort getInPort(String name) {
+		for (NodeAudioInPort in : inPorts) {
 			if (in.getName() == name)
 				return in;
 		}
 		return null;
 	}
 
-	public NodeOutPort getOutPort(String name) {
-		for (NodeOutPort out : outPorts) {
+	public NodeAudioOutPort getOutPort(String name) {
+		for (NodeAudioOutPort out : outPorts) {
 			System.out.println(out.getName());
 			if (out.getName() == name)
 				return out;

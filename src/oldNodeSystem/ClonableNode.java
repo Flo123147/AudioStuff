@@ -8,6 +8,7 @@ import display.NodeView;
 import helper.ImHelping;
 import oldEntries.AudioOutEntry;
 
+@Deprecated
 public abstract class ClonableNode extends OldNode {
 
 	protected UnitGenerator unitGen;

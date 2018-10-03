@@ -18,8 +18,6 @@ public abstract class NodePort extends Draggable {
 	public static final int PORT_HEIGHT = 20;
 	public static final int CONN_DIAMETER = 20;
 
-	protected UnitPort port;
-
 	public TextField portNameDisplay;
 	protected Color dotColor;
 

@@ -13,15 +13,16 @@ import helper.ControlHelper;
 import helper.EmptyDraggable;
 import helper.ImHelping;
 
-public class NodeOutPort extends NodePort {
+public class NodeAudioOutPort extends NodePort {
 	public boolean isTriggered = true;
 	public boolean autoTrigger;
 	LinkedList<Drawable> drawCurvesTo;
 	private EmptyDraggable empty;
 	private boolean curveToEmpty;
 	private long redTime = 0;
+	public UnitOutputPort port;
 
-	public NodeOutPort(UnitOutputPort out) {
+	public NodeAudioOutPort(UnitOutputPort out) {
 		super(out.getName());
 		port = out;
 		portNameDisplay.setText(port.getName());
@@ -36,8 +37,8 @@ public class NodeOutPort extends NodePort {
 			dotColor = Color.LIGHT_GRAY;
 			isTriggered = false;
 		} else if (autoTrigger) {
-			UnitOutputPort uop = (UnitOutputPort) port;
-			if (uop.get() == 1) {
+
+			if (port.get() == 1) {
 				triggerRed();
 			}
 		}
@@ -69,7 +70,7 @@ public class NodeOutPort extends NodePort {
 		Window.dragger.startConnecting(this, temp);
 	}
 
-	public void connectingEnd(boolean success, NodeInPort nip, Drawable temp) {
+	public void connectingEnd(boolean success, NodeAudioInPort nip, Drawable temp) {
 		if (success) {
 			drawCurvesTo.add(nip);
 		}
@@ -78,11 +79,12 @@ public class NodeOutPort extends NodePort {
 
 	}
 
-	public void disconnect(NodeInPort toDisconnect) {
+	public void disconnect(NodeAudioInPort toDisconnect) {
 		drawCurvesTo.remove(toDisconnect);
 	}
 
 	public void triggerRed() {
+		
 		redTime = System.currentTimeMillis() + 100;
 		dotColor = Color.RED;
 		isTriggered = true;

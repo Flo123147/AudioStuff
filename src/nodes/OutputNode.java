@@ -2,10 +2,10 @@ package nodes;
 
 import helper.ControlHelper;
 import nodeComponents.KnobComponent;
-import nodeSystem.Node;
+import nodeSystem.GeneratorNode;
 import unitGnerators.OutputUnit;
 
-public class OutputNode extends Node {
+public class OutputNode extends GeneratorNode {
 
 	private KnobComponent volumeKnob;
 	private OutputUnit outUnit;
@@ -20,11 +20,6 @@ public class OutputNode extends Node {
 
 		volumeKnob.output.connect(outUnit.volume);
 
-//		SawtoothOscillator sine = new SawtoothOscillator();
-//		wind.addToSynth(sine);
-//		sine.frequency.set(500);
-//		sine.output.connect(wind.getMainOutput());
-//		sine.output.connect(0, wind.getMainOutput(), 1);
 	}
 
 	
@@ -35,10 +30,5 @@ public class OutputNode extends Node {
 
 	}
 
-	@Override
-	public void event(String event) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

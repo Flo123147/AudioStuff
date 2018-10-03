@@ -2,11 +2,12 @@ package nodes;
 
 import helper.ControlHelper;
 import nodeComponents.KnobComponent;
+import nodeSystem.GeneratorNode;
 import nodeSystem.Node;
 import testingInProgress.Testinstrument;
 import unitGnerators.SimpleInstument;
 
-public class SimpleSoundNode extends Node {
+public class SimpleSoundNode extends GeneratorNode {
 
 	public SimpleInstument simpleInstument;
 	private KnobComponent volumeKnob;
@@ -29,10 +30,5 @@ public class SimpleSoundNode extends Node {
 
 	}
 
-	@Override
-	public void event(String event) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

@@ -3,7 +3,7 @@ package display;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import nodes.LinearSequenzerNode;
+import nodes.BasicSequenzerNode;
 import nodes.MainControllerNode;
 import nodes.OutputNode;
 import nodes.SimpleSoundNode;
@@ -23,7 +23,7 @@ public class MainView extends View {
 		addNode(new MainControllerNode(new int[] { 100, 200 }));
 		addNode(new TimerNode(new int[] { 400, 200 }));
 		addNode(new OutputNode(new int[] { 800, 200 }));
-		addNode(new LinearSequenzerNode(new int[] { 500, 500 }));
+		addNode(new BasicSequenzerNode(new int[] { 500, 500 }));
 		addNode(new SimpleSoundNode(new int[] { 800, 700 }, new Testinstrument()));
 	}
 
