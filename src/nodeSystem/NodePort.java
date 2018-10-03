@@ -4,13 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
-import java.util.LinkedList;
-
-import com.jsyn.ports.UnitPort;
-
 import display.Draggable;
 import helper.ControlHelper;
-import helper.EmptyDraggable;
 import nodeSupComponents.TextField;
 
 public abstract class NodePort extends Draggable {
@@ -29,7 +24,8 @@ public abstract class NodePort extends Draggable {
 
 		addChild(portNameDisplay = new TextField(new int[] { PORT_WIDTH / 2, 0 }, "NodePortName", PORT_WIDTH,
 				PORT_HEIGHT, true));
-
+		
+		portNameDisplay.setText(name);
 		dotColor = Color.lightGray;
 	}
 
@@ -45,8 +41,11 @@ public abstract class NodePort extends Draggable {
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
-		g.setColor(dotColor);
+		g.setColor(Color.black);
 		g.fillOval(x - CONN_DIAMETER / 2, y + (PORT_HEIGHT / 2) - CONN_DIAMETER / 2, CONN_DIAMETER, CONN_DIAMETER);
+		g.setColor(dotColor);
+		g.fillOval(x - CONN_DIAMETER / 2 +2, y + (PORT_HEIGHT / 2) - CONN_DIAMETER / 2+2, CONN_DIAMETER-4, CONN_DIAMETER-4);
+
 	}
 
 	@Override

@@ -3,10 +3,11 @@ package unitGnerators;
 import com.jsyn.data.SegmentedEnvelope;
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitOutputPort;
+import com.jsyn.unitgen.Circuit;
 import com.jsyn.unitgen.PassThrough;
 import com.jsyn.unitgen.VariableRateMonoReader;
 
-public abstract class SimpleInstument extends MyBaseUnit {
+public abstract class SimpleInstument extends Circuit {
 
 	public UnitInputPort amplitude;
 	public UnitOutputPort output;
@@ -44,12 +45,6 @@ public abstract class SimpleInstument extends MyBaseUnit {
 	}
 
 	public abstract void startYourShit();
-
-	@Override
-	protected void baseTrigger() {
-		reader.dataQueue.clear();
-		reader.dataQueue.queue(myTestThingy, 0, 5);
-	}
 
 	public String getName() {
 		return name;

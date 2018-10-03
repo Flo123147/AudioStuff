@@ -19,4 +19,10 @@ public class TimerNode extends Node {
 
 	}
 
+	@Override
+	protected void control(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

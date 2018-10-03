@@ -32,16 +32,16 @@ public class NodeAudioInPort extends NodePort {
 			removeInConnection();
 	}
 
-	public void addInConnection(NodeAudioOutPort connectionFrom) {
+	public void addInConnection(NodeAudioOutPort connectionAudioFrom) {
 		if (this.connectionFrom != null) {
 			removeInConnection();
 		}
-		this.connectionFrom = connectionFrom;
-		connectionFrom.port.connect(this.port);
+		this.connectionFrom = connectionAudioFrom;
+		connectionAudioFrom.port.connect(this.port);
 	}
 
 	public void removeInConnection() {
-		((UnitOutputPort) connectionFrom.port).disconnect((UnitInputPort) this.port);
+		connectionFrom.port.disconnect(this.port);
 		connectionFrom.disconnect(this);
 		connectionFrom = null;
 	}

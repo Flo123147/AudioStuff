@@ -5,7 +5,6 @@ import com.jsyn.ports.UnitOutputPort;
 import com.jsyn.ports.UnitPort;
 import com.jsyn.unitgen.UnitGenerator;
 
-import unitGnerators.MyBaseUnit;
 
 public abstract class GeneratorNode extends Node {
 	public GeneratorNode(int[] pos, String name) {
@@ -17,18 +16,18 @@ public abstract class GeneratorNode extends Node {
 	 */
 	protected void setUnitGenerator(UnitGenerator myUnit) {
 		this.unitGenerator = myUnit;
-		if (myUnit instanceof MyBaseUnit) {
-			MyBaseUnit mbu = (MyBaseUnit) myUnit;
-			mbu.node = this;
-		}
+//		if (myUnit instanceof MyBaseUnit) {
+//			MyBaseUnit mbu = (MyBaseUnit) myUnit;
+//			mbu.node = this;
+//		}
 		for (UnitPort up : myUnit.getPorts()) {
 			if (up instanceof UnitInputPort) {
 				UnitInputPort uip = (UnitInputPort) up;
-				addInPort(uip);
+				addAudioInPort(uip);
 
 			} else if (up instanceof UnitOutputPort) {
 				UnitOutputPort uop = (UnitOutputPort) up;
-				addOutPort(uop);
+				addAudioOutPort(uop);
 
 			}
 		}

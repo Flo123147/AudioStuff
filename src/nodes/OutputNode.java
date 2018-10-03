@@ -16,7 +16,7 @@ public class OutputNode extends GeneratorNode {
 
 		addNodeComponent("Volume", volumeKnob = new KnobComponent(outUnit, "Volume", 0, 1, 0.002), 0, 0);
 		volumeKnob.input.setName("Volume");
-		addInPort(volumeKnob.input);
+		addAudioInPort(volumeKnob.input);
 
 		volumeKnob.output.connect(outUnit.volume);
 
@@ -28,6 +28,13 @@ public class OutputNode extends GeneratorNode {
 	public void click(String button, ControlHelper ch) {
 		// TODO Auto-generated method stub
 
+	}
+
+
+	@Override
+	protected void control(String name) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

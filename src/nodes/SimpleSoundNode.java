@@ -16,7 +16,6 @@ public class SimpleSoundNode extends GeneratorNode {
 		super(pos, simpleInstrument.getName());
 		setUnitGenerator(simpleInstrument);
 		this.simpleInstument = simpleInstrument;
-		simpleInstrument.node = this;
 
 		addNodeComponent("Volume", volumeKnob = new KnobComponent(simpleInstument, "Volume", 0, 1, 0.001), 0, 0);
 
@@ -28,6 +27,12 @@ public class SimpleSoundNode extends GeneratorNode {
 	public void click(String button, ControlHelper ch) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	protected void control(String name) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

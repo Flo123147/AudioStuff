@@ -19,6 +19,7 @@ public abstract class BaseSequenzerComponent extends NodeComponent implements Cl
 	private int length;
 
 	private int currentStep;
+	@SuppressWarnings("unused")
 	private boolean isPulse;
 
 	public BaseSequenzerComponent(String name, int maxWidth, int maxHeight, BasicSequenzerNode nodeSeq) {
@@ -60,7 +61,18 @@ public abstract class BaseSequenzerComponent extends NodeComponent implements Cl
 		return tracks.get(t).get(i);
 	}
 
-	public void addTrack() {
+	public void step() {
+		currentStep++;
+		if (currentStep >= length) {
+			currentStep = 0;
+		}
+		for (int i = 0; i < nrOfTracks; i++) {
+			if (tracks.get(i).get(currentStep))
+				nodeSeq.triggerTrack(i);
+		}
+	}
+
+	public boolean addTrack() {
 		if (nrOfTracks < MAX_TRACKS) {
 			LinkedList<Boolean> newTrack;
 			tracks.add(newTrack = new LinkedList<>());
@@ -68,7 +80,9 @@ public abstract class BaseSequenzerComponent extends NodeComponent implements Cl
 			for (int i = 0; i < length; i++) {
 				newTrack.add(false);
 			}
+			return true;
 		}
+		return false;
 	}
 
 	public void lengthPlus() {
@@ -107,6 +121,11 @@ public abstract class BaseSequenzerComponent extends NodeComponent implements Cl
 
 	public int getStep() {
 		return currentStep;
+	}
+
+	public int getTrackCount() {
+		// TODO Auto-generated method stub
+		return nrOfTracks;
 	}
 
 }

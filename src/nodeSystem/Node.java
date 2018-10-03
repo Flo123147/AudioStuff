@@ -8,13 +8,14 @@ import com.jsyn.unitgen.UnitGenerator;
 
 import graphics.Drawable;
 import helper.Empty;
+import nodes.BasicSequenzerNode;
 import uiShit.ClickReciever;
 
 public abstract class Node extends BaseNode implements ClickReciever {
 
-	private LinkedList<NodeAudioInPort> inPorts;
+	private LinkedList<NodePort> inPorts;
 	private int nrInPorts = 0;
-	private LinkedList<NodeAudioOutPort> outPorts;
+	private LinkedList<NodePort> outPorts;
 	private int nrOutPorts = 0;
 
 	private Drawable inOutRoot;
@@ -30,18 +31,48 @@ public abstract class Node extends BaseNode implements ClickReciever {
 
 	}
 
-	
-
+	/**
+	 * Currently disabled
+	 * 
+	 * @param names
+	 */
 	public void setAutoPorts(String[] names) {
-		for (String name : names) {
-			for (NodeAudioOutPort port : outPorts) {
-				if (port.getName().equals(name))
-					port.autoTrigger = true;
-			}
+//		for (String name : names) {
+//			for (NodeAudioOutPort port : outPorts) {
+//				if (port.getName().equals(name))
+//					port.autoTrigger = true;
+//			}
+//		}
+	}
+
+	public void addControlInPort(String name) {
+		NodeControlInPort port;
+		inOutRoot.addChild(port = new NodeControlInPort(name, this));
+		port.setPos(new int[] { 0, nrInPorts * NodePort.PORT_HEIGHT });
+		inPorts.add(port);
+
+		nrInPorts++;
+
+		if (nrInPorts > nrOutPorts) {
+			inOutHeight += NodePort.PORT_HEIGHT;
+			updateMetrics();
 		}
 	}
 
-	public void addInPort(UnitInputPort in) {
+	public void addControlOutPort(String name) {
+		NodeControlOutPort port;
+		inOutRoot.addChild(port = new NodeControlOutPort(name));
+		port.setPos(new int[] { getWidth(), nrOutPorts * NodePort.PORT_HEIGHT });
+		outPorts.add(port);
+
+		nrOutPorts++;
+		if (nrInPorts < nrOutPorts) {
+			inOutHeight += NodePort.PORT_HEIGHT;
+			updateMetrics();
+		}
+	}
+
+	public void addAudioInPort(UnitInputPort in) {
 		NodeAudioInPort port;
 		inOutRoot.addChild(port = new NodeAudioInPort(in));
 		port.setPos(new int[] { 0, nrInPorts * NodePort.PORT_HEIGHT });
@@ -55,7 +86,7 @@ public abstract class Node extends BaseNode implements ClickReciever {
 		}
 	}
 
-	public void addOutPort(UnitOutputPort out) {
+	public void addAudioOutPort(UnitOutputPort out) {
 		NodeAudioOutPort port;
 		inOutRoot.addChild(port = new NodeAudioOutPort(out));
 		port.setPos(new int[] { getWidth(), nrOutPorts * NodePort.PORT_HEIGHT });
@@ -72,25 +103,19 @@ public abstract class Node extends BaseNode implements ClickReciever {
 	public void updateMetrics() {
 		super.updateMetrics();
 		if (outPorts != null)
-			for (NodeAudioOutPort nop : outPorts) {
+			for (NodePort nop : outPorts) {
 				nop.setX(getWidth());
 			}
 	}
 
-	public NodeAudioInPort getInPort(String name) {
-		for (NodeAudioInPort in : inPorts) {
-			if (in.getName() == name)
-				return in;
+	public void controlPort(String name) {
+		for (NodePort port : outPorts) {
+			if (port.getName().equals(name) && port instanceof NodeControlOutPort) {
+				NodeControlOutPort ncop = (NodeControlOutPort) port;
+				ncop.control();
+			}
 		}
-		return null;
 	}
 
-	public NodeAudioOutPort getOutPort(String name) {
-		for (NodeAudioOutPort out : outPorts) {
-			System.out.println(out.getName());
-			if (out.getName() == name)
-				return out;
-		}
-		return null;
-	}
+	protected abstract void control(String name);
 }

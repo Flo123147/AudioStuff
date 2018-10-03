@@ -11,10 +11,11 @@ public class BasicSequenzerNode extends Node {
 
 	public static final String NAME_ADD_TRACK = "Add Track";
 	public static final String NAME_REMOVE_TRACK = "Remove Track";
-	public static final String NAME_MODE_TOGGLE = "Toggle Mode";
+	public static final String NAME_MODE_TOGGLE = "Toggle Mode (UNUSED)";
 	public static final String NAME_INCREASE = "+";
 	public static final String NAME_DECREASE = "-";
 	private static final int START_LENGTH = 1;
+	private static final String TRIGGER_NAME = "Trigger";
 
 	private boolean isPulse;
 	private DisplayComponent modeDisp, lenghtDisplay;
@@ -33,6 +34,8 @@ public class BasicSequenzerNode extends Node {
 
 		addNodeComponent("Sequenzer", sequenzer = new LinearSequenzer("Sequenzer", 250, 200, this), 0, 2);
 
+		addControlInPort("Step");
+
 		modeDisp.setText("Pulse");
 		lenghtDisplay.setText("" + START_LENGTH);
 
@@ -42,11 +45,16 @@ public class BasicSequenzerNode extends Node {
 	}
 
 	public void step() {
-		//TODO  lel
+		sequenzer.step();
 	}
-	
+
 	private void addTrack() {
-		sequenzer.addTrack();
+		if (sequenzer.addTrack())
+			addControlOutPort(TRIGGER_NAME + " " + sequenzer.getTrackCount());
+	}
+
+	public void triggerTrack(int i) {
+		controlPort(TRIGGER_NAME + " " + (i+1));
 	}
 
 	@Override
@@ -84,6 +92,12 @@ public class BasicSequenzerNode extends Node {
 		}
 	}
 
+	@Override
+	protected void control(String name) {
+		if (name.equals("Step")) {
+			step();
+		}
 
+	}
 
 }

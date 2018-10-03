@@ -46,5 +46,10 @@ public class OutputUnit extends Circuit {
 		volumePs.output.connect(amplitudeScalerRight.scale);
 
 	}
+	
+	@Override
+	public boolean isStartRequired() {
+		return true;
+	}
 
 }

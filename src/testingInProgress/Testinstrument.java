@@ -20,7 +20,7 @@ public class Testinstrument extends SimpleInstument {
 		sine2.output.connect(outPs.input);
 //		sine1.output.connect(sine2.amplitude);
 
-		reader.output.connect(sine2.amplitude);
+//		reader.output.connect(sine2.amplitude);
 //
 	}
 

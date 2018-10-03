@@ -12,6 +12,8 @@ import helper.ControlHelper;
 import helper.ValueContainer;
 import nodeSystem.NodeAudioInPort;
 import nodeSystem.NodeAudioOutPort;
+import nodeSystem.NodeControlInPort;
+import nodeSystem.NodeControlOutPort;
 import oldNodeSystem.Connector;
 import oldNodeSystem.SliderKnob;
 
@@ -22,7 +24,8 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 	private ControlHelper ch;
 	private boolean connecting;
-	private NodeAudioOutPort connectFrom;
+	private NodeAudioOutPort connectAudioFrom;
+	private NodeControlOutPort connectControlFrom;
 
 	private Window wind;
 
@@ -93,20 +96,30 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 		if (connecting) {
 			boolean foundPort = false;
+
 			for (Draggable d : viewCont.x.getDragos()) {
 				if (d.getCollider() != null && d.getCollider().contains(e.getPoint())) {
-					if (d instanceof NodeAudioInPort) {
-						NodeAudioInPort nip = (NodeAudioInPort) d;
-						nip.addInConnection(connectFrom);
-						connectFrom.connectingEnd(true, nip, toDrag);
+					if (connectAudioFrom != null && d instanceof NodeAudioInPort) {
+						NodeAudioInPort naip = (NodeAudioInPort) d;
+						naip.addInConnection(connectAudioFrom);
+						connectAudioFrom.connectingEnd(true, naip);
+						connectAudioFrom = null;
+						foundPort = true;
+					} else if (connectControlFrom != null && d instanceof NodeControlInPort) {
+						NodeControlInPort ncip = (NodeControlInPort) d;
+						ncip.addInConnection(connectControlFrom);
+						connectControlFrom.connectingEnd(true, ncip);
+						connectControlFrom = null;
 						foundPort = true;
 					}
 
 				}
 			}
 			if (!foundPort) {
-				connectFrom.connectingEnd(false, null, toDrag);
-
+				if (connectAudioFrom != null)
+					connectAudioFrom.connectingEnd(false, null);
+				if (connectControlFrom != null)
+					connectControlFrom.connectingEnd(false, null);
 			}
 		}
 		connecting = false;
@@ -139,10 +152,16 @@ public class Dragger implements MouseMotionListener, MouseListener {
 
 	}
 
-	public void startConnecting(NodeAudioOutPort start, Draggable temp) {
+	public void startControlConnecting(NodeControlOutPort startControl, Draggable temp) {
+		connecting = true;
+		connectControlFrom = startControl;
+		toDrag = temp;
+	}
+
+	public void startAudioConnecting(NodeAudioOutPort startAudio, Draggable temp) {
 
 		connecting = true;
-		connectFrom = start;
+		connectAudioFrom = startAudio;
 		toDrag = temp;
 
 	}

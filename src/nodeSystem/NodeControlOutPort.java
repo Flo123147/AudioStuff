@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
 
-import com.jsyn.ports.UnitOutputPort;
-
 import display.Draggable;
 import display.Window;
 import graphics.Drawable;
@@ -13,35 +11,40 @@ import helper.ControlHelper;
 import helper.EmptyDraggable;
 import helper.ImHelping;
 
-public class NodeAudioOutPort extends NodePort {
+public class NodeControlOutPort extends NodePort {
 	public boolean isTriggered = true;
 	public boolean autoTrigger;
 	LinkedList<Drawable> drawCurvesTo;
 	private EmptyDraggable empty;
 	private boolean curveToEmpty;
 	private long redTime = 0;
-	public UnitOutputPort port;
 
-	public NodeAudioOutPort(UnitOutputPort out) {
-		super(out.getName());
-		port = out;
-		portNameDisplay.setText(port.getName());
+	public LinkedList<NodeControlInPort> connectedTo;
+
+	public NodeControlOutPort(String name) {
+		super(name);
+//		portNameDisplay.setText(name);
 		portNameDisplay.setX(-portNameDisplay.getLocalX());
 		drawCurvesTo = new LinkedList<>();
+		connectedTo = new LinkedList<>();
+		dotColor = Color.blue;
+
+	}
+
+	public void control() {
+		triggerRed();
+		for (NodeControlInPort ncip : connectedTo) {
+			ncip.control();
+		}
+
 	}
 
 	@Override
 	protected void draw(Graphics2D g, int x, int y) {
-
 		if (isTriggered && redTime < System.currentTimeMillis()) {
-			dotColor = Color.LIGHT_GRAY;
+			dotColor = Color.blue;
 			isTriggered = false;
-		} else if (autoTrigger) {
-
-			if (port.get() == 1) {
-				triggerRed();
-			}
-		}
+		} 
 
 		g.fillRect(x - PORT_WIDTH, y, PORT_WIDTH, PORT_HEIGHT);
 		g.setColor(Color.LIGHT_GRAY);
@@ -55,8 +58,9 @@ public class NodeAudioOutPort extends NodePort {
 			g.setColor(dotColor);
 			ImHelping.drawConnectionBezier(g, this.getX(), getY() + CONN_DIAMETER / 2, empty.getX(), empty.getY());
 		}
-
 		super.draw(g, x, y);
+		g.setColor(Color.red);
+		g.fillRect(-5, -2, 10, 4);
 	}
 
 	@Override
@@ -67,27 +71,28 @@ public class NodeAudioOutPort extends NodePort {
 	}
 
 	private void startConnecting(Draggable temp) {
-		Window.dragger.startAudioConnecting(this, temp);
+		Window.dragger.startControlConnecting(this, temp);
 	}
 
-	public void connectingEnd(boolean success, NodeAudioInPort nip) {
+	public void connectingEnd(boolean success, NodeControlInPort ncip) {
 		if (success) {
-			drawCurvesTo.add(nip);
+			drawCurvesTo.add(ncip);
+			connectedTo.add(ncip);
 		}
 		curveToEmpty = false;
 		empty = null;
 
 	}
 
-	public void disconnect(NodeAudioInPort toDisconnect) {
+	public void disconnect(NodeControlInPort toDisconnect) {
 		drawCurvesTo.remove(toDisconnect);
+		connectedTo.remove(toDisconnect);
 	}
 
 	public void triggerRed() {
-		
+
 		redTime = System.currentTimeMillis() + 100;
 		dotColor = Color.RED;
 		isTriggered = true;
 	}
-
 }
