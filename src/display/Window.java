@@ -4,11 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.image.BufferStrategy;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -16,34 +14,22 @@ import javax.swing.JFrame;
 import com.jsyn.JSyn;
 import com.jsyn.Synthesizer;
 import com.jsyn.ports.UnitInputPort;
-import com.jsyn.unitgen.Circuit;
 import com.jsyn.unitgen.LineOut;
-import com.jsyn.unitgen.SineOscillator;
 import com.jsyn.unitgen.UnitGenerator;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.UnmarshallingContext;
-
-import audioShit.Piano;
-import audioShit.PianoNode;
 import helper.ImHelping;
 import helper.KeyMngr;
 import helper.ValueContainer;
-import testingInProgress.TESTCIRCUIT;
-import uiShit.TimeLinesBox;
 import uiShit.UiBorder;
-import unitGnerators.PropertiyUnit;
-import uiShit.UiBaseElement;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements Runnable {
 	private boolean running;
 	private Map<String, View> views;
 	private final String MAIN_VIEW_NAME = "MainView";
-//	private Kreis[] kreises = new Kreis[3];
 	private boolean initialized;
 
 	public static Window widow;
 	public static Dragger dragger;
-//	public static Root root;
 	public static KeyMngr keyMngr;
 
 	private static Synthesizer synth;
@@ -108,7 +94,9 @@ public class Window extends JFrame implements Runnable {
 		synth = JSyn.createSynthesizer();
 		lineOut = new LineOut();
 
-		synth.start();
+//		synth.start(1000);
+
+		synth.start(44100);
 		synth.add(lineOut);
 		lineOut.start();
 

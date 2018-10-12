@@ -1,8 +1,7 @@
-package oldNodeSystem;
+package display;
 
 import java.awt.Graphics2D;
 
-import display.View;
 import graphics.Drawable;
 
 public class Root extends Drawable {

@@ -16,6 +16,7 @@ public class OutputNode extends GeneratorNode {
 
 		addNodeComponent("Volume", volumeKnob = new KnobComponent(outUnit, "Volume", 0, 1, 0.002), 0, 0);
 		volumeKnob.input.setName("Volume");
+		volumeKnob.setValue(1);
 		addAudioInPort(volumeKnob.input);
 
 		volumeKnob.output.connect(outUnit.volume);

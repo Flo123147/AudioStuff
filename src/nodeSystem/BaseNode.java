@@ -124,4 +124,10 @@ public abstract class BaseNode extends Draggable {
 		return Math.max(BASE_WIDTH, componentWidth);
 	}
 
+	@Override
+	public void setName(String name) {
+		nameDisplay.setText(name);
+		super.setName(name);
+	}
+	
 }

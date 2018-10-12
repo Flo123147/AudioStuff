@@ -20,7 +20,7 @@ public class SimpleSoundNode extends GeneratorNode {
 		addNodeComponent("Volume", volumeKnob = new KnobComponent(simpleInstument, "Volume", 0, 1, 0.001), 0, 0);
 
 		volumeKnob.output.connect(simpleInstrument.amplScaler.scale);
-
+		addControlInPort("Play");
 	}
 
 	@Override
@@ -31,7 +31,8 @@ public class SimpleSoundNode extends GeneratorNode {
 
 	@Override
 	protected void control(String name) {
-		// TODO Auto-generated method stub
+		if(name.equals("Play"))
+			simpleInstument.play();
 		
 	}
 

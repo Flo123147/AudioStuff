@@ -19,9 +19,10 @@ public class ScalerUnit extends UnitFilter {
 		double[] outs = output.getValues();
 		double[] skalars = scale.getValues();
 		for (int i = 0; i < limit; i++) {
-			outs[i] = ins[i] * skalars[i];
+			outs[i] = ins[i] * skalars[i];			
+			
 		}
-
+//		System.out.println(ins[start] + "   " + skalars[start]);
 	}
 
 }

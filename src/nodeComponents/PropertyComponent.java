@@ -12,6 +12,8 @@ public abstract class PropertyComponent extends NodeComponent {
 
 	protected double value;
 	protected double min, max, valueChangePerPixel;
+	protected double percentage;
+	protected double range;
 
 	private PropertiyUnit propertyUnit;
 	public UnitInputPort input;
@@ -32,6 +34,7 @@ public abstract class PropertyComponent extends NodeComponent {
 		value = (max - min) / 2;
 		this.min = min;
 		this.max = max;
+		this.range = max - min;
 		this.valueChangePerPixel = valueChangePerPixel;
 
 		output = propertyUnit.output;
@@ -50,14 +53,25 @@ public abstract class PropertyComponent extends NodeComponent {
 		value = clamp(value);
 	}
 
+	private void updatePercentage() {
+		percentage = (value - min) / range;
+	}
+
 	private double clamp(double value) {
 		if (value <= min) {
+			percentage = 0;
 			return min;
 		} else if (value >= max) {
+			percentage = 1;
 			return max;
 		} else {
+			updatePercentage();
 			return value;
 		}
+	}
+
+	public void setValue(double i) {
+		value = clamp(i);
 	}
 
 	public double getValue() {

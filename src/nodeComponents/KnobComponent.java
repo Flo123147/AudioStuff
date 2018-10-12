@@ -1,5 +1,7 @@
 package nodeComponents;
 
+import java.awt.Graphics2D;
+
 import com.jsyn.unitgen.Circuit;
 
 public class KnobComponent extends PropertyComponent {
@@ -12,8 +14,6 @@ public class KnobComponent extends PropertyComponent {
 		super(circuit, name, 100, 120, min, max, valueChangePerPixel);
 
 		addChild(knob = new ActualKnob(new int[] { 50, MIDDLE_Y }, "KnobBase", this));
-		knob.setRadius(35);
-
+		knob.setRadius(35); 
 	}
-
 }

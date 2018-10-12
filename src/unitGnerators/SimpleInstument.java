@@ -14,7 +14,7 @@ public abstract class SimpleInstument extends Circuit {
 
 	private String name;
 	public VariableRateMonoReader reader;
-	private SegmentedEnvelope myTestThingy;
+	protected SegmentedEnvelope myTestThingy;
 	protected PassThrough outPs;
 	public ScalerUnit amplScaler;
 
@@ -31,9 +31,9 @@ public abstract class SimpleInstument extends Circuit {
 		output = amplScaler.output;
 		addPort(output);
 
-		reader.amplitude.set(1);
+		reader.amplitude.set(0.1);
 
-		double[] data = { 0.02, 1, 0.2, 0.9, 0.3, 0.6, 2, 0.5, 3, 0 };
+		double[] data = { 0.02, 1, 3, 0 };
 		myTestThingy = new SegmentedEnvelope(data);
 
 		reader.rate.set(1);
@@ -49,5 +49,7 @@ public abstract class SimpleInstument extends Circuit {
 	public String getName() {
 		return name;
 	}
+
+	public abstract void play();
 
 }

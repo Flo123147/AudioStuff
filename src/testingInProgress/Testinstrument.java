@@ -7,21 +7,17 @@ import unitGnerators.SimpleInstument;
 
 public class Testinstrument extends SimpleInstument {
 
-	public UnitOscillator sine2, sine1;
-//	private SineOscillator sine1;
+	public UnitOscillator sine;
 
-	public Testinstrument() {
-		super("Test");
-		add(sine2 = new SineOscillator());
-//		add(sine1 = new SineOscillator());
-//		sine1.frequency.set(20);
-		sine2.frequency.set(528);
+	public Testinstrument(double freq) {
+		super("Test " + freq);
+		add(sine = new SineOscillator());
+		sine.frequency.set(freq);
 
-		sine2.output.connect(outPs.input);
-//		sine1.output.connect(sine2.amplitude);
+		sine.output.connect(outPs.input);
 
-//		reader.output.connect(sine2.amplitude);
-//
+		reader.output.connect(sine.amplitude);
+ 
 	}
 
 	@Override
@@ -29,4 +25,9 @@ public class Testinstrument extends SimpleInstument {
 
 	}
 
+	@Override
+	public void play() {
+		reader.dataQueue.clear();
+		reader.dataQueue.queue(myTestThingy, 0,2);
+	}
 }
